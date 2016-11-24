@@ -1,6 +1,43 @@
+<!DOCTYPE html>
 <html>
-<body>
-<h1>Hello World</h1>
+<head>
+    <!-- import the angular.js resources -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <!--import custom app logic -->
+    <script src="app.js"></script>
+    <!-- import some css -->
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+</head>
+    
+<body ng-app="checkout_app" ng-controller="checkout_ctrl">
+    <!-- header -->
+    <div>
+        <h1>CATTHINGS</h1>
+        <h2>Item Checkout</h2>
+    </div>
+    
+    <!-- item table here -->
+    <div>
+        <table class="w3-table w3-bordered w3-striped">
+            <tr>
+                <td>Item Name</td>
+                <td>Item Description</td>
+                <td>Quantity Available</td>
+                <td>Tags</td>
+            </tr>
+            
+            <tr ng-repeat="x in items">
+                <td>{{ x.item_name }}</td>
+                <td>{{ x.description }}</td>
+                <td>{{ x.quantity }}</td>
+                <td>{{ x.tags }}</td>
+            </tr>
+        </table>
+    </div>
+    <!-- Cart -->
+    <div>
+    
+    </div>
 </body>
 </html>
 
