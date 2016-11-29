@@ -18,12 +18,14 @@
     
     <!-- item table here -->
     <div>
+        <h3>Available Items</h3>
         <table class="w3-table w3-bordered w3-striped">
             <tr>
                 <td>Item Name</td>
                 <td>Item Description</td>
                 <td>Quantity Available</td>
                 <td>Tags</td>
+                <td>Add to cart</td>
             </tr>
             
             <tr ng-repeat="x in items">
@@ -31,12 +33,27 @@
                 <td>{{ x.description }}</td>
                 <td>{{ x.quantity }}</td>
                 <td>{{ x.tags }}</td>
+                <td><button ng-click="addToCart(x.id)" class="w3-btn w3-ripple">Add to Cart</button></td>
             </tr>
         </table>
     </div>
+    
+    
     <!-- Cart -->
     <div>
-    
+        <h3>Cart</h3>
+        <table class="w3-table w3-bordered w3-striped">
+            <tr>
+                <td>Item Name</td>
+                <td>Qty</td>
+                <td></td>               
+            </tr>
+            <tr ng-repeat="cart_item in cart">
+                <td>{{ cart_item.item_name }}</td>
+                <td>{{ cart_item.quantity }}</td>
+                <td><button class="w3-btn w3-ripple">Remove From Cart</button></td>
+            </tr>
+        </table>
     </div>
 </body>
 </html>
