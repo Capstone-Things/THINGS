@@ -21,11 +21,11 @@
         <h3>Available Items</h3>
         <table class="w3-table w3-bordered w3-striped">
             <tr>
-                <td>Item Name</td>
-                <td>Item Description</td>
-                <td>Quantity Available</td>
-                <td>Tags</td>
-                <td>Add to cart</td>
+                <th>Item Name</th>
+                <th>Item Description</th>
+                <th>Quantity Available</th>
+                <th>Tags</th>
+                <th>Add to cart</th>
             </tr>
             
             <tr ng-repeat="x in items">
@@ -44,8 +44,8 @@
         <h3>Cart</h3>
         <table class="w3-table w3-bordered w3-striped">
             <tr>
-                <td>Item Name</td>
-                <td>Qty</td>
+                <th>Item Name</th>
+                <th>Qty</th>
                 <td></td>               
             </tr>
             <tr ng-repeat="cart_item in cart">
@@ -54,6 +54,10 @@
                 <td><button class="w3-btn w3-ripple">Remove From Cart</button></td>
             </tr>
         </table>
+    </div>
+    <!-- Checkout section -->
+    <div>
+        <button ng-click="checkout" class="w3-btn w3-ripple">Checkout</button>        
     </div>
 </body>
 </html>
