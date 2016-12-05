@@ -52,8 +52,7 @@ app.controller("checkout_ctrl", function ($scope, $log) {
                     quantity: 1
                     });
                 }
-				$scope.items[i].quantity -= 1;
-                break;
+				break;
 			}
 		}
 		if (index === -1) {
@@ -61,11 +60,21 @@ app.controller("checkout_ctrl", function ($scope, $log) {
         }
     };
     
-    $scope.removeFromCart = function () {
-        
+    $scope.removeFromCart = function (id) {
+        for (var i=0; i < $scope.cart.length; i=i+1){
+            if($scope.cart[i].id === id){
+                $scope.cart.splice(i,1);
+                break;
+            }
+        }
     };
     
     $scope.checkout = function () {
-        $scope.log("Checkout complete");
+        var checkout_item = $scope.cart.pop();
+        while(checkout_item != null){
+            $scope.items[checkout_item.id].quantity -= checkout_item.quantity;
+            checkout_item = $scope.cart.pop();
+        }
+        <!-- TODO: trigger confirmation message -->
     };
-});
+}); 
