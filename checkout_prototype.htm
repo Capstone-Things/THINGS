@@ -21,7 +21,10 @@
         <h1>CATTHINGS</h1>
         <h2>Item Checkout</h2>
     </div>
-    
+    <!-- search bar-->
+    <div>
+        <input ng-model="search_field" type="text" placeholder="Search">
+    </div>
     <!-- item table here -->
     <div>
         <h3>Available Items</h3>
@@ -34,7 +37,7 @@
                 <th>Add to cart</th>
             </tr>
             
-            <tr ng-repeat="x in items">
+            <tr ng-repeat="x in items | filter: { item_name: search_field }">
                 <td>{{ x.item_name }}</td>
                 <td>{{ x.description }}</td>
                 <td>{{ x.quantity }}</td>
@@ -56,13 +59,14 @@
             </tr>
             <tr ng-repeat="cart_item in cart">
                 <td>{{ cart_item.item_name }}</td>
-                <td><input type="number" ng-model="cart_item.quantity"></input></td>
+                <td><input type="number" ng-model="cart_item.quantity"></td>
                 <td><button ng-click="removeFromCart(cart_item.id)" class="btn btn-danger">Remove From Cart</button></td>
             </tr>
         </table>
     </div>
     <!-- Checkout section -->
     <div>
+        <input type="text" ng-model="user_name" placeholder="Name">
         <button ng-click="checkout()" class="btn btn-primary">Checkout</button>        
     </div>
 </body>

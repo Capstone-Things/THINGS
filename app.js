@@ -1,5 +1,8 @@
-var app = angular.module("checkout_app", []); 
+var app = angular.module("checkout_app", ['ui.bootstrap']); 
 app.controller("checkout_ctrl", function ($scope, $log) {
+    
+    $scope.search_field = "";
+    $scope.user_name = "";
     
     $scope.items = [
         {
@@ -25,6 +28,7 @@ app.controller("checkout_ctrl", function ($scope, $log) {
         }
     ];
     
+    //this array represents the cart
     $scope.cart = [];
     
     $scope.addToCart = function (id) {
