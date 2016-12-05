@@ -1,5 +1,5 @@
 var app = angular.module("checkout_app", ['ui.bootstrap']); 
-app.controller("checkout_ctrl", function ($scope, $log) {
+app.controller("checkout_ctrl", function ($scope, $window) {
     
     $scope.search_field = "";
     $scope.user_name = "";
@@ -80,5 +80,6 @@ app.controller("checkout_ctrl", function ($scope, $log) {
             checkout_item = $scope.cart.pop();
         }
         <!-- TODO: trigger confirmation message -->
+        $window.confirm("Thank you " + $scope.user_name + ", checkout complete.");
     };
 }); 
