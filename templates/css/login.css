@@ -1,0 +1,38 @@
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+}
+/*
+img.avatar {
+    width: 40%;
+    border-radius: 50%;
+}
+*/
+.container {
+    padding: 16px;
+    max-width: 500px;
+    background: #FFFFFF;
+}
+
+body {
+    background: #76b852;
+}
