@@ -5,16 +5,22 @@
     <!-- import the angular.js resources -->
     <script src="libs/AngularJS/1.5.9/angular.js"></script>
     <!-- import Angularjs UI-bootstrap -->
-    <script src="libs/ui-bootstrap-tpls-2.3.0.js"></script>
+    <script src="libs/ui-bootstrap-tpls-2.3.0.js"></script>    
+    <!-- import NGMOCKS for Backend Testing -->
+    <script src="libs/node_modules/angular-mocks/angular-mocks.js"></script>
+    <!-- import UI Router -->
+    <script src="libs/node_modules/angular-ui-router/release/angular-ui-router.js"></script>
     <!--import custom app logic -->
-    <script src="templates/js/app.js"></script>
+    <script src="templates/js/app.js"></script>  
     <!-- Bootstrap css -->
-    <link href="libs/BootstrapCSS/3.3.7/bootstrap.css">
+    <link rel="stylesheet" href="libs/BootstrapCSS/3.3.7/bootstrap.css">
+    <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css">
+
 </head>
     
-<body ng-app="catthings_app" ng-controller="catthings_ctrl">
-    <!-- login -->
-    <div ng-include src="'templates/html/login.html'"></div>
+<body ng-app="catthings_app">
     
+    <div ui-view></div>
+
 </body>
 </html>

@@ -1,0 +1,10 @@
+<h1>Home Page</h1>
+<div ng-app="catthings_app" ng-controller="Inventory as $things">  
+    <table>
+      <tr ng-repeat="x in $things.inventory">
+        <td>{{ x.name }}</td>
+        <td>{{ x.description }}</td>
+        <td>{{ x.quantity }}</td>
+      </tr>
+    </table>
+</div>
