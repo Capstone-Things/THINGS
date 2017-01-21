@@ -2,7 +2,7 @@
 <div ng-app="catthings_app" align="center" ng-controller="Inventory as $things">  
     <table>
       <tr ng-repeat="x in $things.inventory">
-        <td>{{ x.name }}</td>
+        <td><input type="checkbox"/ name={x}>{{ x.name }}</td>
         <td>{{ x.description }}</td>
         <td>{{ x.quantity }}</td>
       </tr>
