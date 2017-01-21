@@ -18,12 +18,12 @@
                         </div>
                     </div>
                 <div class="form-bottom">
-                    <form role="form" action="" method="post" class="login-form">
+                    <form role="form" class="login-form" ng-controller="LoginCheckController">
                         <div class="form-group">
                             <label class="sr-only" for="form-username">fullName</label>
-                            <input type="text" name="form-username" placeholder="Fullname..." class="form-username form-control" id="form-username">
+                            <input type="text" name="form-username" placeholder="Username" class="form-username form-control" id="form-username">
                         </div>
-                         <button type="submit" class="btn">Sign in!</button>
+                         <button type="submit" class="btn" ng-click="LoginCheck()">Login</button>
                     </form>
                 </div>
             </div>
