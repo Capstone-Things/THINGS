@@ -1,10 +1,47 @@
 <h1>Home Page</h1>
-<div ng-app="catthings_app" align="center" ng-controller="Inventory as $things">  
-    <table>
-      <tr ng-repeat="x in $things.inventory">
-        <td><input type="checkbox"/ name={x}>{{ x.name }}</td>
-        <td>{{ x.description }}</td>
-        <td>{{ x.quantity }}</td>
-      </tr>
+<div ng-app="catthings_app" align="center" ng-controller="InventoryController">
+    <table class="table" id="inventoryTable">
+      <thead class="thead-inverse">
+        <tr>
+          <th><b>Name</b></th>
+          <th><b>Description</b></th>
+          <th><b>Quantity</b></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in inventory">
+          <td>{{ item.name }}</td>
+          <td>{{ item.description }}</td>
+          <td>{{ item.quantity }}</td>
+          <td><button type="button" class="btn btn-default btn-sm" ng-click="addToCart(item)">Add to Cart</button></td>
+        </tr>
+      </tbody>
     </table>
+
+    <h1>Cart</h1>
+    <div ng-app="catthings_app" align="center">
+      <table class="table" id="cartTable">
+        <thead class="thead-inverse">
+          <tr>
+            <th></th>
+            <th><b>Name</b></th>
+            <th><b>Description</b></th>
+            <th><b>Quantity Wanted</b></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="selected in cart">
+            <td><input type="checkbox" ng-model="selected.checked"/></td>
+            <td>{{ selected.name }}</td>
+            <td>{{ selected.description }}</td>
+            <td>{{ selected.quantity }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <button  type="button" ng-click=removeSelected()>Remove</button>
+    </div>
+    <div>
+      <button type="submit">Checkout</button>
+    </div>
 </div>
