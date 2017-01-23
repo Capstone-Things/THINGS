@@ -1,47 +1,117 @@
-<h1>Home Page</h1>
-<div ng-app="catthings_app" align="center" ng-controller="InventoryController">
-    <table class="table" id="inventoryTable">
-      <thead class="thead-inverse">
-        <tr>
-          <th><b>Name</b></th>
-          <th><b>Description</b></th>
-          <th><b>Quantity</b></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="item in inventory">
-          <td>{{ item.name }}</td>
-          <td>{{ item.description }}</td>
-          <td>{{ item.quantity }}</td>
-          <td><button type="button" class="btn btn-default btn-sm" ng-click="addToCart(item)">Add to Cart</button></td>
-        </tr>
-      </tbody>
-    </table>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>CAT THINGS</title>
 
-    <h1>Cart</h1>
-    <div ng-app="catthings_app" align="center">
-      <table class="table" id="cartTable">
-        <thead class="thead-inverse">
-          <tr>
-            <th></th>
-            <th><b>Name</b></th>
-            <th><b>Description</b></th>
-            <th><b>Quantity Wanted</b></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="selected in cart">
-            <td><input type="checkbox" ng-model="selected.checked"/></td>
-            <td>{{ selected.name }}</td>
-            <td>{{ selected.description }}</td>
-            <td>{{ selected.quantity }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <button  type="button" ng-click=removeSelected()>Remove</button>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="templates/css/main.css">
+  </head>
+
+  <body>
+
+    <div class="Top-header">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-6">
+              <div class="logo">
+                <h1><a href=""><img src="templates/images/cat_logo.png"></a></h1>
+              </div>
+          </div>
+
+          <div class="col-sm-6">
+            <div class="shopping-item">
+              <a href="cart.html">Cart<span class="cart-amount"></span> <i class="fa fa-shopping-cart"></i> 
+              <span class="product-count">5</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div>
-      <button type="submit">Checkout</button>
+
+    <div class="mainmenu-area">
+      <div class="container">
+        <div class="row">
+          <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="index.html">Home</a></li>
+                        <li><a href="shop.html">Shop page</a></li>
+                        <li><a href="cart.html">Cart</a></li>
+                        <li><a href="checkout.html">Checkout</a></li>
+                    </ul>
+                </div>  
+        </div>
+      </div>
     </div>
-</div>
+
+    <div class=maincontent-area>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div ng-app="catthings_app" align="center" ng-controller="InventoryController">
+              <table class="table" id="inventoryTable">
+                <thead class="thead-inverse">
+                  <tr>
+                    <th><b>Namedd</b></th>
+                    <th><b>Description</b></th>
+                    <th><b>Quantity</b></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="item in inventory">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td><button type="button" class="btn btn-default btn-sm" ng-click="addToCart(item)">Add to Cart</button></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h1>Cart</h1>
+              <div ng-app="catthings_app" align="center">
+                <table class="table" id="cartTable">
+                  <thead class="thead-inverse">
+                    <tr>
+                      <th></th>
+                      <th><b>Name</b></th>
+                      <th><b>Description</b></th>
+                      <th><b>Quantity Wanted</b></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="selected in cart">
+                      <td><input type="checkbox" ng-model="selected.checked"/></td>
+                      <td>{{ selected.name }}</td>
+                      <td>{{ selected.description }}</td>
+                      <td>{{ selected.quantity }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <button  type="button" ng-click=removeSelected()>Remove</button>
+              </div>
+              <div>
+                <button type="submit">Checkout</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="footer-bottom-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="copyright">
+                        <p>&copy; cat. All Rights Reserved. </p>
+                    </div>
+                </div>                        
+            </div>
+        </div>
+    </div>
+
+  </body>
+
+
+</html>
