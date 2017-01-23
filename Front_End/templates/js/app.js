@@ -33,15 +33,13 @@ function LoginCheckController($scope, $location) {
     };
 }
 
-
-
 //Original Controller
 app.controller("catthings_ctrl", function ($scope, $window) {
 
 });
 
-app.controller('InventoryController', ['$scope', '$http', InventoryController]);
-function InventoryController($scope, $http) {
+app.controller('InventoryController', ['$scope', '$http', '$uibModal', InventoryController]);
+function InventoryController($scope, $http, $uibModal) {
 
   //Get latest inventory data from database
   $http.get('/view').then(function (response) {
@@ -52,8 +50,21 @@ function InventoryController($scope, $http) {
 
   //Add to cart
   $scope.addToCart = function(item) {
-    item.checked = false;
-    $scope.cart.push(item);
+    var cartItem = angular.copy(item); //Make copy of the item to add to cart
+    cartItem.checked = false; //Set checked to false
+    $scope.currentQuantity = item.quantity; //Get current quantity of item
+    var answer = $uibModal.open({templateUrl: 'templates/html/promptQuantity.html',
+                                 backdrop: 'static',
+                                 controller: PromptQuantityController,
+                                 scope: $scope
+                               });
+    answer.result.then(function(response){
+      console.log(response);
+      if(response != "Canceled"){
+        cartItem.quantity = response;
+        $scope.cart.push(cartItem);
+      }
+    });
   };
 
   //Remove selected items from cart
@@ -66,23 +77,35 @@ function InventoryController($scope, $http) {
     });
     $scope.cart=newCart;
   }
+
+  //Checkout items
+  $scope.checkOut = function(){
+    console.log($scope.cart);
+    /*
+    $http.post('/checkout', $scope.cart).then(function(){
+      $http.get('/view').then(function (response) {
+          $scope.inventory = response.data;
+      });
+    });
+    */
+  }
 }
 
-/* Old inventory controller
-//Mock API Call Test
-app.controller('Inventory', function Inventory($http) {
-    var ctrl = this;
-
-    ctrl.inventory = [];
-    ctrl.getInventory = function () {
-        $http.get('/view').then(function (response) {
-            ctrl.inventory = response.data;
-        });
-    };
-
-    ctrl.getInventory();
-});
-*/
+//Controller for promptQuantity.html
+var PromptQuantityController = function PromptQuantityController($scope, $uibModalInstance){
+  $scope.ok = function(){
+    console.log($scope.currentQuantity);
+    console.log($scope.quantity)
+    if(parseInt($scope.quantity) <= parseInt($scope.currentQuantity)){
+        if(parseInt($scope.quantity) > 0){
+            $uibModalInstance.close($scope.quantity);
+        }
+    }
+  };
+  $scope.close = function(result){
+    $uibModalInstance.close(result);
+  };
+}
 
 app.run(function ($httpBackend) {
     var inventory = [{name: 'Pop Tarts', description: 'Yummy', quantity: '5'}, {name: 'Kool-Aid', description: 'Oh Yeah', quantity: '10'}, {name: 'Printer Ink', description: 'Ink for printer', quantity: '30'}];
@@ -91,10 +114,15 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('/view').respond(inventory);
 
     //checkout items
-    //$httpBackend.whenPost('/checkout').respond();
+    $httpBackend.whenPOST('/checkout').respond(function(method, url, data) {
+        console.log(method);
+        console.log(url);
+        console.log(data);
+    });
 
     $httpBackend.whenGET('templates/html/login.html').passThrough();
     //$httpBackend.whenGET('/templates/html/login.html').passThrough();
     $httpBackend.whenGET('templates/html/home.html').passThrough();
     //$httpBackend.whenGET('../html/home.html').passThrough();
+    $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
 });
