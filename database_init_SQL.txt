@@ -37,6 +37,7 @@ Important Notes:
         price       money,
         quantity    int NOT NULL,
         threshold   int NOT NULL,
+        dateCreated timestamp DEFAULT CURRENT_TIMESTAMP,
         is_hidden   bool NOT NULL DEFAULT false,
         PRIMARY KEY (item_id)
     );
@@ -46,7 +47,7 @@ Important Notes:
         transaction_id  SERIAL,
         item_id         int NOT NULL REFERENCES items(item_id),
         person          text    NOT NULL DEFAULT 'anonymous',
-        qty_changed     int,
+        qty_changed     int		 NOT NULL,
         qty_remaining   int,
         timestamp       timestamp DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (transaction_id)
