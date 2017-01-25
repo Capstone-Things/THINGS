@@ -1,3 +1,18 @@
+# Cat Things
+ Cat things is a lightweight inventory control system developed for the CAT.
+ Cat things will keep track of inventory levels, track usage trends,
+ create shopping lists, and send alerts on low inventory.
+
+## API install instructions
+- you must have installed node.js on your machine before proceeding
+1. open a console in the root directory and execute `npm install`
+2. create a file in API/things-api/db_info.js
+3. add this line to the file
+4. `exports.connection_string = "postgres://user:password@host:5432/database"`
+5. fill in the proper data to connect to your database.
+
+_this section should be updated regularly_
+
 ## Welcome to GitHub Pages
 
 You can use the [editor on GitHub](https://github.com/Capstone-Things/THINGS/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
@@ -8,7 +23,7 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
-```markdown
+markdown
 Syntax highlighted code block
 
 # Header 1
