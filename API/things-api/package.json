@@ -3,10 +3,14 @@
   "version": "0.0.1",
   "description": "This API will serve the Cat Things web app.",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "express": "^4.14.0",
+    "test": "^0.6.0"
+  },
   "devDependencies": {},
   "scripts": {
-    "test": "all_tests.js"
+    "start": "node app.js",
+    "test": "node all_tests.js"
   },
   "author": "",
   "license": "MIT"
