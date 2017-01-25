@@ -1,3 +1,10 @@
+/*
+.navbar-default {
+  font-family: "Roboto Condensed",sans-serif;
+  background-color: black;
+}
+*/
+
 .mainmenu-area {background: none repeat scroll 0 0 #fbfbfb;
 font-family: "Roboto Condensed",sans-serif;
 text-transform: uppercase;
@@ -5,13 +12,15 @@ width: 100%;
 z-index: 999;}
 
 .logo h1 {
-    font-size: 40px;
-    margin: 30px 0;font-weight: 400;
+    font-size: 20px;
+    margin: 30px 0;
+    font-weight: 400;
+    vertical-align: top;
 }
 .logo h1 a {
     color: #999;
 }
-.logo h1 a:hover {text-decoration: none;opacity: .7}
+.logo h1 a:hover {text-decoration: none;opacity: .7}*/
 .logo h1 a span {
     color: #5a88ca;
 }

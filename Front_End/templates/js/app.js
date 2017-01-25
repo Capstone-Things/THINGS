@@ -38,6 +38,12 @@ app.controller("catthings_ctrl", function ($scope, $window) {
 
 });
 
+app.controller('NavBarController', ['$scope', NavBarController]);
+function NavBarController($scope) {
+    $scope.isCollapsed = true;
+}
+
+//Inventory Controller
 app.controller('InventoryController', ['$scope', '$http', '$uibModal', InventoryController]);
 function InventoryController($scope, $http, $uibModal) {
 
