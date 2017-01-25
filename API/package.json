@@ -1,3 +1,13 @@
-"scripts": {
-  "test": "myTests"
+{
+  "name": "things-api",
+  "version": "0.0.1",
+  "description": "This API will serve the Cat Things web app.",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "all_tests.js"
+  },
+  "author": "",
+  "license": "MIT"
 }

@@ -1,3 +1,10 @@
-"scripts": {
-  "test": "cd API && npm test"
+{
+  "name": "testingPackage",
+  "description": "high level package to make CI work.",
+  "scripts": {
+    "test": "node ./API/all_tests.js"
+  },
+  "dependencies": {
+    "test": "^0.6.0"
+  }
 }
