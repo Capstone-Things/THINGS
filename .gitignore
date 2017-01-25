@@ -3,3 +3,4 @@
 node_modules/
 API/things-api/node_modules/
 API/things-api/db_info.js
+*npm-debug.log

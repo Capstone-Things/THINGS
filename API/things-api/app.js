@@ -1,6 +1,6 @@
 var express = require('express');
 var pg = require('pg');
-var db_info = require('db_info.js')
+var db_info = require('./db_info.js')
 var app = express();
 var pool = new pg.Pool(db_info.config);
 
