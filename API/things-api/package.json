@@ -1,0 +1,21 @@
+{
+  "name": "things-api",
+  "version": "0.0.1",
+  "description": "This API will serve the Cat Things web app.",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
+    "multer": "^1.2.1",
+    "pg": "^6.1.2",
+    "test": "^0.6.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node app.js",
+    "test": "node all_tests.js"
+  },
+  "author": "",
+  "license": "MIT"
+}
