@@ -1,0 +1,11 @@
+{
+  "name": "testingPackage",
+  "description": "high level package to make CI work. The actual API package is in API/things-api",
+  "scripts": {
+    "install": "cd API/things-api/ && npm install",
+    "test": "cd API/things-api/ && npm test"
+  },
+  "dependencies": {
+    "test": "^0.6.0"
+  }
+}
