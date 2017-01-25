@@ -1,0 +1,3 @@
+"scripts": {
+  "test": "cd API && npm test"
+}
