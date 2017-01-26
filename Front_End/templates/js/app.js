@@ -16,6 +16,10 @@ app.config(function($stateProvider, $urlRouterProvider) {
         .state('home', {
           url: "/home",
           templateUrl: 'templates/html/home.html',
+        })
+        .state('cart', {
+          url: "/cart",
+          templateUrl: 'templates/html/cart.html'
         });
 });
 
@@ -33,31 +37,86 @@ function LoginCheckController($scope, $location) {
     };
 }
 
-//Original Controller
+//Original Controller...May not be needed
 app.controller("catthings_ctrl", function ($scope, $window) {
 
 });
 
+//Service to manage cart
+app.service('cartList', [cartList]);
+function cartList () {
+  var cart = [];
+  return {
+      getCart: function () {
+          return cart;
+      },
+      addToCart: function(item) {
+          cart.push(item);
+          console.log(cart);
+      },
+      removeSelected: function(){
+        var newCart=[];
+            angular.forEach(cart,function(item){
+            if(!item.checked){
+                newCart.push(item);
+            }
+        });
+        cart=newCart;
+        return cart;
+      }
+  };
+}
+
+//NavBar Controller
 app.controller('NavBarController', ['$scope', NavBarController]);
 function NavBarController($scope) {
     $scope.isCollapsed = true;
 }
 
-//Inventory Controller
-app.controller('InventoryController', ['$scope', '$http', '$uibModal', InventoryController]);
-function InventoryController($scope, $http, $uibModal) {
+//Cart Controller
+app.controller('CartController', ['$scope', '$http', '$uibModal', 'cartList', CartController]);
+function CartController($scope, $http, $uibModal, cartList){
+  $scope.cart = cartList.getCart();
 
+  function check(){
+    if(!$scope.cart.length){
+      $scope.cartNotEmpty = false;
+      $scope.cartEmpty = true;
+    }
+    else{
+      $scope.cartNotEmpty = true;
+      $scope.cartEmpty = false;
+    }
+  }
+  check()
+
+  //Remove selected items from cart
+  $scope.removeSelected = function() {
+    $scope.cart = cartList.removeSelected();
+    check();
+  }
+
+  //Checkout
+  $scope.Checkout = function() {
+    console.log($scope.cart);
+
+    $http.post('/checkout', $scope.cart).then(function(){
+
+    });
+  }
+}
+
+//Inventory Controller
+app.controller('InventoryController', ['$scope', '$http', '$uibModal', '$location', 'cartList', InventoryController]);
+function InventoryController($scope, $http, $uibModal, $location, cartList) {
   //Get latest inventory data from database
   $http.get('/view').then(function (response) {
       $scope.inventory = response.data;
   });
 
-  $scope.cart=[];
-
-  //Add to cart
-  $scope.addToCart = function(item) {
+  $scope.addToCart = function(item){
     var cartItem = angular.copy(item); //Make copy of the item to add to cart
-    cartItem.checked = false; //Set checked to false
+    cartItem.check = false;
     $scope.currentQuantity = item.quantity; //Get current quantity of item
     var answer = $uibModal.open({templateUrl: 'templates/html/promptQuantity.html',
                                  backdrop: 'static',
@@ -68,32 +127,9 @@ function InventoryController($scope, $http, $uibModal) {
       console.log(response);
       if(response != "Canceled"){
         cartItem.quantity = response;
-        $scope.cart.push(cartItem);
+        cartList.addToCart(cartItem);
       }
     });
-  };
-
-  //Remove selected items from cart
-  $scope.removeSelected = function() {
-    var newCart=[];
-        angular.forEach($scope.cart,function(item){
-        if(!item.checked){
-            newCart.push(item);
-        }
-    });
-    $scope.cart=newCart;
-  }
-
-  //Checkout items
-  $scope.checkOut = function(){
-    console.log($scope.cart);
-    /*
-    $http.post('/checkout', $scope.cart).then(function(){
-      $http.get('/view').then(function (response) {
-          $scope.inventory = response.data;
-      });
-    });
-    */
   }
 }
 
@@ -127,8 +163,7 @@ app.run(function ($httpBackend) {
     });
 
     $httpBackend.whenGET('templates/html/login.html').passThrough();
-    //$httpBackend.whenGET('/templates/html/login.html').passThrough();
     $httpBackend.whenGET('templates/html/home.html').passThrough();
-    //$httpBackend.whenGET('../html/home.html').passThrough();
+    $httpBackend.whenGET('templates/html/cart.html').passThrough();
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
 });

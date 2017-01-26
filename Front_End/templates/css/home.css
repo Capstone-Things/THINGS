@@ -1,10 +1,13 @@
-/*
 .navbar-default {
   font-family: "Roboto Condensed",sans-serif;
-  background-color: black;
+  /*background-color: black;*/
 }
-*/
 
+.table th, .table td{
+  text-align: center;
+}
+
+/*
 .mainmenu-area {background: none repeat scroll 0 0 #fbfbfb;
 font-family: "Roboto Condensed",sans-serif;
 text-transform: uppercase;
@@ -20,7 +23,7 @@ z-index: 999;}
 .logo h1 a {
     color: #999;
 }
-.logo h1 a:hover {text-decoration: none;opacity: .7}*/
+.logo h1 a:hover {text-decoration: none;opacity: .7}
 .logo h1 a span {
     color: #5a88ca;
 }
@@ -73,26 +76,32 @@ z-index: 999;}
 .shopping-item:hover .product-count {
     background: none repeat scroll 0 0 #000;
 }
-
-.mainmenu-area ul.navbar-nav li a {
+*/
+ul.navbar-nav li a {
     color: #6e6a6a;
     font-size: 14px;
     padding: 20px;
 }
 
-.mainmenu-area ul.navbar-nav li:hover a, .mainmenu-area ul.navbar-nav li.active a {background: #4aaf51; color:#FFF;}
-.mainmenu-area .nav > li > a:focus {color: #FFF;}
-.maincontent-area {padding-bottom: 50px; padding-top:20px;}
+ul.navbar-nav li:hover a, ul.navbar-nav li.active a {background: #4aaf51; color:#FFF;}
+.nav > li > a:focus {color: #FFF;}
+.inventoryContainer {padding-bottom: 50px; padding-top:20px;}
 
 
+/*
 .footer-wid-title {
   font-family: raleway;
   font-size: 30px;
   font-weight: 100;color: #fff
 }
+*/
 
 .footer-bottom-area {
+  font-family: raleway;
   background: none repeat scroll 0 0 #000;
   color: #fff;
-  padding-bottom: 40px;
+  /*padding-bottom: 40px;*/
+  position: absolute;
+  width: 100%;
+  bottom: 0;
 }

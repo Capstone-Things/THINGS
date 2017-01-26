@@ -1,0 +1,79 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>CAT THINGS</title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="templates/css/cart.css">
+  </head>
+
+  <body>
+    <!-- Navigation Bar-->
+    <nav class="navbar navbar-default" ng-controller="NavBarController">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">CAT</a>
+          <button type="button" class="navbar-toggle" ng-click="isCollapsed = !isCollapsed">
+              <span class="sr-only">Toggle navigation</span>
+      				<span class="icon-bar"></span>
+      				<span class="icon-bar"></span>
+      				<span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" uib-collapse="isCollapsed">
+          <ul class="nav navbar-nav">
+            <li><a href="#home">Inventory</a></li>
+            <li><a href="#request">Request Item</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active"><a ng-href="#cart" class="navbar-right">Cart <i class="fa fa-shopping-cart"></i></a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!--Cart Table -->
+    <div class= "cartContainer" ng-app="catthings_app" align="center" ng-controller="CartController">
+      <h1>Cart</h1>
+      <div class="notEmpty" ng-show="cartNotEmpty">
+        <table class="table table-bordered" id="cartTable">
+          <thead class="thead-inverse">
+            <tr>
+              <th><b>Remove<b></th>
+              <th><b>Name</b></th>
+              <th><b>Description</b></th>
+              <th><b>Quantity Wanted</b></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="selected in cart">
+              <td><input type="checkbox" ng-model="selected.checked"/></td>
+              <td>{{ selected.name }}</td>
+              <td>{{ selected.description }}</td>
+              <td>{{ selected.quantity }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <button  type="button" class="btn btn-danger" ng-click=removeSelected()>Remove</button>
+        <button type="submit" class="btn btn-success" ng-click=checkOut()>Checkout</button>
+      </div>
+      <div class="empty" ng-show="cartEmpty">
+        No items in cart!
+      </div>
+    </div>
+
+    <div class="footer-bottom-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="copyright">
+                        <p>&copy; Computer Action Team. All Rights Reserved. </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div>
+
+  </body>
+
+
+</html>
