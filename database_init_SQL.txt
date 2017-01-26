@@ -35,7 +35,7 @@ Important Notes:
         item_name   text    NOT NULL,
         description text,
         price       money,
-        quantity    int NOT NULL,
+        quantity    int NOT NULL DEFAULT 0,
         threshold   int NOT NULL,
         dateCreated timestamp DEFAULT CURRENT_TIMESTAMP,
         is_hidden   bool NOT NULL DEFAULT false,
@@ -58,6 +58,14 @@ Important Notes:
         tag_name    text,    
         item_id int REFERENCES items (item_id),
         PRIMARY KEY (tag_name)
+    );
+
+    -------------------------------------------------------------------
+    CREATE TABLE users (
+        username    text,
+        password    text NOT NULL,
+        user_type   text NOT NULL,
+        PRIMARY KEY (username)
     );
 
     -------------------------------------------------------------------
@@ -114,12 +122,16 @@ Important Notes:
         ('Printer Supplies', max_item_id());
 
     ----------------------------------------------------------------------------
-    INSERT INTO items (item_name, description, price, quantity, threshold) VALUES
+    INSERT INTO items (item_name, description , price, quantity, threshold) VALUES
         ('HDMI to VGA Adapter', 'For classroom projectors.', 15.00, 4, 2);
     INSERT INTO tags VALUES 
         ('Digital Adapters', max_item_id());
     INSERT INTO tags VALUES 
         ('Electronics', max_item_id());
+
+    ----------------------------------------------------------------------------
+    INSERT INTO users (username, password, user_type) VALUES
+        ('lukekaz9', 'hashedpassword', 'Admin');
 
 -- Perform some Transaction --
 
