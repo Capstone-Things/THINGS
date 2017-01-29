@@ -4,21 +4,33 @@
  create shopping lists, and send alerts on low inventory.
 
 ## API install instructions
-- you must have installed node.js on your machine before proceeding
-1. open a console in the root directory and execute `npm install`
-2. create a file in API/things-api/db_info.js
-3. add the following
-4. `exports.config = {
-  user: 'username', //env var: PGUSER
-  database: 'databasename', //env var: PGDATABASE
-  password: 'secret', //env var: PGPASSWORD
-  host: 'hostname', // Server hosting the postgres database
-  port: 5432, //env var: PGPORT
-  max: 10, // max number of clients in the pool
-  idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
-};`
-5. fill in the proper data to connect to your database.
+1. Prerequisite: [node.js](https://nodejs.org/en/) must be installed on your machine before proceeding  
 
+2. Open a console and navigate to the THINGS/API/things-api directory then execute    
+       
+       ```bash
+       npm install
+       ```
+3. Create a file in API/things-api/db_info.js
+4. Add the following lines  
+        
+       ```javascript 
+       exports.config = {  
+         user: 'username', //env var: PGUSER 
+         database: 'databasename', //env var: PGDATABASE  
+         password: 'secret',  //env var: PGPASSWORD
+         host: 'hostname',  // Server hosting the postgres database
+         port: 5432,  //env var: PGPORT 
+         max: 10,  // max number of clients in the pool 
+         idleTimeoutMillis: 30000,  // how long a client is allowed to remain idle before being closed
+       };  
+       ``` 
+5. Fill in the proper data to connect to your database.
+6. Launch the server with 
+       
+       ```bash
+       npm start
+       ```
 _this section should be updated regularly_
 
 ## Welcome to GitHub Pages
