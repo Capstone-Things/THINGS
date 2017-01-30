@@ -74,8 +74,8 @@ function NavBarController($scope) {
 }
 
 //Cart Controller
-app.controller('CartController', ['$scope', '$http', '$uibModal', 'cartList', CartController]);
-function CartController($scope, $http, $uibModal, cartList){
+app.controller('CartController', ['$scope', '$http', '$uibModal', '$location', 'cartList', CartController]);
+function CartController($scope, $http, $uibModal, $location, cartList){
   $scope.cart = cartList.getCart();
 
   function check(){
@@ -97,11 +97,15 @@ function CartController($scope, $http, $uibModal, cartList){
   }
 
   //Checkout
-  $scope.Checkout = function() {
+  $scope.checkOut = function() {
     console.log($scope.cart);
 
-    $http.post('/checkout', $scope.cart).then(function(){
-
+    $http.post('/checkout', $scope.cart).then(function(response){
+      console.log(response.status);
+      if(response.status === 200){
+              $location.path("home");
+      }
+      //Else 404 error....Could need another modal
     });
   }
 }
@@ -124,8 +128,7 @@ function InventoryController($scope, $http, $uibModal, $location, cartList) {
                                  scope: $scope
                                });
     answer.result.then(function(response){
-      console.log(response);
-      if(response != "Canceled"){
+      if(response != "Cancel"){
         cartItem.quantity = response;
         cartList.addToCart(cartItem);
       }
@@ -134,14 +137,20 @@ function InventoryController($scope, $http, $uibModal, $location, cartList) {
 }
 
 //Controller for promptQuantity.html
-var PromptQuantityController = function PromptQuantityController($scope, $uibModalInstance){
-  $scope.ok = function(){
-    console.log($scope.currentQuantity);
-    console.log($scope.quantity)
+var PromptQuantityController = function PromptQuantityController($scope, $uibModal, $uibModalInstance){
+  $scope.ok = function($uibModal){
     if(parseInt($scope.quantity) <= parseInt($scope.currentQuantity)){
         if(parseInt($scope.quantity) > 0){
             $uibModalInstance.close($scope.quantity);
         }
+        else{
+          $scope.errorQuantity = false;
+          $scope.negativeQuantity = true;
+        }
+    }
+    else{
+      $scope.errorQuantity = true;
+      $scope.negativeQuantity = false;
     }
   };
   $scope.close = function(result){
@@ -155,11 +164,20 @@ app.run(function ($httpBackend) {
     //returns the current inventory list
     $httpBackend.whenGET('/view').respond(inventory);
 
-    //checkout items
+    //Checkout items
     $httpBackend.whenPOST('/checkout').respond(function(method, url, data) {
-        console.log(method);
-        console.log(url);
-        console.log(data);
+        data = JSON.parse(data);
+        for (var i = 0; i < data.length; i++){
+          for (var j = 0; j < inventory.length; j++){
+            if (inventory[j].name === data[i].name){
+              console.log(inventory[j].quantity);
+              inventory[j].quantity = (parseInt(inventory[j].quantity) - data[i].quantity).toString();
+              console.log(inventory[j].quantity);
+              break;
+            }
+          }
+        }
+        return [200, {}, {}];
     });
 
     $httpBackend.whenGET('templates/html/login.html').passThrough();
