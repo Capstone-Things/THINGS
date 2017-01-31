@@ -15,7 +15,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('home', {
           url: "/home",
-          templateUrl: 'templates/html/home.html',
+          templateUrl: 'templates/html/home.html'
+        })
+        .state('request',{
+          url: "/request",
+          templateUrl: 'templates/html/request.html'
         })
         .state('cart', {
           url: "/cart",
@@ -183,5 +187,6 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/login.html').passThrough();
     $httpBackend.whenGET('templates/html/home.html').passThrough();
     $httpBackend.whenGET('templates/html/cart.html').passThrough();
+    $httpBackend.whenGET('templates/html/request.html').passThrough();
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
 });
