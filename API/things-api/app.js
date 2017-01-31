@@ -8,29 +8,80 @@ app.get('/', function (req, res) {
   res.send('Hello World!');
 });
 
-app.get('/items', function(req, res){
+
+//Checkout items api route
+//------------------------------------------------------------------------------
+app.get('/checkout/:id/:person/:qty', function(req, res) {
+    
+    transaction(req.params.id, req.params.person, -req.params.qty, function(err, tranRes) {
+        if (err) {
+            res.status(500);
+            res.send('Database Error');
+        } else {
+            res.status(200);
+            res.send(tranRes);
+        }
+    });
+});
+
+//Checkin items api route
+//------------------------------------------------------------------------------
+app.get('/checkin/:id/:person/:qty', function(req, res) {
+    
+    transaction(req.params.id, req.params.person, req.params.qty, function(err, tranRes) {
+        if (err) {
+            res.status(500);
+            res.send('Database Error');
+        } else {
+            res.status(200);
+            res.send(tranRes);
+        }
+    });
+});
+
+var transaction = function(id, person, qty, retFunc) {
+
+    pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('error fetching client from pool', err);
+        }
+    
+         client.query('INSERT INTO transactions(item_id, person, qty_changed) VALUES ($1, $2, $3)', [id, person, qty], function(err, result) {
+             //call `done()` to release the client back to the pool
+             done();
+
+             if(err) {
+                 console.error('error running query', err);
+                 retFunc(err, null);
+             } else {
+                 retFunc(null, 'Transaction Completed Successfully');
+             }
+        });
+    });
+}
+
+app.get('/view', function(req, res){
   //first query the database
   //then return the results to the user
 
-  pool.connect(function(err, client, done) {
-    if(err) {
-      return console.error('error fetching client from pool', err);
-    }
-    client.query('SELECT * FROM items', [], function(err, result) {
-    //call `done()` to release the client back to the pool
-      done();
+      pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query('SELECT item_name AS name, description, quantity FROM items', [], function(err, result) {
+            //call `done()` to release the client back to the pool
+            done();
 
-      if(err) {
-        return console.error('error running query', err);
-      }
-      console.log(result.rows[0].number);
-      //output: 1
-      res.send(result.rows);
-  });
+            if(err) {
+                return console.error('error running query', err);
+            }
+
+            //output: 1
+            res.send(result.rows);
+        });
+    });
 });
 
-
-});
 
 app.listen(3000, function () {
   console.log('Listening on port 3000');
