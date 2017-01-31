@@ -9,35 +9,56 @@ app.get('/', function (req, res) {
 });
 
 
-//Checkout / Check in items
+//Checkout items api route
 //------------------------------------------------------------------------------
-app.get('/transaction/:id/:person/:qty', function(req, res){
-  //first query the database
-  //then return the results to the user
-
-  pool.connect(function(err, client, done) {
-    if(err) {
-      return console.error('error fetching client from pool', err);
-    }
-    client.query('INSERT INTO transactions(item_id, person, qty_changed) VALUES ($1, $2, $3)', [req.params.id, req.params.person, req.params.qty], function(err, result) {
-      //call `done()` to release the client back to the pool
-      done();
-
-      if(err) {
-        res.send(err);
-        return console.error('error running query', err);
-      } else {
-        res.send('Transaction Completed Successfully');
-      }
-      console.log(req.params.id);
-      console.log(req.params.qty);
-      console.log(req.params.person);
-
-      //output: 1
+app.get('/checkout/:id/:person/:qty', function(req, res) {
+    
+    transaction(req.params.id, req.params.person, -req.params.qty, function(err, tranRes) {
+        if (err) {
+            res.status(500);
+            res.send('Database Error');
+        } else {
+            res.status(200);
+            res.send(tranRes);
+        }
     });
-  });
 });
 
+//Checkin items api route
+//------------------------------------------------------------------------------
+app.get('/checkin/:id/:person/:qty', function(req, res) {
+    
+    transaction(req.params.id, req.params.person, req.params.qty, function(err, tranRes) {
+        if (err) {
+            res.status(500);
+            res.send('Database Error');
+        } else {
+            res.status(200);
+            res.send(tranRes);
+        }
+    });
+});
+
+var transaction = function(id, person, qty, retFunc) {
+
+    pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('error fetching client from pool', err);
+        }
+    
+         client.query('INSERT INTO transactions(item_id, person, qty_changed) VALUES ($1, $2, $3)', [id, person, qty], function(err, result) {
+             //call `done()` to release the client back to the pool
+             done();
+
+             if(err) {
+                 console.error('error running query', err);
+                 retFunc(err, null);
+             } else {
+                 retFunc(null, 'Transaction Completed Successfully');
+             }
+        });
+    });
+}
 
 app.get('/view', function(req, res){
   //first query the database
