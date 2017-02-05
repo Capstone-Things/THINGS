@@ -36,10 +36,15 @@ function LoginCheckController($scope, $location, $rootScope) {
         Password: 'password'
     }];
     */
+    $scope.showAdminLogin = false;
     $scope.LoginCheck = function() {
       $rootScope.username = $scope.username;
       $location.path("home");
     };
+
+    $scope.SetAdminLogin = function() {
+      $scope.showAdminLogin = !$scope.showAdminLogin;
+    }
 }
 
 //Original Controller...May not be needed

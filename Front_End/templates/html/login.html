@@ -20,13 +20,29 @@
                 <div class="form-bottom">
                     <form role="form" class="login-form" ng-controller="LoginCheckController">
                         <div class="form-group">
-                            <label class="sr-only" for="username">fullName</label>
-                            <input type="text" ng-model="username" name="username" placeholder="Username" class="form-username form-control" required>
+                            <div ng-switch on="showAdminLogin">
+                                <span ng-switch-when="true">
+                                    <label class="sr-only" for="username">fullName</label>
+                                    <input type="text" ng-model="username" name="username" placeholder="Full Name" class="form-username form-control" required>
+                                </span>                           
+                                <span ng-switch-when="false">
+                                    <label class="sr-only" for="username">UserName</label>
+                                    <input type="text" ng-model="username" name="username" placeholder="Username" class="form-username form-control" required>
+                                    <input type="password" ng-model="password" name="password" placeholder="password" class="form-password form-control" required>
+                               </span>
+                            </div>
                         </div>
-                         <button type="submit" class="btn" ng-click="LoginCheck()">Login</button>
-                         <div class="adminLogin">
-                           <a type="submit" class="btn">Login as Admin</a>
-                         </div>
+                        <button type="submit" class="btn" ng-click="LoginCheck()">Login</button>
+                        <div class="adminLogin">     
+                             <div ng-switch on="showAdminLogin">
+                               <span ng-switch-when="true">
+                                    <a type="submit" class="btn" ng-click="SetAdminLogin()">Login as Admin</a>
+                               </span>                           
+                               <span ng-switch-when="false">
+                                    <a type="submit" class="btn" ng-click="SetAdminLogin()">Login as Student</a>                                 
+                               </span>
+                             </div>
+                        </div>
                     </form>
                 </div>
             </div>
