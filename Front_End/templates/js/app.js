@@ -28,8 +28,8 @@ app.config(function($stateProvider, $urlRouterProvider) {
 });
 
 //Login Controller
-app.controller('LoginCheckController', ['$scope', '$location', LoginCheckController]);
-function LoginCheckController($scope, $location) {
+app.controller('LoginCheckController', ['$scope', '$location','$rootScope', LoginCheckController]);
+function LoginCheckController($scope, $location, $rootScope) {
     /* Can be used for Admin login
     $scope.users = [{
         UserName: 'admin',
@@ -37,7 +37,8 @@ function LoginCheckController($scope, $location) {
     }];
     */
     $scope.LoginCheck = function() {
-        $location.path("home");
+      $rootScope.username = $scope.username;
+      $location.path("home");
     };
 }
 
@@ -78,8 +79,8 @@ function NavBarController($scope) {
 }
 
 //Cart Controller
-app.controller('CartController', ['$scope', '$http', '$uibModal', '$location', 'cartList', CartController]);
-function CartController($scope, $http, $uibModal, $location, cartList){
+app.controller('CartController', ['$scope', '$http', '$uibModal', '$location', '$rootScope', 'cartList', CartController]);
+function CartController($scope, $http, $uibModal, $location, $rootScope, cartList){
   $scope.cart = cartList.getCart();
 
   function check(){
@@ -102,8 +103,9 @@ function CartController($scope, $http, $uibModal, $location, cartList){
 
   //Checkout
   $scope.checkOut = function() {
-    console.log($scope.cart);
-
+    console.log($rootScope.username);
+    console.log($scope.cart.id);
+    console.log($scope.cart.quantity);
     $http.post('/checkout', $scope.cart).then(function(response){
       console.log(response.status);
       if(response.status === 200){
@@ -118,8 +120,9 @@ function CartController($scope, $http, $uibModal, $location, cartList){
 app.controller('InventoryController', ['$scope', '$http', '$uibModal', '$location', 'cartList', InventoryController]);
 function InventoryController($scope, $http, $uibModal, $location, cartList) {
   //Get latest inventory data from database
-  $http.get('/view').then(function (response) {
+  $http.get("http://localhost:3000/view").then(function (response) {
       $scope.inventory = response.data;
+      console.log($scope.inventory);
   });
 
   $scope.addToCart = function(item){
@@ -189,4 +192,6 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/cart.html').passThrough();
     $httpBackend.whenGET('templates/html/request.html').passThrough();
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
+
+    $httpBackend.whenGET("http://localhost:3000/view").passThrough();
 });
