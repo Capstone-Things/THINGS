@@ -1,0 +1,35 @@
+<body>
+  <nav class="navbar navbar-default" ng-controller="NavBarController">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">CAT</a>
+        <button type="button" class="navbar-toggle" ng-click="isCollapsed = !isCollapsed">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+      </div>
+      <div class="collapse navbar-collapse" uib-collapse="isCollapsed">
+        <ul class="nav navbar-nav">
+          <li><a ng-href="#home">Inventory</a></li>
+          <li class="active"><a ng-href="#request">Request Item</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a class="navbar-right" ng-href="#cart">Cart <i class="fa fa-shopping-cart"></i></a></li>
+          <li><a class="navbar-right" ng-href="#login">Logout <i class="fa fa-sign-out"></i></a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <form>
+    <div class="form-group">
+      <label for="itemName">Name:</label>
+      <input type="text" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="quantityNeeded">Quantity:</label>
+      <input type="number" class="form-control" min="0">
+    </div>
+  </form>
+</body>

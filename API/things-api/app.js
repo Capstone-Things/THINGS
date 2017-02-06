@@ -12,7 +12,7 @@ app.get('/', function (req, res) {
 //Checkout items api route
 //------------------------------------------------------------------------------
 app.get('/checkout/:id/:person/:qty', function(req, res) {
-    
+
     transaction(req.params.id, req.params.person, -req.params.qty, function(err, tranRes) {
         if (err) {
             res.status(500);
@@ -27,7 +27,7 @@ app.get('/checkout/:id/:person/:qty', function(req, res) {
 //Checkin items api route
 //------------------------------------------------------------------------------
 app.get('/checkin/:id/:person/:qty', function(req, res) {
-    
+
     transaction(req.params.id, req.params.person, req.params.qty, function(err, tranRes) {
         if (err) {
             res.status(500);
@@ -45,7 +45,7 @@ var transaction = function(id, person, qty, retFunc) {
         if(err) {
             return console.error('error fetching client from pool', err);
         }
-    
+
          client.query('INSERT INTO transactions(item_id, person, qty_changed) VALUES ($1, $2, $3)', [id, person, qty], function(err, result) {
              //call `done()` to release the client back to the pool
              done();
@@ -68,7 +68,7 @@ app.get('/view', function(req, res){
         if(err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query('SELECT item_name AS name, description, quantity FROM items', [], function(err, result) {
+        client.query('SELECT item_id, item_name AS name, description, quantity FROM items', [], function(err, result) {
             //call `done()` to release the client back to the pool
             done();
 
