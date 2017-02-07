@@ -14,12 +14,12 @@ app.get('/', function (req, res) {
 * /params   id
 *           person
 *           qty
-* /brief    Route to remove some :qty from inventory 
+* /brief    Route to remove some :qty from inventory
 *
 * /author   Luke?
 ****************************************************/
 app.get('/checkout/:id/:person/:qty', function(req, res) {
-    
+
     transaction(req.params.id, req.params.person, -req.params.qty, function(err, tranRes) {
         if (err) {
             res.status(500);
@@ -37,12 +37,12 @@ app.get('/checkout/:id/:person/:qty', function(req, res) {
 * /params   id
 *           person
 *           qty
-* /brief    Route to add item back into inventory 
+* /brief    Route to add item back into inventory
 *
 * /author   Luke
 ****************************************************/
 app.get('/checkin/:id/:person/:qty', function(req, res) {
-    
+
     transaction(req.params.id, req.params.person, req.params.qty, function(err, tranRes) {
         if (err) {
             res.status(500);
@@ -57,7 +57,7 @@ app.get('/checkin/:id/:person/:qty', function(req, res) {
 
 /****************************************************
 * /path     N/A
-* /brief    Helper function for checkin route 
+* /brief    Helper function for checkin route
 *
 * /author   Luke
 ****************************************************/
@@ -67,7 +67,7 @@ var transaction = function(id, person, qty, retFunc) {
         if(err) {
             return console.error('error fetching client from pool', err);
         }
-    
+
          client.query('INSERT INTO transactions(item_id, person, qty_changed) VALUES ($1, $2, $3)', [id, person, qty], function(err, result) {
              //call `done()` to release the client back to the pool
              done();
@@ -86,7 +86,7 @@ var transaction = function(id, person, qty, retFunc) {
 /****************************************************
 * /path     /view
 * /params   null
-* /brief    Display all entries in the table 
+* /brief    Display all entries in the table
 *
 * /author   <insert name>
 ****************************************************/
@@ -114,12 +114,43 @@ app.get('/view', function(req, res){
 
 
 /****************************************************
+* /path     /shoppinglist
+* /params   null
+* /brief    Returns all items with quantity less than threshold
+*
+* /author   Luke
+****************************************************/
+app.get('/shoppinglist', function(req, res){
+  //first query the database
+  //then return the results to the user
+
+      pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('error fetching client from pool', err);
+        }
+        client.query('SELECT item_name AS name, description, price FROM items WHERE quantity < threshold', [], function(err, result) {
+            //call `done()` to release the client back to the pool
+            done();
+
+            if(err) {
+                return console.error('error running query', err);
+            }
+
+            //output: 1
+            res.send(result.rows);
+        });
+    });
+});
+
+
+
+/****************************************************
 * /path     /stats/:id
-* /params  
-*           
-*           
+* /params
+*
+*
 * /brief    Route to pull satistics for an item
-*           should probably be renamed to be more specific 
+*           should probably be renamed to be more specific
 *
 * /author   Andrew McCann
 * /date     2/3/2017
@@ -127,14 +158,14 @@ app.get('/view', function(req, res){
 app.get('/stats/:id', function(err, client, done) {
     pool.connect(function(err, client, done) {
         if(err) {
-            return console.error('Error fetching client from pool', err);   
+            return console.error('Error fetching client from pool', err);
         }
         /*
         client.query('INSERT INTO transactions(item_id, person, qty_changed) VALUES ($1, $2, $3)', [id, person, qty], function(err, result) {
-        client.query('SELECT item_name, quantity, blahbalh 
+        client.query('SELECT item_name, quantity, blahbalh
         client.query('SELECT * FROM transactions WHERE item_name = id', [], function(err, result) {
             done();
-            
+
             if(err)
                 return console.error('Error returned from DB', err);
 
@@ -147,9 +178,9 @@ app.get('/stats/:id', function(err, client, done) {
 * /path     /stats/range/:start_date/:end_date
 * /params   :start_date - Beginning of time frame
 *           :end_date - End of time frame
-*           
+*
 * /brief    Route to pull all stats from a date_range
-*            
+*
 * /author   Andrew McCann
 * /date     2/3/2017
 ****************************************************/
