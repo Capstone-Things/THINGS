@@ -112,41 +112,38 @@ app.get('/view', function(req, res){
     });
 });
 
-//Add new item api route, used to insert rows into 
-//------------------------------------------------------------------------------
-app.get('/add/:name/:desc/:price/:thresh', function(req, res) {
 
-    additem(req.params.name, req.params.desc, req.params.pr, req.params.thresh, function(err, tranRes) {
-        if (err) {
-            res.status(500);
-            res.send('Database Error');
-        } else {
-            res.status(200);
-            res.send(tranRes);
-        }
-    });
-});
+/****************************************************
+* /path     /add/:name/:desc/:price/:thresh
+* /params
+*
+* /brief    Add new item api route, used to insert rows into
+*
+* /author   Austen & Luke
+* /date     2/7/2017
+****************************************************/
+app.get('/add/:name/:desc/:price/:thresh', function(req, res){
+  //first query the database
+  //then return the results to the user
 
-var additem = function(name, desc, pr, thresh, retFunc) {
-
-    pool.connect(function(err, client, done) {
+      pool.connect(function(err, client, done) {
         if(err) {
             return console.error('error fetching client from pool', err);
         }
+        client.query('INSERT INTO items(item_name, description, price, threshold) VALUES ($1, $2, $3, $4)',
+        [req.params.name, req.params.desc, req.params.price, req.params.thresh], function(err, result) {
+            //call `done()` to release the client back to the pool
+            done();
 
-         client.query('INSERT INTO items(item_name, description, price, threshold) VALUES ($1, $2, $3, $4)', [name, desc, pr, thresh], function(err, result) {
-             //call `done()` to release the client back to the pool
-             done();
+            if(err) {
+                return console.error('error running query', err);
+            }
 
-             if(err) {
-                 console.error('error running query', err);
-                 retFunc(err, null);
-             } else {
-                 retFunc(null, 'Transaction Completed Successfully');
-             }
+            //output: 1
+            res.jsonp(result.rows);
         });
     });
-}
+});
 
 /****************************************************
 * /path     /shoppinglist
