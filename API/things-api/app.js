@@ -19,16 +19,7 @@ app.get('/', function (req, res) {
 * /author   Luke?
 ****************************************************/
 app.get('/checkout/:id/:person/:qty', function(req, res) {
-
-    transaction(req.params.id, req.params.person, -req.params.qty, function(err, tranRes) {
-        if (err) {
-            res.status(500);
-            res.jsonp('Database Error');
-        } else {
-            res.status(200);
-            res.jsonp(tranRes);
-        }
-    });
+    transaction(req.params.id, req.params.person, -req.params.qty, errResultHandler, res);
 });
 
 
@@ -42,17 +33,9 @@ app.get('/checkout/:id/:person/:qty', function(req, res) {
 * /author   Luke
 ****************************************************/
 app.get('/checkin/:id/:person/:qty', function(req, res) {
-
-    transaction(req.params.id, req.params.person, req.params.qty, function(err, tranRes) {
-        if (err) {
-            res.status(500);
-            res.jsonp('Database Error');
-        } else {
-            res.status(200);
-            res.jsonp(tranRes);
-        }
-    });
+    transaction(req.params.id, req.params.person, req.params.qty, errResultHandler, res);
 });
+
 
 
 /****************************************************
@@ -61,7 +44,7 @@ app.get('/checkin/:id/:person/:qty', function(req, res) {
 *
 * /author   Luke
 ****************************************************/
-var transaction = function(id, person, qty, retFunc) {
+var transaction = function(id, person, qty, retFunc, res) {
 
     pool.connect(function(err, client, done) {
         if(err) {
@@ -69,15 +52,15 @@ var transaction = function(id, person, qty, retFunc) {
         }
 
          client.query('INSERT INTO transactions(item_id, person, qty_changed) VALUES ($1, $2, $3)', [id, person, qty], function(err, result) {
-             //call `done()` to release the client back to the pool
-             done();
+            //call `done()` to release the client back to the pool
+            done();
 
-             if(err) {
-                 console.error('error running query', err);
-                 retFunc(err, null);
-             } else {
-                 retFunc(null, 'Transaction Completed Successfully');
-             }
+            if(err) {
+                console.error('error running query', err);
+                retFunc(err, null, res);
+            } else {
+                retFunc(null, 'Transaction Completed Successfully', res);
+            }
         });
     });
 }
@@ -86,7 +69,7 @@ var transaction = function(id, person, qty, retFunc) {
 /****************************************************
 * /path     /view
 * /params   null
-* /brief    Display all entries in the table
+* /brief    Display all entries in the items table
 *
 * /author   <insert name>
 ****************************************************/
@@ -101,16 +84,11 @@ app.get('/view', function(req, res){
         client.query('SELECT item_id, item_name AS name, description, quantity FROM items', [], function(err, result) {
             //call `done()` to release the client back to the pool
             done();
-
-            if(err) {
-                return console.error('error running query', err);
-            }
-
-            //output: 1
-            res.jsonp(result.rows);
+            errResultHandler(err, result.rows, res);
         });
     });
 });
+
 
 
 /****************************************************
@@ -134,16 +112,12 @@ app.get('/add/:name/:desc/:price/:thresh', function(req, res){
         [req.params.name, req.params.desc, req.params.price, req.params.thresh], function(err, result) {
             //call `done()` to release the client back to the pool
             done();
-
-            if(err) {
-                return console.error('error running query', err);
-            }
-
-            //output: 1
-            res.jsonp(result.rows);
+            errResultHandler(err, 'Item Added Successfully', res);
         });
     });
 });
+
+
 
 /****************************************************
 * /path     /shoppinglist
@@ -163,13 +137,7 @@ app.get('/shoppinglist', function(req, res){
         client.query('SELECT item_name AS name, description, price FROM items WHERE quantity < threshold', [], function(err, result) {
             //call `done()` to release the client back to the pool
             done();
-
-            if(err) {
-                return console.error('error running query', err);
-            }
-
-            //output: 1
-            res.jsonp(result.rows);
+            errResultHandler(err, result.rows, res);
         });
     });
 });
@@ -206,6 +174,8 @@ app.get('/stats/:id', function(err, client, done) {
     });
 });
 
+
+
 /****************************************************
 * /path     /stats/range/:start_date/:end_date
 * /params   :start_date - Beginning of time frame
@@ -231,6 +201,28 @@ app.get('/stats/range/:start_date/:end_date', function(err, client, done) {
     });
 
 });
+
+
+
+/****************************************************
+* /path     /stats/range/:start_date/:end_date
+* /params   :start_date - Beginning of time frame
+*           :end_date - End of time frame
+*
+* /brief    Responds with a meaningful status and returns the results
+*
+* /author   Luke
+* /date     2/7/2017
+****************************************************/
+var errResultHandler = function(err, result, res) {
+    if (err) {
+      res.status(500);
+      res.jsonp('Database Error');
+    } else {
+      res.status(200);
+      res.jsonp(result);
+    }
+}
 
 
 app.listen(3000, function () {
