@@ -2,7 +2,7 @@
 var app = angular.module("catthings_app", ['ui.bootstrap', 'ngMockE2E', 'ui.router']);
 
 //UI Router Config
-app.config(function($stateProvider, $urlRouterProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
 
     // For any unmatched url, send to /index
     $urlRouterProvider.otherwise("/");
@@ -25,6 +25,10 @@ app.config(function($stateProvider, $urlRouterProvider) {
           url: "/cart",
           templateUrl: 'templates/html/cart.html'
         });
+   $sceDelegateProvider.resourceUrlWhitelist([
+     'self',
+     'http://things.cs.pdx.edu/**'
+   ]);
 });
 
 //Login Controller
@@ -125,8 +129,9 @@ function CartController($scope, $http, $uibModal, $location, $rootScope, cartLis
 app.controller('InventoryController', ['$scope', '$http', '$uibModal', '$location', 'cartList', InventoryController]);
 function InventoryController($scope, $http, $uibModal, $location, cartList) {
   //Get latest inventory data from database
-  $http.get("http://localhost:3000/view").then(function (response) {
-      $scope.inventory = response.data;
+  $http.jsonp("http://things.cs.pdx.edu:3000/view?callback=JSON_CALLBACK", {jsonpCallbackParam:  'callback'})
+  .success(function (data) {
+      $scope.inventory = data;
       console.log($scope.inventory);
   });
 
@@ -198,5 +203,6 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/request.html').passThrough();
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
 
-    $httpBackend.whenGET("http://localhost:3000/view").passThrough();
+  //  $httpBackend.whenGET("http://localhost:3000/view").passThrough();
+    $httpBackend.whenJSONP(/http:\/\/things\.cs\.pdx\.edu:3000\/view*/).passThrough();
 });
