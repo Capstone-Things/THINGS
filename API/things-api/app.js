@@ -5,7 +5,7 @@ var app = express();
 var pool = new pg.Pool(db_info.config);
 
 app.get('/', function (req, res) {
-  res.send('Hello World!');
+  res.jsonp('Hello World!');
 });
 
 
@@ -23,10 +23,10 @@ app.get('/checkout/:id/:person/:qty', function(req, res) {
     transaction(req.params.id, req.params.person, -req.params.qty, function(err, tranRes) {
         if (err) {
             res.status(500);
-            res.send('Database Error');
+            res.jsonp('Database Error');
         } else {
             res.status(200);
-            res.send(tranRes);
+            res.jsonp(tranRes);
         }
     });
 });
@@ -46,10 +46,10 @@ app.get('/checkin/:id/:person/:qty', function(req, res) {
     transaction(req.params.id, req.params.person, req.params.qty, function(err, tranRes) {
         if (err) {
             res.status(500);
-            res.send('Database Error');
+            res.jsonp('Database Error');
         } else {
             res.status(200);
-            res.send(tranRes);
+            res.jsonp(tranRes);
         }
     });
 });
@@ -107,7 +107,7 @@ app.get('/view', function(req, res){
             }
 
             //output: 1
-            res.send(result.rows);
+            res.jsonp(result.rows);
         });
     });
 });
@@ -137,7 +137,7 @@ app.get('/shoppinglist', function(req, res){
             }
 
             //output: 1
-            res.send(result.rows);
+            res.jsonp(result.rows);
         });
     });
 });
@@ -169,7 +169,7 @@ app.get('/stats/:id', function(err, client, done) {
             if(err)
                 return console.error('Error returned from DB', err);
 
-            res.send(result.rows);
+            res.jsonp(result.rows);
         }*/
     });
 });
