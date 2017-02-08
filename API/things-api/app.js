@@ -39,10 +39,10 @@ app.get('/checkin/:id/:person/:qty', function(req, res) {
 
 
 /****************************************************
-* /path     N/A
-* /brief    Helper function for checkin route
+* /func name  transaction
+* /brief      Helper function for checkin route
 *
-* /author   Luke
+* /author     Luke
 ****************************************************/
 var transaction = function(id, person, qty, retFunc, res) {
 
@@ -237,16 +237,16 @@ app.get('/stats/range/:start_date/:end_date', function(err, client, done) {
 
 
 /****************************************************
-* /path     N/A
-* /params   :err - the error that occured, null if none
-*           :result - the result of the database query
+* /func name  errResultHandler
+* /params     :err - the error that occured, null if none
+*             :result - the result of the database query
                       (either the rows returned or success message)
-            :res - the function to handle the responding the result
+              :res - the function to handle the responding the result
 *
-* /brief    Responds with a meaningful status and returns the results
+* /brief      Responds with a meaningful status and returns the results
 *
-* /author   Luke
-* /date     2/7/2017
+* /author     Luke
+* /date       2/7/2017
 ****************************************************/
 var errResultHandler = function(err, result, res) {
     if (err) {
