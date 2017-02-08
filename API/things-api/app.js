@@ -237,7 +237,7 @@ app.get('/stats/range/:start_date/:end_date', function(err, client, done) {
 
 
 /****************************************************
-* /path     /stats/range/:start_date/:end_date
+* /path     N/A
 * /params   :err - the error that occured, null if none
 *           :result - the result of the database query
                       (either the rows returned or success message)
