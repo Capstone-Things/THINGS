@@ -98,11 +98,6 @@ Important Notes:
         FOR EACH ROW EXECUTE PROCEDURE set_qty_remaining();
 
     -------------------------------------------------------------------
-    CREATE OR REPLACE FUNCTION max_item_id()
-    RETURNS int LANGUAGE SQL AS
-    $$ SELECT max(item_id) FROM items; $$;
-
-    -------------------------------------------------------------------
     CREATE OR REPLACE FUNCTION item_id_with_name(text) 
     RETURNS int LANGUAGE SQL AS
     $$ SELECT item_id FROM items WHERE item_name = $1; $$;
