@@ -22,7 +22,7 @@ app.get('/', function (req, res) {
 * Brief: This route will Authenticate the user and return a JSON token
 *
 *
-*
+* Author: Nick McHale
 ****************************************************/
 app.post('/authenticate', function(req, res) {
 
