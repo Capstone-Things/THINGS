@@ -1,13 +1,45 @@
-var express = require('express');
-var pg = require('pg');
-var db_info = require('./db_info.js')
-var app = express();
-var pool = new pg.Pool(db_info.config);
+//Import Packages
+var express = require('express'); //Express is the Node Server Framework
+var pg = require('pg'); // pg is a library for connecting to the postgresql Database
+var fs = require('fs'); // fs give us file system access
+var https = require('https'); // this will allow us to host a https server
+
+//Import Config files
+var db_info = require('./db_info.js') //This file contains all of the configuration info needed to connect to the database.
+
+//Instanciate global variables.
+var app = express(); // This is our Express Application.
+var pool = new pg.Pool(db_info.config); //This is the pool that DB client connections live in.
 
 app.get('/', function (req, res) {
   res.jsonp('Hello World!');
 });
 
+/****************************************************
+* Path: /authorize
+* HTTP Method: POST
+* Params: Username, Password
+* Brief: This route will Authenticate the user and return a JSON token
+*
+*
+*
+****************************************************/
+app.post('/authenticate', function(req, res) {
+
+	//Look up user in Database
+		//if not found ERROR
+		//if found check password
+
+	//check password
+		//if no match ERROR
+		//if match assign token
+	
+	//generate Token
+
+	//return token and success flag
+
+
+});
 
 /****************************************************
 * /path     /checkout/:id/:person/:qty
@@ -259,6 +291,18 @@ var errResultHandler = function(err, result, res) {
 }
 
 
+//This will launch our server, and pass it to the express app.
+https.createServer({
+	key: fs.readFileSync('key.pem'),
+	cert: fs.readFileSync('cert.pem')
+}, app).listen(3000, function() {
+	console.log('Listening on port 3000');
+});
+
+
+//The following is depreciated as we are launching with a HTTPS server
+/*
 app.listen(3000, function () {
   console.log('Listening on port 3000');
 });
+*/
