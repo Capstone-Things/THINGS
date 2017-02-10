@@ -9,7 +9,8 @@
     "express": "^4.14.0",
     "multer": "^1.2.1",
     "pg": "^6.1.2",
-    "test": "^0.6.0"
+    "test": "^0.6.0",
+    "jwt-simple": "~0.5.1"
   },
   "devDependencies": {},
   "scripts": {

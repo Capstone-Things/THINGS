@@ -3,9 +3,13 @@ var express = require('express'); //Express is the Node Server Framework
 var pg = require('pg'); // pg is a library for connecting to the postgresql Database
 var fs = require('fs'); // fs give us file system access
 var https = require('https'); // this will allow us to host a https server
+var jwt = require('jwt-simple');
 
 //Import Config files
-var db_info = require('./db_info.js') //This file contains all of the configuration info needed to connect to the database.
+var db_info = require('./conf/db/db_info.js') //This file contains all of the configuration info needed to connect to the database.
+var keyFile =  fs.readFileSync('./conf/ssl/server.key'); //the key for SSL
+var certFile=  fs.readFileSync('./conf/ssl/server.crt'); //ssl cert(self signed)
+
 
 //Instanciate global variables.
 var app = express(); // This is our Express Application.
@@ -35,7 +39,7 @@ app.post('/authenticate', function(req, res) {
 		//if match assign token
 	
 	//generate Token
-
+	
 	//return token and success flag
 
 
@@ -293,8 +297,8 @@ var errResultHandler = function(err, result, res) {
 
 //This will launch our server, and pass it to the express app.
 https.createServer({
-	key: fs.readFileSync('key.pem'),
-	cert: fs.readFileSync('cert.pem')
+	key: keyFile,
+	cert: certFile 
 }, app).listen(3000, function() {
 	console.log('Listening on port 3000');
 });
