@@ -39,6 +39,9 @@ Important Notes:
         threshold   int NOT NULL,
         dateCreated timestamp DEFAULT CURRENT_TIMESTAMP,
         is_hidden   bool NOT NULL DEFAULT false,
+        CHECK(quantity >= 0),
+        CHECK(threshold >= 0),
+        CHECK(price >= 0::money),
         PRIMARY KEY (item_id)
     );
 
@@ -95,7 +98,7 @@ Important Notes:
         FOR EACH ROW EXECUTE PROCEDURE set_qty_remaining();
 
     -------------------------------------------------------------------
-    CREATE OR REPLACE FUNCTION max_item_id() 
+    CREATE OR REPLACE FUNCTION max_item_id()
     RETURNS int LANGUAGE SQL AS
     $$ SELECT max(item_id) FROM items; $$;
 
