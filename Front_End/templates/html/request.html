@@ -12,24 +12,35 @@
       </div>
       <div class="collapse navbar-collapse" uib-collapse="isCollapsed">
         <ul class="nav navbar-nav">
-          <li><a ng-href="#home">Inventory</a></li>
+          <li><a href="home.html">Inventory</a></li>
           <li class="active"><a ng-href="#request">Request Item</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li><a class="navbar-right" ng-href="#cart">Cart <i class="fa fa-shopping-cart"></i></a></li>
-          <li><a class="navbar-right" ng-href="#login">Logout <i class="fa fa-sign-out"></i></a></li>
+          <li><a class="navbar-right" href="cart.html">Cart <i class="fa fa-shopping-cart"></i></a></li>
+          <li><a class="navbar-right" href="login.html">Logout <i class="fa fa-sign-out"></i></a></li>
         </ul>
       </div>
     </div>
   </nav>
-  <form>
+  <form action = "submit_page.php" method = "post">
     <div class="form-group">
       <label for="itemName">Name:</label>
-      <input type="text" class="form-control">
+      <input type="text" placeholder="Name of item" class="form-control">
     </div>
     <div class="form-group">
       <label for="quantityNeeded">Quantity:</label>
-      <input type="number" class="form-control" min="0">
+      <input type="number" placeholder="Number requested" class="form-control" min="0">
+    </div>
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <textarea cols="50" rows="4" name="description" placeholder="Describe the item, including where it can be bought" class = "form-control"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="message">Additional Information:</label>
+      <textarea cols="50" rows="4" name="message" placeholder="Any additional information for the administrator" class = "form-control"></textarea>
+    </div>
+    <div class="form-group">
+      <input type="submit" value="Submit">
     </div>
   </form>
 </body>
