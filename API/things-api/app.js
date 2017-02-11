@@ -132,7 +132,7 @@ app.put('/add/:name/:desc/:price/:thresh', function(req, res){
 * /author   Luke
 * /date     2/7/2017
 ****************************************************/
-app.get('/tagitem/:id/:tag', function(req, res){
+app.post('/tagitem/:id/:tag', function(req, res){
   //first query the database
   //then return the results to the user
 
@@ -198,7 +198,7 @@ app.get('/stats/:name', function(req, res) {
             return(console.error('Invalid ID number', err));
         }
 */
-        client.query('SELECT * FROM transactions WHERE item_id = $1', [id], function(err, result) {
+        client.query('SELECT * FROM transactions', [], function(err, result) {
             done();
         //Get transaction history
 
@@ -236,12 +236,86 @@ app.get('/history/recent/:entries?', function(req, res) {
         if(req.params.entries) {
             entries = req.params.entries
         }
+        // TODO:> Define what attributes we actually want to display.
+        // would be cool if we had a VERBose flag.
         client.query('SELECT * FROM transactions ORDER BY timestamp DESC LIMIT $1', [entries], function(err, result) {
             done();
            errResultHandler(err, result.rows, res);
         });
     });
 });
+
+
+
+/****************************************************
+* /path     /history/:name
+* /params   :name - name of the item
+*           :entries? - OPTIONAL, add int value to 
+*           specify number of recents
+*
+* /brief    Route to get last 15 transactions of a 
+*           specific item
+*
+* /author   Andrew McCann
+* /date     2/10/2017
+****************************************************/
+app.get('/history/:name/:entries?', function(req, res) {
+    pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('Error fetching client from pool', err);
+        }
+        var entries = 15
+        if(req.params.entries) {
+            entries = req.params.entries
+        }
+        var name = req.params.name
+        if(name === 'undefined') {
+            console.log('Nobueno')
+        }
+        //TODO:> Cut down on the attributes
+        client.query('SELECT * FROM transactions AS t, items AS i WHERE i.item_name = $2 AND t.item_id = i.item_id ORDER BY timestamp DESC LIMIT $1', [entries, name], function(err, result) {
+            done();
+           errResultHandler(err, result.rows, res);
+        });
+    });
+});
+
+
+
+/****************************************************
+* /path     /history/bytag/:tag
+* /params   :name - name of the item
+*           :entries? - OPTIONAL, add int value to 
+*           specify number of recents
+*
+* /brief    Route to get last 15 transactions of a 
+*           specific item
+*
+* /author   Andrew McCann
+* /date     2/10/2017
+****************************************************/
+app.get('/historybytag/:tag/:entries?', function(req, res) {
+    pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('Error fetching client from pool', err);
+        }
+        var entries = 15
+        if(req.params.entries) {
+            entries = req.params.entries
+        }
+        var tag = req.params.tag
+        if(tag === 'undefined') {
+            console.log('Nobueno')
+        }
+        name = tag.toLowerCase()
+        //TODO:> Results, and console log above, route name is sloppy. Differentiate without collision?
+        client.query('SELECT * FROM transactions AS t, tags WHERE LOWER(tags.tag_name) = $2 AND t.item_id = tags.item_id ORDER BY timestamp DESC LIMIT $1', [entries, name], function(err, result) {
+            done();
+           errResultHandler(err, result.rows, res);
+        });
+    });
+});
+
 
 
 /****************************************************
@@ -285,19 +359,12 @@ app.get('/history/:start_date/:end_date', function(req, res) {
 * /author   
 * /date     
 ****************************************************/
+//
+//
+//
+//
 
-/****************************************************
-* /route    /secretdelete/:table/:id
-* /params   :table - Table to delete from
-*           :id - item_id
-*
-* /brief    Secret delete function for use during dev
-*           Either never document, or remove prior to
-*           delivery
-*
-* /author     Andrew McCann
-* /date       2/10/2017
-****************************************************/
+
 
 /****************************************************
 * /func name  errResultHandler
@@ -350,6 +417,31 @@ app.delete('/secretdelete/:table/:id', function(req, res) {
         });
     });
 
+});
+
+app.get('/secretview/tags/', function(req, res) {
+    pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('Error fetching client from pool', err);
+        }
+        client.query('SELECT * FROM tags', [], function(err, result) {
+            done();
+            errResultHandler(err, result.rows, res);
+        });
+        
+    });
+});
+app.get('/secretview/transactions/', function(req, res) {
+    pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('Error fetching client from pool', err);
+        }
+        client.query('SELECT * FROM transactions', [], function(err, result) {
+            done();
+            errResultHandler(err, result.rows, res);
+        });
+        
+    });
 });
 
 app.listen(3000, function () {
