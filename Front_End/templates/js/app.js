@@ -20,10 +20,6 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
         .state('request',{
           url: "/request",
           templateUrl: 'templates/html/request.html'
-        })
-        .state('cart', {
-          url: "/cart",
-          templateUrl: 'templates/html/cart.html'
         });
    $sceDelegateProvider.resourceUrlWhitelist([
      'self',
@@ -34,12 +30,6 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
 //Login Controller
 app.controller('LoginCheckController', ['$scope', '$location','$rootScope', LoginCheckController]);
 function LoginCheckController($scope, $location, $rootScope) {
-    /* Can be used for Admin login
-    $scope.users = [{
-        UserName: 'admin',
-        Password: 'password'
-    }];
-    */
     $scope.showAdminLogin = false;
     $scope.LoginCheck = function() {
       $rootScope.username = $scope.username;
@@ -51,22 +41,27 @@ function LoginCheckController($scope, $location, $rootScope) {
     }
 }
 
-//Original Controller...May not be needed
-app.controller("catthings_ctrl", function ($scope, $window) {
-
-});
-
 //Service to manage cart
-app.service('cartList', [cartList]);
-function cartList () {
+app.service('cartList', ['$rootScope', cartList]);
+function cartList ($rootScope) {
   var cart = [];
   return {
       getCart: function () {
           return cart;
       },
       addToCart: function(item) {
-          cart.push(item);
-          console.log(cart);
+        var doesExist = false;
+        //Make sure it's not in cart
+        for(var i = 0; i < cart.length; i++){
+          if (cart[i].item_id === item.item_id){
+            doesExist = true;
+          }
+        }
+          if(doesExist == false){
+            cart.push(item);
+            $rootScope.$broadcast("CartAdd", cart);
+          }
+          //Otherwise, don't do anything
       },
       removeSelected: function(){
         var newCart=[];
@@ -74,7 +69,7 @@ function cartList () {
             if(!item.checked){
                 newCart.push(item);
             }
-        });
+            });
         cart=newCart;
         return cart;
       }
@@ -90,8 +85,9 @@ function NavBarController($scope) {
 //Cart Controller
 app.controller('CartController', ['$scope', '$http', '$uibModal', '$location', '$rootScope', 'cartList', CartController]);
 function CartController($scope, $http, $uibModal, $location, $rootScope, cartList){
-  $scope.cart = cartList.getCart();
 
+  //Initialization purposes
+  $scope.cart = [];
   function check(){
     if(!$scope.cart.length){
       $scope.cartNotEmpty = false;
@@ -103,6 +99,25 @@ function CartController($scope, $http, $uibModal, $location, $rootScope, cartLis
     }
   }
   check()
+
+  //Broadcast for when items are added to Cart
+  $scope.$on("CartAdd", function(event, newCart){
+    $scope.cart = newCart;
+    check();
+  });
+
+  //Check Quantity
+  $scope.checkQuantity = function(){
+    for(var i = 0; i < $scope.cart.length; i++){
+      if($scope.cart[i].selectedQuantity == null){ //Not all items have selected quantities
+        return true;
+      }
+      if($scope.cart[i].selectedQuantity > parseInt($scope.cart[i].quantity) || $scope.cart[i].selectedQuantity < 0){
+        return true;
+      }
+    }
+    return false;
+  }
 
   //Remove selected items from cart
   $scope.removeSelected = function() {
@@ -132,24 +147,15 @@ function InventoryController($scope, $http, $uibModal, $location, cartList) {
   $http.jsonp("http://things.cs.pdx.edu:3000/view?callback=JSON_CALLBACK", {jsonpCallbackParam:  'callback'})
   .success(function (data) {
       $scope.inventory = data;
-      console.log($scope.inventory);
   });
 
   $scope.addToCart = function(item){
-    var cartItem = angular.copy(item); //Make copy of the item to add to cart
-    cartItem.check = false;
-    $scope.currentQuantity = item.quantity; //Get current quantity of item
-    var answer = $uibModal.open({templateUrl: 'templates/html/promptQuantity.html',
-                                 backdrop: 'static',
-                                 controller: PromptQuantityController,
-                                 scope: $scope
-                               });
-    answer.result.then(function(response){
-      if(response != "Cancel"){
-        cartItem.quantity = response;
-        cartList.addToCart(cartItem);
-      }
-    });
+    if(item.carted == true){
+      //Make copy of the item to add to cart
+      var cartItem = angular.copy(item);
+      cartItem.check = false;
+      cartList.addToCart(cartItem);
+    }
   }
 }
 
