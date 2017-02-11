@@ -187,22 +187,23 @@ app.get('/shoppinglist', function(req, res){
 * /author   Andrew McCann
 * /date     2/3/2017
 ****************************************************/
-app.get('/stats/:id', function(err, client, done) {
+app.get('/stats/:id', function(req, res) {
     pool.connect(function(err, client, done) {
         if(err) {
             return console.error('Error fetching client from pool', err);
         }
-        /*
-        client.query('INSERT INTO transactions(item_id, person, qty_changed) VALUES ($1, $2, $3)', [id, person, qty], function(err, result) {
-        client.query('SELECT item_name, quantity, blahbalh
-        client.query('SELECT * FROM transactions WHERE item_name = id', [], function(err, result) {
+        // Quickly validate if id is an int
+        var id = parseInt(req.params.id)
+        if(req.params.id != id) {
+            done();
+            return(console.error('Invalid ID number', err));
+        }
+
+        client.query('SELECT * FROM transactions WHERE item_id = $1', [id], function(err, result) {
             done();
 
-            if(err)
-                return console.error('Error returned from DB', err);
-
-            res.jsonp(result.rows);
-        }*/
+            errResultHandler(err, result.rows, res);
+        });
     });
 });
 
@@ -218,18 +219,20 @@ app.get('/stats/:id', function(err, client, done) {
 * /author   Andrew McCann
 * /date     2/3/2017
 ****************************************************/
-app.get('/stats/range/:start_date/:end_date', function(err, client, done) {
+app.get('/stats/range/:start_date/:end_date', function(req, res) {
     pool.connect(function(err, client, done) {
         if(err) {
             return console.error('Error fetching client from pool', err);
         }
-        /*
-        client.query('SELECT * FROM transactions WHERE date <= end_date AND date >= start_date', [], function(err, result) {
+        //Date validation is a tricky problem I am 
+        //pretending does not exist for now
+        var start_date = req.params.start_date
+        var end_date = req.params.end_date
+        client.query('SELECT * FROM transactions WHERE cast(timestamp as date) <= $2 AND cast(timestamp as date) >= $1', [start_date, end_date], function(err, result) {
             done();
-            if(err) {
-                return console.error('Error resulting from query', err);
-            }
-        } */
+            errResultHandler(err, result.rows, res);
+
+        });
     });
 
 });
