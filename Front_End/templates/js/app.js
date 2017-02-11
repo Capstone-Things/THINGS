@@ -121,6 +121,22 @@ function CartController($scope, $http, $uibModal, $location, $rootScope, cartLis
   }
 }
 
+//Request Controller
+app.controller('RequestController', ['$scope', '$http', '$location', RequestController]);
+function RequestController($scope, $http, $location){
+
+  //sendRequest
+  $scope.sendRequest = function() {
+    $http.post('/request', $scope.itemName, $scope.quantityNeeded, $scope.description, $scope.message).then(function(response){
+      console.log(response.status);
+      if(response.status === 200){
+              $location.path("home");
+      }
+      //Else 404 error....
+    });
+  }
+}
+
 //Inventory Controller
 app.controller('InventoryController', ['$scope', '$http', '$uibModal', '$location', 'cartList', InventoryController]);
 function InventoryController($scope, $http, $uibModal, $location, cartList) {
@@ -199,4 +215,5 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
 
     $httpBackend.whenGET("http://things.cs.pdx.edu:3000/view").passThrough();
+    $httpBackend.whenPOST("http://things.cs.pdx.edu:3000/request").passThrough();
 });
