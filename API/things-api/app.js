@@ -1,5 +1,6 @@
 var express = require('express');
 var pg = require('pg');
+var nodemailer = require('nodemailer');
 var db_info = require('./db_info.js')
 var app = express();
 var pool = new pg.Pool(db_info.config);
@@ -22,6 +23,42 @@ app.get('/checkout/:id/:person/:qty', function(req, res) {
             res.send(tranRes);
         }
     });
+});
+
+//Request api route
+//------------------------------------------------------------------------------
+app.post('/request/', function(req, res) {
+    var header_data = req.header;
+    var name = header_data['itemName'];
+    var num = header_data['quantityNeeded'];
+    var desc = header_data['description'];
+    var msg = header_data['message'];
+
+// create reusable transporter object using the default SMTP transport
+let transporter = nodemailer.createTransport({
+    service: 'yahoo',
+    auth: {
+        user: 'catthingsuser@yahoo.com',
+        pass: 'testing12345'
+    }
+});
+
+// setup email data with unicode symbols
+let mailOptions = {
+    from: '"CAT-Things-User" <catthingsuser@yahoo.com>', // sender address
+    to: 'aruzicka@pdx.edu', // list of receivers
+    subject: 'New Inventory Request from a User', // Subject line
+    text: 'A user has requested ' + num + ' ' + name + '\n' + 'With the following description: ' + desc + '\n' + 'Additional Information from user: ' + msg
+};
+
+// send mail with defined transport object
+transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+        return console.log(error);
+    }
+    console.log('Message %s sent: %s', info.messageId, info.response);
+});
+
 });
 
 //Checkin items api route
