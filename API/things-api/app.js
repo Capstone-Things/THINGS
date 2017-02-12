@@ -1,19 +1,28 @@
 //Import Packages
 var express = require('express'); //Express is the Node Server Framework
+var bodyParser = require('body-parser')//for parsing the body of POST's
+var cookieParser = require('cookie-parser')//for parsing cookies
 var pg = require('pg'); // pg is a library for connecting to the postgresql Database
 var fs = require('fs'); // fs give us file system access
 var https = require('https'); // this will allow us to host a https server
-var jwt = require('jwt-simple');
+var jwt = require('jsonwebtoken');
 
 //Import Config files
-var db_info = require('./conf/db/db_info.js') //This file contains all of the configuration info needed to connect to the database.
+var db_info = require('./conf/db/db_info.js'); //This file contains all of the configuration info needed to connect to the database.
 var keyFile =  fs.readFileSync('./conf/ssl/server.key'); //the key for SSL
 var certFile=  fs.readFileSync('./conf/ssl/server.crt'); //ssl cert(self signed)
+var tokenSecret = fs.readFileSync('./conf/jwtSecret.key', 'utf-8').replace(/\s/g, '');
 
 
 //Instanciate global variables.
 var app = express(); // This is our Express Application.
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({extended: true}));  //support encoded bodies
+app.use(cookieParser());
+
 var pool = new pg.Pool(db_info.config); //This is the pool that DB client connections live in.
+
+
 
 app.get('/', function (req, res) {
   res.jsonp('Hello World!');
@@ -24,25 +33,55 @@ app.get('/', function (req, res) {
 * HTTP Method: POST
 * Params: Username, Password
 * Brief: This route will Authenticate the user and return a JSON token
-*
+*     that is valid for 1 week
 *
 * Author: Nick McHale
 ****************************************************/
 app.post('/authenticate', function(req, res) {
+  var username = req.body.username;
+  var password = req.body.password;
 
 	//Look up user in Database
-		//if not found ERROR
-		//if found check password
+  pool.connect(function(err, client, done) {
+      if(err) {
+          return console.error('error fetching client from pool', err);
+      }
 
-	//check password
-		//if no match ERROR
-		//if match assign token
-	
-	//generate Token
-	
-	//return token and success flag
+       client.query("SELECT * FROM users WHERE username=$1", [username], function(err, result) {
+          //call `done()` to release the client back to the pool
+          done();
 
+          if(err) {
+              //if not found user is uknown return 401
+              console.error('error running query', err);
+              res.sendStatus(401);//invalid user
 
+          } else {
+              var data = result.rows[0];
+              if(!data){
+                res.sendStatus(401);
+                return console.error('invalid username', username);
+              }
+              //if our user exsits, lets check their password.
+              if(password != data.password){
+                res.sendStatus(401);//invalid password
+                return console.error('invalid password');
+              }
+              else{
+                //assign a token
+                var payload = {
+                  user: data.username,
+                  admin: data.admin
+                };
+                var token = jwt.sign(payload, tokenSecret, {expiresIn: '7d'});
+                res.set('token', token);//attatch the token as a header
+                res.set('username', username);// attatch the username as a header
+                res.set('admin', data.admin);// attatch admin status as a header
+                res.sendStatus(200);//send 200 response code.
+              }
+          }
+    });
+});
 });
 
 /****************************************************
@@ -298,7 +337,7 @@ var errResultHandler = function(err, result, res) {
 //This will launch our server, and pass it to the express app.
 https.createServer({
 	key: keyFile,
-	cert: certFile 
+	cert: certFile
 }, app).listen(3000, function() {
 	console.log('Listening on port 3000');
 });
