@@ -73,7 +73,17 @@
               <td>{{ selected.name }}</td>
               <td>{{ selected.description }}</td>
               <td>{{ selected.quantity }}</td>
-              <td><input type="number" min="0" ng-model="selected.selectedQuantity" required/></td>
+              <td><input type="number" ng-model="selected.selectedQuantity" required/>
+                <div class="invalidQuantity" ng-show="selected.errorQuantity">
+                  <b>Quantity entered is greater than what is available</b>
+                </div>
+                <div class="negativeQuantity" ng-show="selected.negativeQuantity">
+                  <b>Quantity cannot be negative!</b>
+                </div>
+                <div class="zeroQuantity" ng-show="selected.zeroQuantity">
+                  <b>Quantity cannot be 0!</b>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>

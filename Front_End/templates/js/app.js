@@ -41,7 +41,7 @@ function LoginCheckController($scope, $location, $rootScope) {
     }
 }
 
-//Service to manage cart
+//==============Service to manage cart=================
 app.service('cartList', ['$rootScope', cartList]);
 function cartList ($rootScope) {
   var cart = [];
@@ -61,28 +61,74 @@ function cartList ($rootScope) {
             cart.push(item);
             $rootScope.$broadcast("CartAdd", cart);
           }
-          //Otherwise, don't do anything
       },
       removeSelected: function(){
         var newCart=[];
+        var toUncheck=[];
             angular.forEach(cart,function(item){
-            if(!item.checked){
+              if(!item.checked){
                 newCart.push(item);
-            }
+              }
+              else{
+                toUncheck.push(item.item_id); //Push item id to uncheck in inventory
+              }
             });
         cart=newCart;
+        $rootScope.$broadcast("Uncheck", toUncheck);
         return cart;
+      },
+      removeFromCart: function(item){
+        for(var i = 0; i < cart.length; i++){
+          if (cart[i].item_id == item.item_id){
+            cart.splice(i, 1);
+            break;
+          }
+        }
+        $rootScope.$broadcast("RemoveCart", cart);
       }
   };
 }
 
-//NavBar Controller
+//=============NavBar Controller=================
 app.controller('NavBarController', ['$scope', NavBarController]);
 function NavBarController($scope) {
     $scope.isCollapsed = true;
 }
 
-//Cart Controller
+//=============Inventory Controller===============
+app.controller('InventoryController', ['$scope', '$http', '$uibModal', '$location', 'cartList', InventoryController]);
+function InventoryController($scope, $http, $uibModal, $location, cartList) {
+  //Get latest inventory data from database
+  $http.jsonp("http://things.cs.pdx.edu:3000/view?callback=JSON_CALLBACK", {jsonpCallbackParam:  'callback'})
+  .success(function (data) {
+      $scope.inventory = data;
+  });
+
+  $scope.addToCart = function(item){
+    if(item.carted == true){ //Checked
+      //Make copy of the item to add to cart
+      var cartItem = angular.copy(item);
+      cartItem.check = false;
+      cartList.addToCart(cartItem);
+    }
+    else{ //Unchecked
+      cartList.removeFromCart(item);
+    }
+  }
+
+  //Uncheck items in inventory table that have been removed from Cart
+  $scope.$on("Uncheck", function(event, toUncheck){
+    for(var i = 0; i < toUncheck.length; i++){
+      for(var j = 0; j < $scope.inventory.length; j++){
+        if ($scope.inventory[j].item_id == toUncheck[i]){
+          $scope.inventory[j].carted = false;
+        }
+      }
+    }
+  });
+}
+
+//============Cart Controller============
 app.controller('CartController', ['$scope', '$http', '$uibModal', '$location', '$rootScope', 'cartList', CartController]);
 function CartController($scope, $http, $uibModal, $location, $rootScope, cartList){
 
@@ -106,15 +152,40 @@ function CartController($scope, $http, $uibModal, $location, $rootScope, cartLis
     check();
   });
 
+  //Broadcast for when item is removed from cart in Inventory list
+  $scope.$on("RemoveCart", function(event, newCart){
+    $scope.cart = newCart;
+    check();
+  });
+
   //Check Quantity
   $scope.checkQuantity = function(){
     for(var i = 0; i < $scope.cart.length; i++){
       if($scope.cart[i].selectedQuantity == null){ //Not all items have selected quantities
         return true;
       }
-      if($scope.cart[i].selectedQuantity > parseInt($scope.cart[i].quantity) || $scope.cart[i].selectedQuantity < 0){
+      if($scope.cart[i].selectedQuantity == 0){ //Quantity entered is 0
+        $scope.cart[i].zeroQuantity = true;
+        $scope.cart[i].errorQuantity = false;
+        $scope.cart[i].negativeQuantity = false;
         return true;
       }
+      if($scope.cart[i].selectedQuantity > parseInt($scope.cart[i].quantity)){ //Quantity greater than available
+        $scope.cart[i].zeroQuantity = false;
+        $scope.cart[i].errorQuantity = true;
+        $scope.cart[i].negativeQuantity = false;
+        return true;
+      }
+      if($scope.cart[i].selectedQuantity < 0){ //Negative Quantity
+        $scope.cart[i].zeroQuantity = false;
+        $scope.cart[i].errorQuantity = false;
+        $scope.cart[i].negativeQuantity = true;
+        return true;
+      }
+      //All good
+      $scope.cart[i].errorQuantity = false;
+      $scope.cart[i].negativeQuantity = false;
+      $scope.cart[i].zeroQuantity = false;
     }
     return false;
   }
@@ -138,47 +209,6 @@ function CartController($scope, $http, $uibModal, $location, $rootScope, cartLis
       //Else 404 error....Could need another modal
     });
   }
-}
-
-//Inventory Controller
-app.controller('InventoryController', ['$scope', '$http', '$uibModal', '$location', 'cartList', InventoryController]);
-function InventoryController($scope, $http, $uibModal, $location, cartList) {
-  //Get latest inventory data from database
-  $http.jsonp("http://things.cs.pdx.edu:3000/view?callback=JSON_CALLBACK", {jsonpCallbackParam:  'callback'})
-  .success(function (data) {
-      $scope.inventory = data;
-  });
-
-  $scope.addToCart = function(item){
-    if(item.carted == true){
-      //Make copy of the item to add to cart
-      var cartItem = angular.copy(item);
-      cartItem.check = false;
-      cartList.addToCart(cartItem);
-    }
-  }
-}
-
-//Controller for promptQuantity.html
-var PromptQuantityController = function PromptQuantityController($scope, $uibModal, $uibModalInstance){
-  $scope.ok = function($uibModal){
-    if(parseInt($scope.quantity) <= parseInt($scope.currentQuantity)){
-        if(parseInt($scope.quantity) > 0){
-            $uibModalInstance.close($scope.quantity);
-        }
-        else{
-          $scope.errorQuantity = false;
-          $scope.negativeQuantity = true;
-        }
-    }
-    else{
-      $scope.errorQuantity = true;
-      $scope.negativeQuantity = false;
-    }
-  };
-  $scope.close = function(result){
-    $uibModalInstance.close(result);
-  };
 }
 
 app.run(function ($httpBackend) {
