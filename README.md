@@ -28,7 +28,7 @@
 5. Fill in the proper data to connect to your database.
 6. Create a self-signed SSL certificate:
        (Prerequisite: openssl installed via npm insall -g openssl)
-       Execute the following from the thigns-api directory:
+       Execute the following from the things-api directory:
        ```bash
        mkdir conf/ssl
        cd conf/ssl
