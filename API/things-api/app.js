@@ -18,7 +18,7 @@ app.get('/', function (req, res) {
 *
 * /author   Luke?
 ****************************************************/
-app.get('/checkout/:id/:person/:qty', function(req, res) {
+app.post('/checkout/:id/:person/:qty', function(req, res) {
     transaction(req.params.id, req.params.person, -req.params.qty, errResultHandler, res);
 });
 
@@ -32,7 +32,7 @@ app.get('/checkout/:id/:person/:qty', function(req, res) {
 *
 * /author   Luke
 ****************************************************/
-app.get('/checkin/:id/:person/:qty', function(req, res) {
+app.post('/checkin/:id/:person/:qty', function(req, res) {
     transaction(req.params.id, req.params.person, req.params.qty, errResultHandler, res);
 });
 
@@ -103,7 +103,7 @@ app.get('/view', function(req, res){
 * /author   Austen & Luke
 * /date     2/7/2017
 ****************************************************/
-app.get('/add/:name/:desc/:price/:thresh', function(req, res){
+app.put('/add/:name/:desc/:price/:thresh', function(req, res){
   //first query the database
   //then return the results to the user
 
@@ -132,7 +132,7 @@ app.get('/add/:name/:desc/:price/:thresh', function(req, res){
 * /author   Luke
 * /date     2/7/2017
 ****************************************************/
-app.get('/tagitem/:id/:tag', function(req, res){
+app.post('/tagitem/:id/:tag', function(req, res){
   //first query the database
   //then return the results to the user
 
@@ -177,62 +177,192 @@ app.get('/shoppinglist', function(req, res){
 
 
 /****************************************************
-* /path     /stats/:id
-* /params
-*
+* /path     /stats/:name
+* /params   :name - item_naem of what we are looking for
 *
 * /brief    Route to pull satistics for an item
-*           should probably be renamed to be more specific
 *
 * /author   Andrew McCann
 * /date     2/3/2017
 ****************************************************/
-app.get('/stats/:id', function(err, client, done) {
+app.get('/stats/:name', function(req, res) {
     pool.connect(function(err, client, done) {
         if(err) {
             return console.error('Error fetching client from pool', err);
         }
-        /*
-        client.query('INSERT INTO transactions(item_id, person, qty_changed) VALUES ($1, $2, $3)', [id, person, qty], function(err, result) {
-        client.query('SELECT item_name, quantity, blahbalh
-        client.query('SELECT * FROM transactions WHERE item_name = id', [], function(err, result) {
+/*
+        // Quickly validate if id is an int
+        var id = parseInt(req.params.id)
+        if(req.params.id != id) {
             done();
+            return(console.error('Invalid ID number', err));
+        }
+*/
+        client.query('SELECT * FROM transactions', [], function(err, result) {
+            done();
+        //Get transaction history
 
-            if(err)
-                return console.error('Error returned from DB', err);
+        //For every 7 day segment times :numweeks?
+            //Net change or total?
+        
+        //Date last out
+            //Take max date of transaction AND qty_change < 0
+        //Date last in 
+            //Take max of date of trans AND qty_changed > 0
 
-            res.jsonp(result.rows);
-        }*/
+
+            errResultHandler(err, result.rows, res);
+        });
+    });
+});
+
+
+/****************************************************
+* /path     /history/recent
+* /params   :entries? - OPTIONAL, add int value to 
+*           specify number of recents
+*
+* /brief    Route to get last 15 transactions
+*
+* /author   Andrew McCann
+* /date     2/10/2017
+****************************************************/
+app.get('/history/recent/:entries?', function(req, res) {
+    pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('Error fetching client from pool', err);
+        }
+        var entries = 15
+        if(req.params.entries) {
+            entries = req.params.entries
+        }
+        // TODO:> Define what attributes we actually want to display.
+        // would be cool if we had a VERBose flag.
+        client.query('SELECT * FROM transactions ORDER BY timestamp DESC LIMIT $1', [entries], function(err, result) {
+            done();
+           errResultHandler(err, result.rows, res);
+        });
     });
 });
 
 
 
 /****************************************************
-* /path     /stats/range/:start_date/:end_date
-* /params   :start_date - Beginning of time frame
-*           :end_date - End of time frame
+* /path     /history/:name
+* /params   :name - name of the item
+*           :entries? - OPTIONAL, add int value to 
+*           specify number of recents
 *
-* /brief    Route to pull all stats from a date_range
+* /brief    Route to get last 15 transactions of a 
+*           specific item
 *
 * /author   Andrew McCann
-* /date     2/3/2017
+* /date     2/10/2017
 ****************************************************/
-app.get('/stats/range/:start_date/:end_date', function(err, client, done) {
+app.get('/history/:name/:entries?', function(req, res) {
     pool.connect(function(err, client, done) {
         if(err) {
             return console.error('Error fetching client from pool', err);
         }
-        /*
-        client.query('SELECT * FROM transactions WHERE date <= end_date AND date >= start_date', [], function(err, result) {
+        var entries = 15
+        if(req.params.entries) {
+            entries = req.params.entries
+        }
+        var name = req.params.name
+        if(name === 'undefined') {
+            console.log('Nobueno')
+        }
+        //TODO:> Cut down on the attributes
+        client.query('SELECT * FROM transactions AS t, items AS i WHERE i.item_name = $2 AND t.item_id = i.item_id ORDER BY timestamp DESC LIMIT $1', [entries, name], function(err, result) {
             done();
-            if(err) {
-                return console.error('Error resulting from query', err);
-            }
-        } */
+           errResultHandler(err, result.rows, res);
+        });
     });
-
 });
+
+
+
+/****************************************************
+* /path     /history/bytag/:tag
+* /params   :name - name of the item
+*           :entries? - OPTIONAL, add int value to 
+*           specify number of recents
+*
+* /brief    Route to get last 15 transactions of a 
+*           specific item
+*
+* /author   Andrew McCann
+* /date     2/10/2017
+****************************************************/
+app.get('/historybytag/:tag/:entries?', function(req, res) {
+    pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('Error fetching client from pool', err);
+        }
+        var entries = 15
+        if(req.params.entries) {
+            entries = req.params.entries
+        }
+        var tag = req.params.tag
+        if(tag === 'undefined') {
+            console.log('Nobueno')
+        }
+        name = tag.toLowerCase()
+        //TODO:> Results, and console log above, route name is sloppy. Differentiate without collision?
+        client.query('SELECT * FROM transactions AS t, tags WHERE LOWER(tags.tag_name) = $2 AND t.item_id = tags.item_id ORDER BY timestamp DESC LIMIT $1', [entries, name], function(err, result) {
+            done();
+           errResultHandler(err, result.rows, res);
+        });
+    });
+});
+
+
+
+/****************************************************
+* /path     /history/:start_date/:end_date
+* /params   :start_date - Beginning of time frame
+*           :end_date - End of time frame
+*
+* /brief    Route to get a window of transactions and 
+*           some related information
+*
+* /author   Andrew McCann
+* /date     2/10/2017
+****************************************************/
+app.get('/history/:start_date/:end_date', function(req, res) {
+    pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('Error fetching client from pool', err);
+        }
+        //Date validation is a tricky problem I am 
+        //pretending does not exist for now
+        var start_date = req.params.start_date
+        var end_date = req.params.end_date
+
+        client.query('SELECT * FROM transactions AS t LEFT JOIN items AS i ON t.item_id = i.item_id WHERE cast(timestamp as date) <= $2 AND cast(timestamp as date) >= $1', [start_date, end_date], function(err, result) {
+            done();
+
+            errResultHandler(err, result.rows, res);
+        });
+    });
+});
+
+
+/****************************************************
+* /route    /edit/????
+* /params   
+*           
+*
+* /brief    This route allows for the modification of
+*           fields
+*
+* /author   
+* /date     
+****************************************************/
+//
+//
+//
+//
 
 
 
@@ -258,6 +388,61 @@ var errResultHandler = function(err, result, res) {
     }
 }
 
+
+/****************************************************
+* /route    /secretdelete/:table/:id
+* /params   :table - Table to delete from
+*           :id - item_id
+*
+* /brief    Secret delete function for use during dev
+*           Either never document, or remove prior to
+*           delivery
+*
+* /author     Andrew McCann
+* /date       2/10/2017
+****************************************************/
+app.delete('/secretdelete/:table/:id', function(req, res) {
+    pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('Error fetching client from pool', err);
+        }
+        var id = parseInt(req.params.id)
+        if(id != req.params.id) {
+            done();
+            return console.error('Invalid item ID', err);
+        }   
+        client.query('DELETE FROM $2 WHERE item_id = $1', [id, req.params.table], function(err, result) {
+            done();
+            errResultHandler(err, result.rows, res);
+        });
+    });
+
+});
+
+app.get('/secretview/tags/', function(req, res) {
+    pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('Error fetching client from pool', err);
+        }
+        client.query('SELECT * FROM tags', [], function(err, result) {
+            done();
+            errResultHandler(err, result.rows, res);
+        });
+        
+    });
+});
+app.get('/secretview/transactions/', function(req, res) {
+    pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('Error fetching client from pool', err);
+        }
+        client.query('SELECT * FROM transactions', [], function(err, result) {
+            done();
+            errResultHandler(err, result.rows, res);
+        });
+        
+    });
+});
 
 app.listen(3000, function () {
   console.log('Listening on port 3000');
