@@ -43,8 +43,11 @@ function LoginCheckController($scope, $location, $rootScope, $http) {
            };
       $http.post('https://localhost:3000/authenticate', loginData).then(function(response){
         if(response.status == 200){
-          $rootScope.username = response.header['username'];
-          $rootScope.isAdmin = response.header['admin'];
+          console.log(response);
+          console.log(response.headers);
+          $rootScope.username = response.headers('username');
+          $rootScope.isAdmin = response.headers('admin');
+          $rootScope.token = response.headers('token');
         };
       });
       $rootScope.username = $scope.username;
