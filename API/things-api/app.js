@@ -5,7 +5,8 @@ var cookieParser = require('cookie-parser')//for parsing cookies
 var pg = require('pg'); // pg is a library for connecting to the postgresql Database
 var fs = require('fs'); // fs give us file system access
 var https = require('https'); // this will allow us to host a https server
-var jwt = require('jsonwebtoken');
+var jwt = require('jsonwebtoken');//JWT library
+var morgan = require('morgan');//for logging requests
 
 //Import Config files
 var db_info = require('./conf/db/db_info.js'); //This file contains all of the configuration info needed to connect to the database.
@@ -19,7 +20,7 @@ var app = express(); // This is our Express Application.
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({extended: true}));  //support encoded bodies
 app.use(cookieParser());
-
+app.use(morgan('dev'));
 var pool = new pg.Pool(db_info.config); //This is the pool that DB client connections live in.
 
 
@@ -70,18 +71,19 @@ app.post('/authenticate', function(req, res) {
               else{
                 //assign a token
                 var payload = {
-                  user: data.username,
+                  username: data.username,
                   admin: data.admin
                 };
+                //this will create the token using our secret, and set to expire in 1 week
                 var token = jwt.sign(payload, tokenSecret, {expiresIn: '7d'});
                 res.set('token', token);//attatch the token as a header
-                res.set('username', username);// attatch the username as a header
+                res.set('username', data.username);// attatch the username as a header
                 res.set('admin', data.admin);// attatch admin status as a header
                 res.sendStatus(200);//send 200 response code.
               }
           }
     });
-});
+  });
 });
 
 /****************************************************
@@ -308,8 +310,6 @@ app.get('/stats/range/:start_date/:end_date', function(err, client, done) {
     });
 
 });
-
-
 
 /****************************************************
 * /func name  errResultHandler
