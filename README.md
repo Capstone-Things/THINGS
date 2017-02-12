@@ -28,10 +28,10 @@
 5. Fill in the proper data to connect to your database.
 6. Create a self-signed SSL certificate:
        (Prerequisite: openssl installed via npm insall -g openssl)
-       Execute the following:
+       Execute the following from the things-api directory:
        ```bash
-       mkdir /conf/ssl
-       cd /conf/ssl
+       mkdir conf/ssl
+       cd conf/ssl
        openssl genrsa -des3 -passout pass:x -out server.pass.key 2048
 
        openssl rsa -passin pass:x -in server.pass.key -out server.key
@@ -47,7 +47,7 @@
        chmod 600 ./*
        ```
 7. Create a key to sign your json web tokens:
-        create a file called thigns-api/conf/jwtSecret.key
+        create a file called things-api/conf/jwtSecret.key
         wite 256 bytes of random data to the file. this is easily done from
         an online random number generator and copy pasted in.
         this link will give you a random 256 bytes, just copy it into the file.
