@@ -7,6 +7,7 @@ var fs = require('fs'); // fs give us file system access
 var https = require('https'); // this will allow us to host a https server
 var jwt = require('jsonwebtoken');//JWT library
 var morgan = require('morgan');//for logging requests
+var cors = require('cors')//package to handle Cross Origin Resource Sharing
 
 //Import Config files
 var db_info = require('./conf/db/db_info.js'); //This file contains all of the configuration info needed to connect to the database.
@@ -21,6 +22,7 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({extended: true}));  //support encoded bodies
 app.use(cookieParser());
 app.use(morgan('dev'));
+app.use(cors());
 var pool = new pg.Pool(db_info.config); //This is the pool that DB client connections live in.
 
 

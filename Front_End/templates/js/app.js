@@ -28,8 +28,8 @@ app.config(function($stateProvider, $urlRouterProvider) {
 });
 
 //Login Controller
-app.controller('LoginCheckController', ['$scope', '$location','$rootScope', LoginCheckController]);
-function LoginCheckController($scope, $location, $rootScope) {
+app.controller('LoginCheckController', ['$scope', '$location','$rootScope','$http', LoginCheckController]);
+function LoginCheckController($scope, $location, $rootScope, $http) {
     /* Can be used for Admin login
     $scope.users = [{
         UserName: 'admin',
@@ -38,6 +38,20 @@ function LoginCheckController($scope, $location, $rootScope) {
     */
     $scope.showAdminLogin = false;
     $scope.LoginCheck = function() {
+      var loginData = {username : $scope.username, password : $scope.password};
+      var config ={
+               headers : {
+                   'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+               }
+           };
+      $http.post('https://localhost:3000/authenticate', loginData, config).then(function(response){
+        if(response.status == 200){
+          $rootScope.username = response.header.username;
+          $rootScope.isAdmin = response.header.admin;
+        }
+
+
+      });
       $rootScope.username = $scope.username;
       $location.path("home");
     };
@@ -198,5 +212,6 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/request.html').passThrough();
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
 
-    $httpBackend.whenGET("http://things.cs.pdx.edu:3000/view").passThrough();
+    $httpBackend.whenGET(/http:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
+    $httpBackend.whenPOST(/https:\/\/localhost:3000\/*/).passThrough();
 });
