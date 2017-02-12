@@ -1,13 +1,92 @@
-var express = require('express');
-var pg = require('pg');
-var db_info = require('./db_info.js')
-var app = express();
-var pool = new pg.Pool(db_info.config);
+//Import Packages
+var express = require('express'); //Express is the Node Server Framework
+var bodyParser = require('body-parser')//for parsing the body of POST's
+var cookieParser = require('cookie-parser')//for parsing cookies
+var pg = require('pg'); // pg is a library for connecting to the postgresql Database
+var fs = require('fs'); // fs give us file system access
+var https = require('https'); // this will allow us to host a https server
+var jwt = require('jsonwebtoken');//JWT library
+var morgan = require('morgan');//for logging requests
+var cors = require('cors')//package to handle Cross Origin Resource Sharing
+
+//Import Config files
+var db_info = require('./conf/db/db_info.js'); //This file contains all of the configuration info needed to connect to the database.
+var keyFile =  fs.readFileSync('./conf/ssl/server.key'); //the key for SSL
+var certFile=  fs.readFileSync('./conf/ssl/server.crt'); //ssl cert(self signed)
+var tokenSecret = fs.readFileSync('./conf/jwtSecret.key', 'utf-8').replace(/\s/g, '');
+
+
+//Instanciate global variables.
+var app = express(); // This is our Express Application.
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({extended: true}));  //support encoded bodies
+app.use(cookieParser());
+app.use(morgan('dev'));
+app.use(cors());
+var pool = new pg.Pool(db_info.config); //This is the pool that DB client connections live in.
+
+
 
 app.get('/', function (req, res) {
   res.jsonp('Hello World!');
 });
 
+/****************************************************
+* Path: /authorize
+* HTTP Method: POST
+* Params: Username, Password
+* Brief: This route will Authenticate the user and return a JSON token
+*     that is valid for 1 week
+*
+* Author: Nick McHale
+****************************************************/
+app.post('/authenticate', function(req, res) {
+  var username = req.body.username;
+  var password = req.body.password;
+
+	//Look up user in Database
+  pool.connect(function(err, client, done) {
+      if(err) {
+          return console.error('error fetching client from pool', err);
+      }
+
+       client.query("SELECT * FROM users WHERE username=$1", [username], function(err, result) {
+          //call `done()` to release the client back to the pool
+          done();
+
+          if(err) {
+              //if not found user is uknown return 401
+              console.error('error running query', err);
+              res.sendStatus(401);//invalid user
+
+          } else {
+              var data = result.rows[0];
+              if(!data){
+                res.sendStatus(401);
+                return console.error('invalid username', username);
+              }
+              //if our user exsits, lets check their password.
+              if(password != data.password){
+                res.sendStatus(401);//invalid password
+                return console.error('invalid password');
+              }
+              else{
+                //assign a token
+                var payload = {
+                  username: data.username,
+                  admin: data.admin
+                };
+                //this will create the token using our secret, and set to expire in 1 week
+                var token = jwt.sign(payload, tokenSecret, {expiresIn: '7d'});
+                res.set('token', token);//attatch the token as a header
+                res.set('username', data.username);// attatch the username as a header
+                res.set('admin', data.admin);// attatch admin status as a header
+                res.sendStatus(200);//send 200 response code.
+              }
+          }
+    });
+  });
+});
 
 /****************************************************
 * /path     /checkout/:id/:person/:qty
@@ -180,7 +259,9 @@ app.get('/shoppinglist', function(req, res){
 * /path     /stats/:name
 * /params   :name - item_naem of what we are looking for
 *
+*
 * /brief    Route to pull satistics for an item
+*           should probably be renamed to be more specific
 *
 * /author   Andrew McCann
 * /date     2/3/2017
@@ -364,8 +445,6 @@ app.get('/history/:start_date/:end_date', function(req, res) {
 //
 //
 
-
-
 /****************************************************
 * /func name  errResultHandler
 * /params     :err - the error that occured, null if none
@@ -444,6 +523,18 @@ app.get('/secretview/transactions/', function(req, res) {
     });
 });
 
+//This will launch our server, and pass it to the express app.
+https.createServer({
+	key: keyFile,
+	cert: certFile
+}, app).listen(3000, function() {
+	console.log('Listening on port 3000');
+});
+
+
+//The following is depreciated as we are launching with a HTTPS server
+/*
 app.listen(3000, function () {
   console.log('Listening on port 3000');
 });
+*/
