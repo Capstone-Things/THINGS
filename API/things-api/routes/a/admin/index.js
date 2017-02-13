@@ -6,6 +6,8 @@ const checkin = require('./checkin');
 const addNewItem = require('./add_new_item');
 const addTag = require('./add_tag');
 const shoppingList = require('./shopping_list');
+const stats = require('./stats');
+const history = require('./history');
 
 //adding authentication middleware for Admin level here
 routes.use(function(req, res, next){
@@ -32,6 +34,11 @@ routes.post('/checkin/:id/:person/:qty', checkin);
 routes.put('/add/:name/:desc/:price/:thresh', addNewItem);
 routes.post('/tagitem/:id/:tag', addTag);
 routes.get('/shopping_list', shoppingList);
+routes.get('/stats/:name', stats);
+routes.get('/history/recent/:entries?', history.recent);
+routes.get('/history/by_item/:name/:entries?', history.item);
+routes.get('/history/by_tag/:tag/:entreis?', history.tag);
+routes.get('/history/by_range/:start_date/:end_date', history.timespan);
 //this is an inline route handler...
 //this is where you land if you goto GET https://localhost:3000/a/admin/
 routes.get('/', (req, res) => {

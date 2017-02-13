@@ -348,7 +348,7 @@ app.get('/history/:name/:entries?', function(req, res) {
 * /author   Andrew McCann
 * /date     2/10/2017
 ****************************************************/
-app.get('/historybytag/:tag/:entries?', function(req, res) {
+app.get('/history/bytag/:tag/:entries?', function(req, res) {
     pool.connect(function(err, client, done) {
         if(err) {
             return console.error('Error fetching client from pool', err);

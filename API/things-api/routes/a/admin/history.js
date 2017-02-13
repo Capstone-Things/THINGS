@@ -1,0 +1,128 @@
+//This module will export the various /history routes
+
+module.exports= {
+
+  /****************************************************
+  * /path     /history/recent/:entries?
+  * /params   :entries? - OPTIONAL, add int value to
+  *           specify number of recents
+  *
+  * /brief    Route to get last 15 transactions
+  *
+  * /author   Andrew McCann
+  * /date     2/10/2017
+  ****************************************************/
+  recent: (req,res)=>{
+    res.app.locals.pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('Error fetching client from pool', err);
+        }
+        var entries = 15
+        if(req.params.entries) {
+            entries = req.params.entries
+        }
+        // TODO:> Define what attributes we actually want to display.
+        // would be cool if we had a VERBose flag.
+        client.query('SELECT * FROM transactions ORDER BY timestamp DESC LIMIT $1', [entries], function(err, result) {
+            done();
+           res.app.locals.helpers.errResultHandler(err, result.rows, res);
+        });
+    });
+  },
+  /****************************************************
+  * /path     /history/by_item/:name/:entries?
+  * /params   :name - name of the item
+  *           :entries? - OPTIONAL, add int value to
+  *           specify number of recents
+  *
+  * /brief    Route to get last 15 transactions of a
+  *           specific item
+  *
+  * /author   Andrew McCann
+  * /date     2/10/2017
+  ****************************************************/
+  item: (req,res)=>{
+    res.app.locals.pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('Error fetching client from pool', err);
+        }
+        var entries = 15
+        if(req.params.entries) {
+            entries = req.params.entries
+        }
+        var name = req.params.name
+        if(name === 'undefined') {
+            console.log('Nobueno')
+        }
+        //TODO:> Cut down on the attributes
+        client.query('SELECT * FROM transactions AS t, items AS i WHERE i.item_name = $2 AND t.item_id = i.item_id ORDER BY timestamp DESC LIMIT $1', [entries, name], function(err, result) {
+            done();
+           res.app.locals.helpers.errResultHandler(err, result.rows, res);
+        });
+    });
+  },
+
+  /****************************************************
+  * /path     /history/by_tag/:tag/:entries?
+  * /params   :name - name of the item
+  *           :entries? - OPTIONAL, add int value to
+  *           specify number of recents
+  *
+  * /brief    Route to get last 15 transactions of a
+  *           specific item
+  *
+  * /author   Andrew McCann
+  * /date     2/10/2017
+  ****************************************************/
+  tag: (req,res)=>{
+    res.app.locals.pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('Error fetching client from pool', err);
+        }
+        var entries = 15
+        if(req.params.entries) {
+            entries = req.params.entries
+        }
+        var tag = req.params.tag
+        if(tag === 'undefined') {
+            console.log('Nobueno')
+        }
+        name = tag.toLowerCase()
+        //TODO:> Results, and console log above, route name is sloppy. Differentiate without collision?
+        client.query('SELECT * FROM transactions AS t, tags WHERE LOWER(tags.tag_name) = $2 AND t.item_id = tags.item_id ORDER BY timestamp DESC LIMIT $1', [entries, name], function(err, result) {
+            done();
+           res.app.locals.helpers.errResultHandler(err, result.rows, res);
+        });
+    });
+  },
+
+  /****************************************************
+  * /path     /history/by_range/:start_date/:end_date
+  * /params   :start_date - Beginning of time frame
+  *           :end_date - End of time frame
+  *
+  * /brief    Route to get a window of transactions and
+  *           some related information
+  *
+  * /author   Andrew McCann
+  * /date     2/10/2017
+  ****************************************************/
+  timespan: (req,res)=>{
+    res.app.locals.pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('Error fetching client from pool', err);
+        }
+        //Date validation is a tricky problem I am
+        //pretending does not exist for now
+        var start_date = req.params.start_date
+        var end_date = req.params.end_date
+
+        client.query('SELECT * FROM transactions AS t LEFT JOIN items AS i ON t.item_id = i.item_id WHERE cast(timestamp as date) <= $2 AND cast(timestamp as date) >= $1', [start_date, end_date], function(err, result) {
+            done();
+
+            res.app.locals.helpers.errResultHandler(err, result.rows, res);
+        });
+    });
+  }
+
+}
