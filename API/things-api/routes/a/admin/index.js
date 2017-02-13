@@ -7,6 +7,22 @@ const addNewItem = require('./add_new_item');
 const addTag = require('./add_tag');
 const shoppingList = require('./shopping_list');
 
+//adding authentication middleware for Admin level here
+routes.use(function(req, res, next){
+    //The previous level should have authorized the token, all we need
+    //to do here is make sure the user has a valid admin field.
+    if(req.decoded.admin === true){
+      //this is a valid account we do not need to do anything special.
+      next();
+    }else {
+      //this is not an admin account, sorry!
+      return res.status(403).send({
+          success: false,
+          message: 'You do not have the proper credentials to access this page.'
+      });
+    }
+});
+
 //add route handelers for subfolders here:
 
 //any route specific middleware should be added here:

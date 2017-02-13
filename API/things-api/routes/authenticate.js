@@ -12,7 +12,7 @@ var fs = require('fs');
 module.exports = (req, res) => {
   var username = req.body.username;
   var password = req.body.password;
-  var tokenSecret = fs.readFileSync('./conf/jwtSecret.key', 'utf-8').replace(/\s/g, '');
+
   //Look up user in Database
   req.app.locals.pool.connect(function(err, client, done) {
       if(err) {
@@ -47,7 +47,7 @@ module.exports = (req, res) => {
                   admin: data.admin
                 };
                 //this will create the token using our secret, and set to expire in 1 week
-                var token = jwt.sign(payload, tokenSecret, {expiresIn: '7d'});
+                var token = jwt.sign(payload, res.app.locals.tokenSecret, {expiresIn: '7d'});
                 res.set('token', token);//attatch the token as a header
                 res.set('username', data.username);// attatch the username as a header
                 res.set('admin', data.admin);// attatch admin status as a header
