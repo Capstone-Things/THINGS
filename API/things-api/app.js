@@ -8,6 +8,7 @@ var https = require('https'); // this will allow us to host a https server
 var morgan = require('morgan');//for logging requests
 var cors = require('cors');//package to handle Cross Origin Resource Sharing
 var routes = require('./routes');
+var helpers = require('./helper_functions')
 
 //Import Config files
 var db_info = require('./conf/db/db_info'); //This file contains all of the configuration info needed to connect to the database.
@@ -24,6 +25,11 @@ app.use(cookieParser()); // midleware to parses cookies
 app.use(morgan('dev')); // enables console output for dev purpouses on requests
 app.use(cors()); // allow cross origin resource sharing
 var pool = new pg.Pool(db_info.config); //This is the pool that DB client connections live in.
+
+//any global helper functions for our templates should go here:
+app.locals.helpers = helpers
+
+
 
 // We need to be able to access the pool from our templates,
 // store the pool in app.locals
