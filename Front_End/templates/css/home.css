@@ -19,7 +19,7 @@
   color: red;
 }
 
-/*
+
 .mainmenu-area {background: none repeat scroll 0 0 #fbfbfb;
 font-family: "Roboto Condensed",sans-serif;
 text-transform: uppercase;
@@ -88,7 +88,7 @@ z-index: 999;}
 .shopping-item:hover .product-count {
     background: none repeat scroll 0 0 #000;
 }
-*/
+
 ul.navbar-nav li a {
     color: #6e6a6a;
     font-size: 14px;

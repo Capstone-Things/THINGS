@@ -4,7 +4,8 @@
     <title>CAT THINGS</title>
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="templates/css/home.css">
+    <link rel="stylesheet" href="templates/css/home.css" />
+
   </head>
 
   <body>
@@ -24,6 +25,7 @@
           <ul class="nav navbar-nav">
             <li class="active"><a ng-href="#home">Inventory</a></li>
             <li><a ng-href="#request">Request Item</a></li>
+            <li><a ng-href="#shoppinglist">Shopping List</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a class="navbar-right" ng-href="#login">Logout <i class="fa fa-sign-out"></i></a></li>
@@ -32,7 +34,7 @@
       </div>
     </nav>
     <!--Inventory Table -->
-    <div class="inventoryContainer" ng-app="catthings_app" align="center" ng-controller="InventoryController">
+    <div class="container" ng-app="catthings_app" align="center" ng-controller="InventoryController">
       <table class="table table-bordered" id="inventoryTable">
         <thead class="thead-inverse">
           <tr>

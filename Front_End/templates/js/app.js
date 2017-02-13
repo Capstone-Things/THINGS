@@ -1,5 +1,5 @@
 /*global angular*/
-var app = angular.module("catthings_app", ['ui.bootstrap', 'ngMockE2E', 'ui.router']);
+var app = angular.module("catthings_app", ['datatables','ui.bootstrap', 'ngMockE2E', 'ui.router']);
 
 //UI Router Config
 app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
@@ -20,6 +20,10 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
         .state('request',{
           url: "/request",
           templateUrl: 'templates/html/request.html'
+        })
+        .state('shoppinglist',{
+          url: "/shoppinglist",
+          templateUrl: 'templates/html/shoppinglist.html'
         });
    $sceDelegateProvider.resourceUrlWhitelist([
      'self',
@@ -94,6 +98,24 @@ app.controller('NavBarController', ['$scope', NavBarController]);
 function NavBarController($scope) {
     $scope.isCollapsed = true;
 }
+
+
+
+
+
+//=============Shopping List Controller=================
+app.controller('ShoppinglistController', ['$scope', '$http', ShoppinglistController]);
+function ShoppinglistController($scope, $http) {
+  //Get latest inventory data from database
+  $http.jsonp("http://things.cs.pdx.edu:3000/view?callback=JSON_CALLBACK", {jsonpCallbackParam:  'callback'})
+  .success(function (data) {
+      $scope.inventory = data;
+  });
+
+}
+
+
+
 
 //=============Inventory Controller===============
 app.controller('InventoryController', ['$scope', '$http', '$uibModal', '$location', 'cartList', InventoryController]);
@@ -237,8 +259,7 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/home.html').passThrough();
     $httpBackend.whenGET('templates/html/cart.html').passThrough();
     $httpBackend.whenGET('templates/html/request.html').passThrough();
-    $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
-
+    $httpBackend.whenGET('templates/html/shoppinglist.html').passThrough();
   //  $httpBackend.whenGET("http://localhost:3000/view").passThrough();
     $httpBackend.whenJSONP(/http:\/\/things\.cs\.pdx\.edu:3000\/view*/).passThrough();
 });
