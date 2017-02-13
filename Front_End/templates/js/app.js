@@ -230,7 +230,7 @@ function CartController($scope, $http, $uibModal, $location, $rootScope, cartLis
   }
 }
 
-  $http.get("http://things.cs.pdx.edu:3000/view").then(function (response) {
+//  $http.get("http://things.cs.pdx.edu:3000/view").then(function (response) {
 app.run(function ($httpBackend) {
     var inventory = [{name: 'Pop Tarts', description: 'Yummy', quantity: '5'}, {name: 'Kool-Aid', description: 'Oh Yeah', quantity: '10'}, {name: 'Printer Ink', description: 'Ink for printer', quantity: '30'}];
 
