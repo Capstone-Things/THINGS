@@ -3,6 +3,8 @@
 *node_modules/
 *db_info.js
 *npm-debug.log
+*.swp
 *.key
-*.crt
 *.csr
+*.crt
+

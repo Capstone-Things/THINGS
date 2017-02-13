@@ -28,12 +28,31 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
 });
 
 //Login Controller
-app.controller('LoginCheckController', ['$scope', '$location','$rootScope', LoginCheckController]);
-function LoginCheckController($scope, $location, $rootScope) {
+app.controller('LoginCheckController', ['$scope', '$location','$rootScope','$http', LoginCheckController]);
+function LoginCheckController($scope, $location, $rootScope, $http) {
+    // Can be used for Admin login
+    $scope.user = {};
+
     $scope.showAdminLogin = false;
     $scope.LoginCheck = function() {
+      var loginData = $scope.user
+      var config ={
+               headers : {
+                   'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+               }
+           };
+      $http.post('https://localhost:3000/authenticate', loginData).then(function(response){
+        if(response.status == 200){
+          console.log(response);
+          console.log(response.headers);
+          $rootScope.username = response.headers('username');
+          $rootScope.isAdmin = response.headers('admin');
+          $rootScope.token = response.headers('token');
+        };
+      });
       $rootScope.username = $scope.username;
       $location.path("home");
+
     };
 
     $scope.SetAdminLogin = function() {
@@ -211,6 +230,7 @@ function CartController($scope, $http, $uibModal, $location, $rootScope, cartLis
   }
 }
 
+  $http.get("http://things.cs.pdx.edu:3000/view").then(function (response) {
 app.run(function ($httpBackend) {
     var inventory = [{name: 'Pop Tarts', description: 'Yummy', quantity: '5'}, {name: 'Kool-Aid', description: 'Oh Yeah', quantity: '10'}, {name: 'Printer Ink', description: 'Ink for printer', quantity: '30'}];
 
@@ -239,6 +259,8 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/request.html').passThrough();
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
 
-  //  $httpBackend.whenGET("http://localhost:3000/view").passThrough();
+    $httpBackend.whenGET("http://localhost:3000/view").passThrough();
     $httpBackend.whenJSONP(/http:\/\/things\.cs\.pdx\.edu:3000\/view*/).passThrough();
+    $httpBackend.whenGET(/http:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
+    $httpBackend.whenPOST(/https:\/\/localhost:3000\/*/).passThrough();
 });
