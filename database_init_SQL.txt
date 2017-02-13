@@ -1,22 +1,22 @@
 /*
 SQL Commands to Create Database Schema
-Luke Kazmierowicz 
+Luke Kazmierowicz
 1/12/17
 
 README
     To rebuild the THINGS data base from scratch completely destroying the existing
-    one, paste this entire text document into SQL prompt. 
-        At the end of this file there are examples of how to insert items into the 
+    one, paste this entire text document into SQL prompt.
+        At the end of this file there are examples of how to insert items into the
     items table and how to perform transactions (insert into the transactions table).
 
 Important Notes:
-    1) item_name is not restricted to being unique. The item_id is the primary key 
-    so it is the only column that needs to be unique. I propose that the front end 
-    run a query to check if an item already exists with the same name as the one being 
+    1) item_name is not restricted to being unique. The item_id is the primary key
+    so it is the only column that needs to be unique. I propose that the front end
+    run a query to check if an item already exists with the same name as the one being
     inserted and informs the user forcing them to enter a unique name.
-    2) When a row is inserted into the transaction table a function is triggered that 
-    adds/subtracts the qty_changed from the item in the items table. It also sets the 
-    qty_remaining attribute in the new transaction to the proper value obtained from 
+    2) When a row is inserted into the transaction table a function is triggered that
+    adds/subtracts the qty_changed from the item in the items table. It also sets the
+    qty_remaining attribute in the new transaction to the proper value obtained from
     the items table.
 */
 
@@ -58,7 +58,7 @@ Important Notes:
 
     -------------------------------------------------------------------
     CREATE TABLE tags (
-        tag_name    text,    
+        tag_name    text,
         item_id int REFERENCES items (item_id),
         PRIMARY KEY (tag_name)
     );
@@ -67,7 +67,7 @@ Important Notes:
     CREATE TABLE users (
         username    text,
         password    text NOT NULL,
-        user_type   text NOT NULL,
+        user_type   boolean NOT NULL,
         PRIMARY KEY (username)
     );
 
@@ -82,7 +82,7 @@ Important Notes:
             UPDATE items
             SET quantity = (quantity + NEW.qty_changed)
             WHERE item_id = NEW.item_id;
-    
+
             NEW.qty_remaining = (
                 SELECT quantity
                 FROM items
@@ -103,33 +103,33 @@ Important Notes:
     $$ SELECT max(item_id) FROM items; $$;
 
     -------------------------------------------------------------------
-    CREATE OR REPLACE FUNCTION item_id_with_name(text) 
+    CREATE OR REPLACE FUNCTION item_id_with_name(text)
     RETURNS int LANGUAGE SQL AS
     $$ SELECT item_id FROM items WHERE item_name = $1; $$;
 
-                             
+
 -- Insert Data Example --
 
     ----------------------------------------------------------------------------
     INSERT INTO items (item_name, description, price, quantity, threshold) VALUES
         ('Pop-Tarts', 'A tasty snack, best consumed toasted.', 2.50, 25, 10);
-    INSERT INTO tags VALUES 
+    INSERT INTO tags VALUES
         ('Food', max_item_id());
-    INSERT INTO tags VALUES 
+    INSERT INTO tags VALUES
         ('Perishable', max_item_id());
 
     ----------------------------------------------------------------------------
     INSERT INTO items (item_name, description, price, quantity, threshold) VALUES
         ('Black & White Printer Ink', 'For Printer In FAB 88', 27.99, 8, 5);
-    INSERT INTO tags VALUES 
+    INSERT INTO tags VALUES
         ('Printer Supplies', max_item_id());
 
     ----------------------------------------------------------------------------
     INSERT INTO items (item_name, description , price, quantity, threshold) VALUES
         ('HDMI to VGA Adapter', 'For classroom projectors.', 15.00, 4, 2);
-    INSERT INTO tags VALUES 
+    INSERT INTO tags VALUES
         ('Digital Adapters', max_item_id());
-    INSERT INTO tags VALUES 
+    INSERT INTO tags VALUES
         ('Electronics', max_item_id());
 
     ----------------------------------------------------------------------------
