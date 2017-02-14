@@ -10,6 +10,11 @@ const checkout = require('./checkout');
 
 //authorization middleware to verify user has a valid token
 const credential_check = function(req, res, next) {
+  //optional --noAuth mode skips auth checkout
+  if(res.app.locals.options.noAuth){
+    next();
+  };
+
   // check header or url parameters or post parameters for token
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
   // decode token

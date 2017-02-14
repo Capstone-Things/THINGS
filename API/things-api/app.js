@@ -2,6 +2,7 @@
 var express = require('express'); //Express is the Node Server Framework
 var bodyParser = require('body-parser')//for parsing the body of POST's
 var cookieParser = require('cookie-parser')//for parsing cookies
+var argv = require('command-line-args');// utility for easy parsing of command line options
 var pg = require('pg'); // pg is a library for connecting to the postgresql Database
 var fs = require('fs'); // fs give us file system access
 var https = require('https'); // this will allow us to host a https server
@@ -16,6 +17,11 @@ var db_info = require('./conf/db/db_info'); //This file contains all of the conf
 var keyFile =  fs.readFileSync('./conf/ssl/server.key'); //the key for SSL
 var certFile=  fs.readFileSync('./conf/ssl/server.crt'); //ssl cert(self signed)
 
+//setup command line args
+const optionDefinitions = [
+  { name: 'noAuth', type: Boolean },
+];
+const options = argv(optionDefinitions);
 
 
 //Instanciate global variables.
@@ -30,7 +36,7 @@ var pool = new pg.Pool(db_info.config); //This is the pool that DB client connec
 //any global helper functions for our templates should go here:
 app.locals.helpers = helpers;
 app.locals.tokenSecret = tokenSecret;
-
+app.locals.options = options;
 
 // We need to be able to access the pool from our templates,
 // store the pool in app.locals
