@@ -155,7 +155,8 @@ function CartController($scope, $http, $uibModal, $location, $rootScope, cartLis
 
   //Initialization purposes
   $scope.cart = [];
-  $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('sDom', 'rt');
+  $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('sDom', 'rtip');
+  $scope.emptyNameError = true;
 
   function check(){
     if(!$scope.cart.length){
@@ -181,8 +182,39 @@ function CartController($scope, $http, $uibModal, $location, $rootScope, cartLis
     check();
   });
 
+  //Check name
+  $scope.checkName = function(){
+    if(angular.isUndefined($scope.userName)){
+      $scope.emptyNameError = true;
+      return true;
+    }
+    else{
+      if($scope.userName.length == 0){
+        $scope.emptyNameError = true;
+        return true;
+      }
+      else{
+        $scope.emptyNameError = false;
+        return false;
+      }
+    }
+  }
+
   //Check Quantity
   $scope.checkQuantity = function(){
+    if(angular.isUndefined($scope.userName)){
+      $scope.emptyNameError = true;
+      return true;
+    }
+    else{
+      if($scope.userName.length == 0){
+        $scope.emptyNameError = true;
+        return true;
+      }
+      else{
+        $scope.emptyNameError = false;
+      }
+    }
     for(var i = 0; i < $scope.cart.length; i++){
       if($scope.cart[i].selectedQuantity == null){ //Not all items have selected quantities
         return true;

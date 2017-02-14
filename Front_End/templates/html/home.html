@@ -58,6 +58,15 @@
     <!--Cart Table -->
     <div class= "cartContainer" ng-app="catthings_app" align="center" ng-controller="CartController">
       <h1>Cart</h1>
+      <div class="username">
+        <label class="item item-input">
+          <span class="input-label">Name:</span>
+          <input type="text" ng-model="userName" ng-required="true" ng-change="checkName()"/>
+        </label>
+      </div>
+      <div class="emptyName" ng-show="emptyNameError">
+        <b>Name is required!</b>
+      </div>
       <div class="notEmpty" ng-show="cartNotEmpty">
         <table datatable="ng" dt-options="dtOptions" class="table table-bordered" id="cartTable">
           <thead class="thead-inverse">

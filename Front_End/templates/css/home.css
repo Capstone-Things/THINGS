@@ -19,6 +19,9 @@
   color: red;
 }
 
+.emptyName {
+  color: red;
+}
 
 .mainmenu-area {background: none repeat scroll 0 0 #fbfbfb;
 font-family: "Roboto Condensed",sans-serif;
