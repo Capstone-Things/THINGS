@@ -104,17 +104,15 @@ function NavBarController($scope) {
 
 
 //=============Shopping List Controller=================
-app.controller('ShoppinglistController', ['$scope', '$http', ShoppinglistController]);
-function ShoppinglistController($scope, $http) {
+app.controller('ShoppingListController', ['$scope', '$http', ShoppingListController]);
+function ShoppingListController($scope, $http) {
   //Get latest inventory data from database
   $http.jsonp("http://things.cs.pdx.edu:3000/view?callback=JSON_CALLBACK", {jsonpCallbackParam:  'callback'})
   .success(function (data) {
-      $scope.inventory = data;
+      $scope.shoppingList = data;
   });
 
 }
-
-
 
 
 //=============Inventory Controller===============
@@ -126,6 +124,7 @@ function InventoryController($scope, $http, $uibModal, $location, cartList) {
       $scope.inventory = data;
   });
 
+  //Add to cart
   $scope.addToCart = function(item){
     if(item.carted == true){ //Checked
       //Make copy of the item to add to cart
@@ -151,11 +150,13 @@ function InventoryController($scope, $http, $uibModal, $location, cartList) {
 }
 
 //============Cart Controller============
-app.controller('CartController', ['$scope', '$http', '$uibModal', '$location', '$rootScope', 'cartList', CartController]);
-function CartController($scope, $http, $uibModal, $location, $rootScope, cartList){
+app.controller('CartController', ['$scope', '$http', '$uibModal', '$location', '$rootScope', 'cartList', 'DTOptionsBuilder', 'DTColumnDefBuilder', CartController]);
+function CartController($scope, $http, $uibModal, $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder){
 
   //Initialization purposes
   $scope.cart = [];
+  $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('sDom', 'rt');
+
   function check(){
     if(!$scope.cart.length){
       $scope.cartNotEmpty = false;

@@ -35,7 +35,7 @@
       </div>
     </nav>
     <!--Inventory Table -->
-    <div class="container" ng-app="catthings_app" align="center" ng-controller="InventoryController">
+    <div class="container" ng-app="catthings_app" align="center" ng-controller="ShoppingListController">
       <table datatable="ng" class="row-border hover">
         <thead>
           <tr>
@@ -45,7 +45,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="item in inventory">
+          <tr ng-repeat="item in shoppingList">
             <td>{{ item.name }}</td>
             <td>{{ item.description }}</td>
             <td>{{ item.quantity }}</td>
