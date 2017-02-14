@@ -25,19 +25,19 @@
   <form role="form" class="request-form" ng-app "catthings_app" ng-controller="RequestController">
     <div class="form-group">
       <label for="itemName">Name:</label>
-      <input type="text" placeholder="Name of item" class="form-control" required>
+      <input type="text" ng-model="question.itemName" name = "itemName" placeholder="Name of item" class="form-control" required>
     </div>
     <div class="form-group">
       <label for="quantityNeeded">Quantity:</label>
-      <input type="number" placeholder="Number requested" class="form-control" min="0" required>
+      <input type="number" ng-model="question.quantityNeeded" name = "quantityNeeded" placeholder="Number requested" class="form-control" min="0" required>
     </div>
     <div class="form-group">
       <label for="description">Description:</label>
-      <textarea cols="50" rows="4" name="description" placeholder="Describe the item, including where it can be bought" class = "form-control" required></textarea>
+      <textarea cols="50" rows="4" ng-model="question.description" name="description" placeholder="Describe the item, including where it can be bought" class = "form-control" required></textarea>
     </div>
     <div class="form-group">
       <label for="message">Additional Information:</label>
-      <textarea cols="50" rows="4" name="message" placeholder="Any additional information for the administrator" class = "form-control"></textarea>
+      <textarea cols="50" rows="4" ng-model="question.message" name="message" placeholder="Any additional information for the administrator" class = "form-control"></textarea>
     </div>
     <div class="form-group">
       <input type="submit" ng-click=sendRequest() value="Submit">

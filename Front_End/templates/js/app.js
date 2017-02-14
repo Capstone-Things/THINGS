@@ -137,10 +137,12 @@ function CartController($scope, $http, $uibModal, $location, $rootScope, cartLis
 //Request Controller
 app.controller('RequestController', ['$scope', '$http', '$location', RequestController]);
 function RequestController($scope, $http, $location){
+  $scope.question = {};
 
   //sendRequest
   $scope.sendRequest = function() {
-    $http.post('/request', $scope.itemName, $scope.quantityNeeded, $scope.description, $scope.message).then(function(response){
+    var qData = $scope.question;
+    $http.post('https://localhost:3000/request', qData).then(function(response){
       console.log(response.status);
       if(response.status === 200){
               $location.path("home");
@@ -226,6 +228,6 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/cart.html').passThrough();
     $httpBackend.whenGET('templates/html/request.html').passThrough();
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
-    $httpBackend.whenGET(/http:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
+    $httpBackend.whenGET(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
     $httpBackend.whenPOST(/https:\/\/localhost:3000\/*/).passThrough();
 });
