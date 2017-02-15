@@ -23,32 +23,79 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
         });
    $sceDelegateProvider.resourceUrlWhitelist([
      'self',
-     'https://things.cs.pdx.edu/**'
+     'https://things.cs.pdx.edu:3000/**'
    ]);
 });
 
+//THIGNS FACTORY
+//this service will act as a portal to the the THIGNS application
+//it will also take care of our tokens and credentials for us
+app.factory('thingsAPI', ['$http', '$location', function($http, $location){
+  var factory = {};//this is the object we will export.
+  //Private Variables
+  var userName = 'Guest';
+  var admin = false;
+  var token = null;
+//For local dev mode comment out the first line and uncomment the second...
+  var urlBase = 'https://things.cs.pdx.edu:3000/';
+//var urlBase = 'https://localhost:3000/';
+
+  //Getters:
+  factory.getBaseURL = () =>{return urlBase;}
+  factory.getUserName = () =>{return userName;}
+
+
+  //Functions:
+  factory.authenticate = (loginData, callback) =>{
+    $http.post( urlBase + 'authenticate', loginData).then(function(response){
+      if(response.status == 200){
+        console.log(response);
+        console.log(response.headers);
+        userName = response.headers('username');
+        admin = response.headers('admin');
+        token = response.headers('token');
+        $location.path('home');
+        callback(true);
+      }
+      callback(false);
+    });
+    return
+  };
+
+  //Logout function
+  factory.logOut = ()=>{
+    userName = 'Guest';
+    admin = false;
+    token = null;
+  };
+  return factory;
+}]);
+
+
+
 //Login Controller
-app.controller('LoginCheckController', ['$scope', '$location','$rootScope','$http', LoginCheckController]);
-function LoginCheckController($scope, $location, $rootScope, $http) {
+app.controller('LoginCheckController', ['$scope', '$location','$rootScope','$http', 'thingsAPI', LoginCheckController]);
+function LoginCheckController($scope, $location, $rootScope, $http, thingsAPI) {
     // Can be used for Admin login
-    $rootScope.baseURL = "https://things.cs.pdx.edu:3000/";
     $scope.user = {};
 
     $scope.showAdminLogin = false;
-    $scope.LoginCheck = function() {
-      var loginData = $scope.user
 
-      $http.post( $rootScope.baseURL + 'authenticate', loginData).then(function(response){
-        if(response.status == 200){
-          console.log(response);
-          console.log(response.headers);
-          $rootScope.username = response.headers('username');
-          $rootScope.isAdmin = response.headers('admin');
-          $rootScope.token = response.headers('token');
-        };
-      });
-      $rootScope.username = $scope.username;
-      $location.path("home");
+    $scope.LoginVerify= (successFlag) =>{
+      if(successFlag === true){
+        console.log("home");
+        $location.path("/home");
+        $scope.$apply()
+      }
+      else {
+        $location.path("login");
+      }
+      return
+    };
+
+    $scope.LoginCheck = function() {
+      var loginData = $scope.user;
+      thingsAPI.authenticate(loginData, $scope.LoginVerify);
 
     };
 
@@ -112,8 +159,8 @@ function NavBarController($scope) {
 }
 
 //=============Inventory Controller===============
-app.controller('InventoryController', ['$scope', '$http', '$rootScope', '$uibModal', '$location', 'cartList', InventoryController]);
-function InventoryController($scope, $http, $uibModal, $location, $rootScope, cartList) {
+app.controller('InventoryController', ['$scope', '$http', '$uibModal', '$location', '$rootScope', 'thingsAPI', 'cartList', InventoryController]);
+function InventoryController($scope, $http, $uibModal, $location, $rootScope, thingsAPI, cartList) {
   $rootScope.baseURL = 'https://things.cs.pdx.edu:3000/';
   //Get latest inventory data from database
   $http.get($rootScope.baseURL +'view')
@@ -250,7 +297,7 @@ function RequestController($scope, $http, $location){
 app.controller('InventoryController', ['$scope', '$http', '$uibModal', '$location', 'cartList', InventoryController]);
 function InventoryController($scope, $http, $uibModal, $location, cartList) {
   //Get latest inventory data from database
-  $http.get("http://things.cs.pdx.edu:3000/view").then(function (response) {
+  $http.get("https://things.cs.pdx.edu:3000/view").then(function (response) {
       $scope.inventory = response.data;
       console.log($scope.inventory);
   });
