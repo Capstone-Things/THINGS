@@ -228,7 +228,73 @@ function CartController($scope, $http, $uibModal, $location, $rootScope, cartLis
   }
 }
 
-//  $http.get("http://things.cs.pdx.edu:3000/view").then(function (response) {
+//Request Controller
+app.controller('RequestController', ['$scope', '$http', '$location', RequestController]);
+function RequestController($scope, $http, $location){
+  $scope.question = {};
+
+  //sendRequest
+  $scope.sendRequest = function() {
+    var qData = $scope.question;
+    $http.post('https://localhost:3000/request', qData).then(function(response){
+      console.log(response.status);
+      if(response.status === 200){
+              $location.path("home");
+      }
+      //Else 404 error....
+    });
+  }
+}
+
+//Inventory Controller
+app.controller('InventoryController', ['$scope', '$http', '$uibModal', '$location', 'cartList', InventoryController]);
+function InventoryController($scope, $http, $uibModal, $location, cartList) {
+  //Get latest inventory data from database
+  $http.get("http://things.cs.pdx.edu:3000/view").then(function (response) {
+      $scope.inventory = response.data;
+      console.log($scope.inventory);
+  });
+
+  $scope.addToCart = function(item){
+    var cartItem = angular.copy(item); //Make copy of the item to add to cart
+    cartItem.check = false;
+    $scope.currentQuantity = item.quantity; //Get current quantity of item
+    var answer = $uibModal.open({templateUrl: 'templates/html/promptQuantity.html',
+                                 backdrop: 'static',
+                                 controller: PromptQuantityController,
+                                 scope: $scope
+                               });
+    answer.result.then(function(response){
+      if(response != "Cancel"){
+        cartItem.quantity = response;
+        cartList.addToCart(cartItem);
+      }
+    });
+  }
+}
+
+//Controller for promptQuantity.html
+var PromptQuantityController = function PromptQuantityController($scope, $uibModal, $uibModalInstance){
+  $scope.ok = function($uibModal){
+    if(parseInt($scope.quantity) <= parseInt($scope.currentQuantity)){
+        if(parseInt($scope.quantity) > 0){
+            $uibModalInstance.close($scope.quantity);
+        }
+        else{
+          $scope.errorQuantity = false;
+          $scope.negativeQuantity = true;
+        }
+    }
+    else{
+      $scope.errorQuantity = true;
+      $scope.negativeQuantity = false;
+    }
+  };
+  $scope.close = function(result){
+    $uibModalInstance.close(result);
+  };
+}
+
 app.run(function ($httpBackend) {
     var inventory = [{name: 'Pop Tarts', description: 'Yummy', quantity: '5'}, {name: 'Kool-Aid', description: 'Oh Yeah', quantity: '10'}, {name: 'Printer Ink', description: 'Ink for printer', quantity: '30'}];
 
@@ -256,7 +322,6 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/cart.html').passThrough();
     $httpBackend.whenGET('templates/html/request.html').passThrough();
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
-
     $httpBackend.whenGET("http://localhost:3000/view").passThrough();
     $httpBackend.whenJSONP(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
     $httpBackend.whenGET(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
