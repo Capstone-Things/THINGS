@@ -26,7 +26,6 @@
             <li><a ng-href="#request">Request Item</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a class="navbar-right" ng-href="#cart">Cart <i class="fa fa-shopping-cart"></i></a></li>
             <li><a class="navbar-right" ng-href="#login">Logout <i class="fa fa-sign-out"></i></a></li>
           </ul>
         </div>
@@ -37,27 +36,71 @@
       <table class="table table-bordered" id="inventoryTable">
         <thead class="thead-inverse">
           <tr>
+            <th><b>Add to Cart</b></th>
             <th><b>Name</b></th>
             <th><b>Description</b></th>
             <th><b>Quantity</b></th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
           <tr ng-repeat="item in inventory">
+            <td><input type="checkbox" ng-model="item.carted" ng-change="addToCart(item)"/></td>
             <td>{{ item.name }}</td>
             <td>{{ item.description }}</td>
             <td>{{ item.quantity }}</td>
-            <td><button type="button" class="btn btn-default btn-sm" ng-click="addToCart(item)">Add to Cart</button></td>
           </tr>
         </tbody>
       </table>
     </div>
-    <!--Footer -->
+
+    <!--Cart Table -->
+    <div class= "cartContainer" ng-app="catthings_app" align="center" ng-controller="CartController">
+      <h1>Cart</h1>
+      <div class="notEmpty" ng-show="cartNotEmpty">
+        <table class="table table-bordered" id="cartTable">
+          <thead class="thead-inverse">
+            <tr>
+              <th><b>Remove<b></th>
+              <th><b>Name</b></th>
+              <th><b>Description</b></th>
+              <th><b>Available</b></th>
+              <th><b>Checkout</b></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="selected in cart">
+              <td><input type="checkbox" ng-model="selected.checked"/></td>
+              <td>{{ selected.name }}</td>
+              <td>{{ selected.description }}</td>
+              <td>{{ selected.quantity }}</td>
+              <td><input type="number" ng-model="selected.selectedQuantity" required/>
+                <div class="invalidQuantity" ng-show="selected.errorQuantity">
+                  <b>Quantity entered is greater than what is available</b>
+                </div>
+                <div class="negativeQuantity" ng-show="selected.negativeQuantity">
+                  <b>Quantity cannot be negative!</b>
+                </div>
+                <div class="zeroQuantity" ng-show="selected.zeroQuantity">
+                  <b>Quantity cannot be 0!</b>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button  type="button" class="btn btn-danger" ng-click=removeSelected()>Remove</button>
+        <button type="submit" class="btn btn-success" ng-disabled="checkQuantity()" ng-click=checkOut()>Checkout</button>
+      </div>
+      <div class="empty" ng-show="cartEmpty">
+        No items in cart!
+      </div>
+    </div>
+
+    <!--Footer
     <div class="footer-bottom-area container row col-md-8">
       <div class="copyright">
           <p>&copy; Computer Action Team. All Rights Reserved. </p>
       </div>
     </div>
+    -->
   </body>
 </html>

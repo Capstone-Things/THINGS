@@ -11,6 +11,10 @@ const history = require('./history');
 
 //adding authentication middleware for Admin level here
 routes.use(function(req, res, next){
+    //if --noAuth then skip this
+    if(res.app.locals.options.noAuth){
+      next();
+    }
     //The previous level should have authorized the token, all we need
     //to do here is make sure the user has a valid admin field.
     if(req.decoded.admin === true){
