@@ -23,7 +23,7 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
         });
    $sceDelegateProvider.resourceUrlWhitelist([
      'self',
-     'http://things.cs.pdx.edu/**'
+     'https://things.cs.pdx.edu/**'
    ]);
 });
 
@@ -31,17 +31,14 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
 app.controller('LoginCheckController', ['$scope', '$location','$rootScope','$http', LoginCheckController]);
 function LoginCheckController($scope, $location, $rootScope, $http) {
     // Can be used for Admin login
+    $rootScope.baseURL = "https://things.cs.pdx.edu:3000/";
     $scope.user = {};
 
     $scope.showAdminLogin = false;
     $scope.LoginCheck = function() {
       var loginData = $scope.user
-      var config ={
-               headers : {
-                   'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
-               }
-           };
-      $http.post('https://localhost:3000/authenticate', loginData).then(function(response){
+
+      $http.post( $rootScope.baseURL + 'authenticate', loginData).then(function(response){
         if(response.status == 200){
           console.log(response);
           console.log(response.headers);
@@ -115,12 +112,13 @@ function NavBarController($scope) {
 }
 
 //=============Inventory Controller===============
-app.controller('InventoryController', ['$scope', '$http', '$uibModal', '$location', 'cartList', InventoryController]);
-function InventoryController($scope, $http, $uibModal, $location, cartList) {
+app.controller('InventoryController', ['$scope', '$http', '$rootScope', '$uibModal', '$location', 'cartList', InventoryController]);
+function InventoryController($scope, $http, $uibModal, $location, $rootScope, cartList) {
+  $rootScope.baseURL = 'https://things.cs.pdx.edu:3000/';
   //Get latest inventory data from database
-  $http.jsonp("http://things.cs.pdx.edu:3000/view?callback=JSON_CALLBACK", {jsonpCallbackParam:  'callback'})
-  .success(function (data) {
-      $scope.inventory = data;
+  $http.get($rootScope.baseURL +'view')
+  .then(function (response) {
+      $scope.inventory = response.data;
   });
 
   $scope.addToCart = function(item){
@@ -260,7 +258,8 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
 
     $httpBackend.whenGET("http://localhost:3000/view").passThrough();
-    $httpBackend.whenJSONP(/http:\/\/things\.cs\.pdx\.edu:3000\/view*/).passThrough();
-    $httpBackend.whenGET(/http:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
+    $httpBackend.whenJSONP(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
+    $httpBackend.whenGET(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
+    $httpBackend.whenPOST(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
     $httpBackend.whenPOST(/https:\/\/localhost:3000\/*/).passThrough();
 });
