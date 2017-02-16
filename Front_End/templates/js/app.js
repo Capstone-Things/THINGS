@@ -1,5 +1,5 @@
 /*global angular*/
-var app = angular.module("catthings_app", ['ui.bootstrap', 'ngMockE2E', 'ui.router']);
+var app = angular.module("catthings_app", ['datatables','ui.bootstrap', 'ngMockE2E', 'ui.router']);
 
 //UI Router Config
 app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
@@ -20,6 +20,10 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
         .state('request',{
           url: "/request",
           templateUrl: 'templates/html/request.html'
+        })
+        .state('shoppinglist',{
+          url: "/shoppinglist",
+          templateUrl: 'templates/html/shoppinglist.html'
         });
    $sceDelegateProvider.resourceUrlWhitelist([
      'self',
@@ -158,6 +162,22 @@ function NavBarController($scope) {
     $scope.isCollapsed = true;
 }
 
+
+
+
+
+//=============Shopping List Controller=================
+app.controller('ShoppingListController', ['$scope', '$http', ShoppingListController]);
+function ShoppingListController($scope, $http) {
+  //Get latest inventory data from database
+  $http.jsonp("http://things.cs.pdx.edu:3000/view?callback=JSON_CALLBACK", {jsonpCallbackParam:  'callback'})
+  .success(function (data) {
+      $scope.shoppingList = data;
+  });
+
+}
+
+
 //=============Inventory Controller===============
 app.controller('InventoryController', ['$scope', '$http', '$uibModal', '$location', '$rootScope', 'thingsAPI', 'cartList', InventoryController]);
 function InventoryController($scope, $http, $uibModal, $location, $rootScope, thingsAPI, cartList) {
@@ -168,6 +188,7 @@ function InventoryController($scope, $http, $uibModal, $location, $rootScope, th
       $scope.inventory = response.data;
   });
 
+  //Add to cart
   $scope.addToCart = function(item){
     if(item.carted == true){ //Checked
       //Make copy of the item to add to cart
@@ -193,11 +214,14 @@ function InventoryController($scope, $http, $uibModal, $location, $rootScope, th
 }
 
 //============Cart Controller============
-app.controller('CartController', ['$scope', '$http', '$uibModal', '$location', '$rootScope', 'cartList', CartController]);
-function CartController($scope, $http, $uibModal, $location, $rootScope, cartList){
+app.controller('CartController', ['$scope', '$http', '$uibModal', '$location', '$rootScope', 'cartList', 'DTOptionsBuilder', 'DTColumnDefBuilder', CartController]);
+function CartController($scope, $http, $uibModal, $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder){
 
   //Initialization purposes
   $scope.cart = [];
+  $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('sDom', 'rtip');
+  $scope.emptyNameError = true;
+
   function check(){
     if(!$scope.cart.length){
       $scope.cartNotEmpty = false;
@@ -222,8 +246,39 @@ function CartController($scope, $http, $uibModal, $location, $rootScope, cartLis
     check();
   });
 
+  //Check name
+  $scope.checkName = function(){
+    if(angular.isUndefined($scope.userName)){
+      $scope.emptyNameError = true;
+      return true;
+    }
+    else{
+      if($scope.userName.length == 0){
+        $scope.emptyNameError = true;
+        return true;
+      }
+      else{
+        $scope.emptyNameError = false;
+        return false;
+      }
+    }
+  }
+
   //Check Quantity
   $scope.checkQuantity = function(){
+    if(angular.isUndefined($scope.userName)){
+      $scope.emptyNameError = true;
+      return true;
+    }
+    else{
+      if($scope.userName.length == 0){
+        $scope.emptyNameError = true;
+        return true;
+      }
+      else{
+        $scope.emptyNameError = false;
+      }
+    }
     for(var i = 0; i < $scope.cart.length; i++){
       if($scope.cart[i].selectedQuantity == null){ //Not all items have selected quantities
         return true;
@@ -368,10 +423,12 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/home.html').passThrough();
     $httpBackend.whenGET('templates/html/cart.html').passThrough();
     $httpBackend.whenGET('templates/html/request.html').passThrough();
+
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
     $httpBackend.whenGET("http://localhost:3000/view").passThrough();
     $httpBackend.whenJSONP(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
     $httpBackend.whenGET(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
     $httpBackend.whenPOST(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
     $httpBackend.whenPOST(/https:\/\/localhost:3000\/*/).passThrough();
+
 });

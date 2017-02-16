@@ -14,6 +14,7 @@
         <ul class="nav navbar-nav">
           <li><a href="home.html">Inventory</a></li>
           <li class="active"><a ng-href="#request">Request Item</a></li>
+          <li><a ng-href="#shoppinglist">Shopping List</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a class="navbar-right" href="cart.html">Cart <i class="fa fa-shopping-cart"></i></a></li>
@@ -22,6 +23,8 @@
 
     </div>
   </nav>
+
+  <div class="container">
   <form role="form" class="request-form" ng-app "catthings_app" ng-controller="RequestController">
     <div class="form-group">
       <label for="itemName">Name:</label>
@@ -43,4 +46,5 @@
       <input type="submit" ng-click=sendRequest() value="Submit">
     </div>
   </form>
+  </div>
 </body>

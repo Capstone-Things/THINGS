@@ -1,0 +1,68 @@
+<html lang="en">
+  <head>
+    <title>CAT THINGS</title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="templates/css/home.css" />
+
+
+
+  </head>
+
+  <body>
+    <!-- Navigation Bar-->
+    <nav class="navbar navbar-default" ng-controller="NavBarController">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">CAT</a>
+          <button type="button" class="navbar-toggle" ng-click="isCollapsed = !isCollapsed">
+              <span class="sr-only">Toggle navigation</span>
+      				<span class="icon-bar"></span>
+      				<span class="icon-bar"></span>
+      				<span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" uib-collapse="isCollapsed">
+          <ul class="nav navbar-nav">
+            <li><a ng-href="#home">Inventory</a></li>
+            <li><a ng-href="#request">Request Item</a></li>
+            <li class="active"><a ng-href="#shoppinglist">Shopping List</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a class="navbar-right" ng-href="#login">Logout <i class="fa fa-sign-out"></i></a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!--Inventory Table -->
+    <div class="container" ng-app="catthings_app" align="center" ng-controller="ShoppingListController">
+      <table datatable="ng" class="row-border hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in shoppingList">
+            <td>{{ item.name }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.quantity }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!--Cart Table -->
+
+
+    <!--Footer
+    <div class="footer-bottom-area container row col-md-8">
+      <div class="copyright">
+          <p>&copy; Computer Action Team. All Rights Reserved. </p>
+      </div>
+    </div>
+    -->
+  </body>
+</html>

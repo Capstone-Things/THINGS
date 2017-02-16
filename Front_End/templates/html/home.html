@@ -4,7 +4,8 @@
     <title>CAT THINGS</title>
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="templates/css/home.css">
+    <link rel="stylesheet" href="templates/css/home.css" />
+
   </head>
 
   <body>
@@ -24,6 +25,7 @@
           <ul class="nav navbar-nav">
             <li class="active"><a ng-href="#home">Inventory</a></li>
             <li><a ng-href="#request">Request Item</a></li>
+            <li><a ng-href="#shoppinglist">Shopping List</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a class="navbar-right" ng-href="#login">Logout <i class="fa fa-sign-out"></i></a></li>
@@ -32,8 +34,8 @@
       </div>
     </nav>
     <!--Inventory Table -->
-    <div class="inventoryContainer" ng-app="catthings_app" align="center" ng-controller="InventoryController">
-      <table class="table table-bordered" id="inventoryTable">
+    <div class="container" ng-app="catthings_app" align="center" ng-controller="InventoryController">
+      <table datatable="ng" class="table table-bordered" id="inventoryTable">
         <thead class="thead-inverse">
           <tr>
             <th><b>Add to Cart</b></th>
@@ -56,8 +58,17 @@
     <!--Cart Table -->
     <div class= "cartContainer" ng-app="catthings_app" align="center" ng-controller="CartController">
       <h1>Cart</h1>
+      <div class="username">
+        <label class="item item-input">
+          <span class="input-label">Name:</span>
+          <input type="text" ng-model="userName" ng-required="true" ng-change="checkName()"/>
+        </label>
+      </div>
+      <div class="emptyName" ng-show="emptyNameError">
+        <b>Name is required!</b>
+      </div>
       <div class="notEmpty" ng-show="cartNotEmpty">
-        <table class="table table-bordered" id="cartTable">
+        <table datatable="ng" dt-options="dtOptions" class="table table-bordered" id="cartTable">
           <thead class="thead-inverse">
             <tr>
               <th><b>Remove<b></th>
@@ -87,8 +98,10 @@
             </tr>
           </tbody>
         </table>
-        <button  type="button" class="btn btn-danger" ng-click=removeSelected()>Remove</button>
-        <button type="submit" class="btn btn-success" ng-disabled="checkQuantity()" ng-click=checkOut()>Checkout</button>
+        <div class="btn-group">
+          <button  type="button" class="btn btn-danger" ng-click=removeSelected()>Remove</button>
+          <button type="submit" class="btn btn-success" ng-disabled="checkQuantity()" ng-click=checkOut()>Checkout</button>
+        </div>
       </div>
       <div class="empty" ng-show="cartEmpty">
         No items in cart!
