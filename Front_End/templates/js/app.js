@@ -1,6 +1,7 @@
 /*global angular*/
-var app = angular.module("catthings_app", ['datatables','ui.bootstrap', 'ngMockE2E', 'ui.router']);
-
+//var app = angular.module("catthings_app");
+var app = angular.module("catthings_app",
+  ['datatables','ui.bootstrap', 'ngMockE2E', 'ui.router']);
 //UI Router Config
 app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
 
@@ -31,82 +32,96 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
    ]);
 });
 
-//THIGNS FACTORY
-//this service will act as a portal to the the THIGNS application
-//it will also take care of our tokens and credentials for us
-app.factory('thingsAPI', ['$http', '$location', function($http, $location){
-  var factory = {};//this is the object we will export.
-  //Private Variables
-  var userName = 'Guest';
-  var admin = false;
-  var token = null;
-//For local dev mode comment out the first line and uncomment the second...
-  var urlBase = 'https://things.cs.pdx.edu:3000/';
-//var urlBase = 'https://localhost:3000/';
-
-  //Getters:
-  factory.getBaseURL = () =>{return urlBase;}
-  factory.getUserName = () =>{return userName;}
+//This Factory will act as a global doorway to the THIGNS API, all controllers
+//will have access to this service.
+app.factory('thingsAPI', ['$http', function($http){
+//private Variables
+  var _admin = false;
+  var _token = null;
+  var _user = 'Guest';
+  //For local dev mode comment out the first line and uncomment the second...
+  var _urlBase = 'https://things.cs.pdx.edu:3000/';
+  //var _urlBase = 'https://localhost:3000/';
 
 
-  //Functions:
-  factory.authenticate = (loginData, callback) =>{
-    $http.post( urlBase + 'authenticate', loginData).then(function(response){
-      if(response.status == 200){
-        console.log(response);
-        console.log(response.headers);
-        userName = response.headers('username');
-        admin = response.headers('admin');
-        token = response.headers('token');
-        $location.path('home');
-        callback(true);
-      }
-      callback(false);
-    });
-    return
-  };
+  var obj = {}; //this is the object that will be handed to our controller.
+//Methods
 
-  //Logout function
-  factory.logOut = ()=>{
-    userName = 'Guest';
-    admin = false;
-    token = null;
-  };
-  return factory;
+  //Getters
+  obj.getUserName = ()=>{return _user;}
+  obj.getBaseURL = () =>{return _urlBase;}
+  obj.getAdmin = ()=>{return _admin;}
+
+  //Setters
+  obj.setToken = (token)=>{_token=token};
+  obj.setUserName = (user)=>{_user=user};
+  obj.setAdmin = (admin)=>{_admin=admin};
+
+  //route calls
+  obj.authenticate=(loginData)=>{
+    return $http.post(_urlBase+'authenticate', loginData);
+  }
+
+  //get view
+  obj.getView = ()=>{
+    return $http.get(_urlBase+'view');
+  }
+
+  //checkout
+  obj.checkout = (id, person, qty)=>{
+    var req = {
+      method: 'POST',
+      url: `${_urlBase}a/checkout/${id}/${person}/${qty}`,
+      headers: {
+        'x-access-token': _token
+      },
+      data: items
+    }
+
+    //log out
+    obj.logOut = ()=>{
+      _name = 'Guest';
+      _admin = false;
+      _token = null;
+    };
+
+    return $http(req);
+  }
+
+
+
+  return obj;//return the object
 }]);
 
-
-
 //Login Controller
-app.controller('LoginCheckController', ['$scope', '$location','$rootScope','$http', 'thingsAPI', LoginCheckController]);
-function LoginCheckController($scope, $location, $rootScope, $http, thingsAPI) {
+app.controller('LoginCheckController', ['$scope', '$location', 'thingsAPI',
+  function ($scope, $location,  thingsAPI) {
     // Can be used for Admin login
     $scope.user = {};
-
     $scope.showAdminLogin = false;
-
-    $scope.LoginVerify= (successFlag) =>{
-      if(successFlag === true){
-        console.log("home");
-        $location.path("/home");
-        $scope.$apply()
-      }
-      else {
-        $location.path("login");
-      }
-      return
-    };
 
     $scope.LoginCheck = function() {
       var loginData = $scope.user;
-      thingsAPI.authenticate(loginData, $scope.LoginVerify);
-
+      thingsAPI.authenticate(loginData).then(
+        function(response){
+            if(response.status == 200){
+              console.log(response);
+              console.log(response.headers);
+              thingsAPI.setUserName(response.headers('username'));
+              thingsAPI.setAdmin(response.headers('admin'));
+              thingsAPI.setToken(response.headers('token'));
+              $location.path('home');
+            }
+       },
+       function(err, response){
+         console.log(`AUTHENTICATE ERROR: ${err}, RESPONSE: ${response}`)
+       }
+      );
     };
-
-    $scope.SetAdminLogin = function() {
-      $scope.showAdminLogin = !$scope.showAdminLogin;
-    }
-}
+  $scope.SetAdminLogin = function() {
+    $scope.showAdminLogin = !$scope.showAdminLogin;
+  }
+}]);
 
 //==============Service to manage cart=================
 app.service('cartList', ['$rootScope', cartList]);
@@ -170,7 +185,7 @@ function NavBarController($scope) {
 app.controller('ShoppingListController', ['$scope', '$http', ShoppingListController]);
 function ShoppingListController($scope, $http) {
   //Get latest inventory data from database
-  $http.jsonp("http://things.cs.pdx.edu:3000/view?callback=JSON_CALLBACK", {jsonpCallbackParam:  'callback'})
+  $http.get("https://things.cs.pdx.edu:3000/view")
   .success(function (data) {
       $scope.shoppingList = data;
   });
@@ -179,8 +194,8 @@ function ShoppingListController($scope, $http) {
 
 
 //=============Inventory Controller===============
-app.controller('InventoryController', ['$scope', '$http', '$uibModal', '$location', '$rootScope', 'thingsAPI', 'cartList', InventoryController]);
-function InventoryController($scope, $http, $uibModal, $location, $rootScope, thingsAPI, cartList) {
+app.controller('InventoryController', ['$scope', '$http', '$uibModal', '$location', '$rootScope',  'cartList', InventoryController]);
+function InventoryController($scope, $http, $uibModal, $location, $rootScope, cartList) {
   $rootScope.baseURL = 'https://things.cs.pdx.edu:3000/';
   //Get latest inventory data from database
   $http.get($rootScope.baseURL +'view')
@@ -214,8 +229,8 @@ function InventoryController($scope, $http, $uibModal, $location, $rootScope, th
 }
 
 //============Cart Controller============
-app.controller('CartController', ['$scope', '$http', '$uibModal', '$location', '$rootScope', 'cartList', 'DTOptionsBuilder', 'DTColumnDefBuilder', CartController]);
-function CartController($scope, $http, $uibModal, $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder){
+app.controller('CartController', ['$scope', '$http',  '$location', '$rootScope', 'cartList', 'DTOptionsBuilder', 'DTColumnDefBuilder', CartController]);
+function CartController($scope, $http,  $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder){
 
   //Initialization purposes
   $scope.cart = [];
@@ -324,6 +339,7 @@ function CartController($scope, $http, $uibModal, $location, $rootScope, cartLis
       console.log(response.status);
       if(response.status === 200){
               $location.path("home");
+              //$scope.apply();
       }
       //Else 404 error....Could need another modal
     });
@@ -349,8 +365,8 @@ function RequestController($scope, $http, $location){
 }
 
 //Inventory Controller
-app.controller('InventoryController', ['$scope', '$http', '$uibModal', '$location', 'cartList', InventoryController]);
-function InventoryController($scope, $http, $uibModal, $location, cartList) {
+app.controller('InventoryController', ['$scope', '$http',  '$location', 'cartList', InventoryController]);
+function InventoryController($scope, $http,  $location, cartList) {
   //Get latest inventory data from database
   $http.get("https://things.cs.pdx.edu:3000/view").then(function (response) {
       $scope.inventory = response.data;
@@ -358,44 +374,29 @@ function InventoryController($scope, $http, $uibModal, $location, cartList) {
   });
 
   $scope.addToCart = function(item){
-    var cartItem = angular.copy(item); //Make copy of the item to add to cart
-    cartItem.check = false;
-    $scope.currentQuantity = item.quantity; //Get current quantity of item
-    var answer = $uibModal.open({templateUrl: 'templates/html/promptQuantity.html',
-                                 backdrop: 'static',
-                                 controller: PromptQuantityController,
-                                 scope: $scope
-                               });
-    answer.result.then(function(response){
-      if(response != "Cancel"){
-        cartItem.quantity = response;
+      if(item.carted == true){ //Checked
+        //Make copy of the item to add to cart
+        var cartItem = angular.copy(item);
+        cartItem.check = false;
         cartList.addToCart(cartItem);
       }
+      else{ //Unchecked
+        cartList.removeFromCart(item);
+      }
+    }
+    //Uncheck items in inventory table that have been removed from Cart
+    $scope.$on("Uncheck", function(event, toUncheck){
+      for(var i = 0; i < toUncheck.length; i++){
+        for(var j = 0; j < $scope.inventory.length; j++){
+          if ($scope.inventory[j].item_id == toUncheck[i]){
+            $scope.inventory[j].carted = false;
+          }
+        }
+      }
     });
-  }
+
 }
 
-//Controller for promptQuantity.html
-var PromptQuantityController = function PromptQuantityController($scope, $uibModal, $uibModalInstance){
-  $scope.ok = function($uibModal){
-    if(parseInt($scope.quantity) <= parseInt($scope.currentQuantity)){
-        if(parseInt($scope.quantity) > 0){
-            $uibModalInstance.close($scope.quantity);
-        }
-        else{
-          $scope.errorQuantity = false;
-          $scope.negativeQuantity = true;
-        }
-    }
-    else{
-      $scope.errorQuantity = true;
-      $scope.negativeQuantity = false;
-    }
-  };
-  $scope.close = function(result){
-    $uibModalInstance.close(result);
-  };
-}
 
 app.run(function ($httpBackend) {
     var inventory = [{name: 'Pop Tarts', description: 'Yummy', quantity: '5'}, {name: 'Kool-Aid', description: 'Oh Yeah', quantity: '10'}, {name: 'Printer Ink', description: 'Ink for printer', quantity: '30'}];
@@ -423,6 +424,7 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/home.html').passThrough();
     $httpBackend.whenGET('templates/html/cart.html').passThrough();
     $httpBackend.whenGET('templates/html/request.html').passThrough();
+    $httpBackend.whenGET('templates/html/shoppinglist.html').passThrough();
 
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
     $httpBackend.whenGET("http://localhost:3000/view").passThrough();
