@@ -25,6 +25,10 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
         .state('shoppinglist',{
           url: "/shoppinglist",
           templateUrl: 'templates/html/shoppinglist.html'
+        })
+        .state('checkin', {
+          url: "/checkin",
+          templateUrl: 'templates/html/checkin.html'
         });
    $sceDelegateProvider.resourceUrlWhitelist([
      'self',
