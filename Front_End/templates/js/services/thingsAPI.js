@@ -45,7 +45,7 @@ app.factory('thingsAPI', ['$http', function($http){
         'x-access-token': _token
       },
       data: items
-    }
+    }//end checkout
 
     //log out
     obj.logOut = ()=>{
