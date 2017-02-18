@@ -15,7 +15,7 @@ app.controller('LoginCheckController', ['$scope', '$location', 'thingsAPI',
               console.log(response);
               console.log(response.headers);
               thingsAPI.setUserName(response.headers('username'));
-              thingsAPI.setadmin(response.headers('admin'));
+              thingsAPI.setAdmin(response.headers('admin'));
               thingsAPI.setToken(response.headers('token'));
               $location.path('home');
             }

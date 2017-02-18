@@ -38,6 +38,7 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
 
 //This Factory will act as a global doorway to the THIGNS API, all controllers
 //will have access to this service.
+/*
 app.factory('thingsAPI', ['$http', function($http){
 //private Variables
   var _admin = false;
@@ -126,7 +127,7 @@ app.controller('LoginCheckController', ['$scope', '$location', 'thingsAPI',
     $scope.showAdminLogin = !$scope.showAdminLogin;
   }
 }]);
-
+*/
 //==============Service to manage cart=================
 app.service('cartList', ['$rootScope', cartList]);
 function cartList ($rootScope) {
