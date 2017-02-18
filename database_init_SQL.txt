@@ -60,14 +60,14 @@ Important Notes:
     CREATE TABLE tags (
         tag_name    text,
         item_id int REFERENCES items (item_id),
-        PRIMARY KEY (tag_name)
+        PRIMARY KEY (tag_name, item_id)
     );
 
     -------------------------------------------------------------------
     CREATE TABLE users (
         username    text,
         password    text NOT NULL,
-        user_type   boolean NOT NULL,
+        user_type   boolean NOT NULL DEFAULT false,
         PRIMARY KEY (username)
     );
 
@@ -97,7 +97,6 @@ Important Notes:
     CREATE TRIGGER set_qty_remaining BEFORE INSERT ON transactions
         FOR EACH ROW EXECUTE PROCEDURE set_qty_remaining();
 
-    -------------------------------------------------------------------
 
     -------------------------------------------------------------------
     CREATE OR REPLACE FUNCTION item_id_with_name(text)
@@ -111,27 +110,35 @@ Important Notes:
     INSERT INTO items (item_name, description, price, quantity, threshold) VALUES
         ('Pop-Tarts', 'A tasty snack, best consumed toasted.', 2.50, 25, 10);
     INSERT INTO tags VALUES
-        ('Food', max_item_id());
+        ('Food', 1);
     INSERT INTO tags VALUES
-        ('Perishable', max_item_id());
+        ('Perishable', 1);
 
     ----------------------------------------------------------------------------
     INSERT INTO items (item_name, description, price, quantity, threshold) VALUES
         ('Black & White Printer Ink', 'For Printer In FAB 88', 27.99, 8, 5);
     INSERT INTO tags VALUES
-        ('Printer Supplies', max_item_id());
+        ('Printer Supplies', 2);
+    INSERT INTO tags VALUES
+        ('Stuff', 2);
 
     ----------------------------------------------------------------------------
     INSERT INTO items (item_name, description , price, quantity, threshold) VALUES
         ('HDMI to VGA Adapter', 'For classroom projectors.', 15.00, 4, 2);
     INSERT INTO tags VALUES
-        ('Digital Adapters', max_item_id());
+        ('Digital Adapters', 3);
     INSERT INTO tags VALUES
-        ('Electronics', max_item_id());
+        ('Electronics', 3);
+    INSERT INTO tags VALUES
+        ('Stuff', 3);
 
     ----------------------------------------------------------------------------
     INSERT INTO users (username, password, user_type) VALUES
-        ('lukekaz9', 'hashedpassword', 'Admin');
+        ('admin', 'hashedpassword', true);
+    INSERT INTO users (username, password) VALUES
+        ('user', 'hashedpassword');
+	
+
 
 -- Perform some Transaction --
 

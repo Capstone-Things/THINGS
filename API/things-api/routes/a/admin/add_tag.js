@@ -1,5 +1,5 @@
 /****************************************************
-* /path     /tagitem/:id/:tag
+* /path     a/admin/tagitem/:id/:tag
 * /params   :id - The id of the item to tag
 *           :tag - the name of the tag to give the item
 *
@@ -18,9 +18,24 @@ module.exports = (req,res) => {
         }
         client.query('INSERT INTO tags VALUES ($1, $2)',
                     [req.params.tag, req.params.id], function(err, result) {
-            //call `done()` to release the client back to the pool
-            done();
+          //call `done()` to release the client back to the pool
+          done();
+
+          if (err) {
+              // If the item id to add the tag to does not exist
+              if (err.toString().includes("violates foreign key constraint")) {
+                res.status(400);
+                res.jsonp("ERROR: No item exist with that id. You can only add tags to items that exist in the database.");
+
+              } // If this item already has this tag
+              else if (err.toString().includes("duplicate key value violates unique constraint")) {
+                res.status(400);
+                res.jsonp("ERROR: A tag with that name already exists for that item. An item cannot have duplicate tags.");
+              }
+          } // No error
+          else {
             res.app.locals.helpers.errResultHandler(err, 'Tag Added Successfully', res);
-        });
+          }
+      });
     });
 }
