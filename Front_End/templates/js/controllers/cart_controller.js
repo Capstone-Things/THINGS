@@ -1,8 +1,8 @@
 var app = angular.module("catthings_app");
 
 //============Cart Controller============
-app.controller('CartController', ['$scope', '$http',  '$location', '$rootScope', 'cartList', 'DTOptionsBuilder', 'DTColumnDefBuilder', CartController]);
-function CartController($scope, $http,  $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder){
+app.controller('CartController', ['$scope', '$http',  '$location', '$rootScope', 'cartList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', CartController]);
+function CartController($scope, $http,  $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI){
 
   //Initialization purposes
   $scope.cart = [];
@@ -104,10 +104,16 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
 
   //Checkout
   $scope.checkOut = function() {
-    console.log($rootScope.username);
-    console.log($scope.cart.id);
-    console.log($scope.cart.quantity);
-    $http.post('/checkout', $scope.cart).then(function(response){
+    console.log($scope.userName);
+    console.log($scope.cart[0].item_id);
+    console.log($scope.cart[0].quantity);
+
+    var test = JSON.stringify($scope.cart);
+    console.log(test);
+
+    //$http.post('/checkout', $scope.cart)
+    thingsAPI.checkout($scope.cart[0].item_id, $scope.userName, $scope.cart[0].quantity)
+    .then(function(response){
       console.log(response.status);
       if(response.status === 200){
               $location.path("home");

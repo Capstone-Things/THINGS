@@ -1,7 +1,7 @@
 var app = angular.module("catthings_app");
 
 //==============Service to manage cart=================
-app.service('cartList', ['$rootScope', cartList]);
+app.factory('cartList', ['$rootScope', cartList]);
 function cartList ($rootScope) {
   var cart = [];
   return {
