@@ -1,8 +1,8 @@
 var app = angular.module("catthings_app");
 
 //============Cart Controller============
-app.controller('CartController', ['$scope', '$http',  '$location', '$rootScope', 'cartList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', CartController]);
-function CartController($scope, $http,  $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI){
+app.controller('CartController', ['$scope', '$http',  '$location', '$rootScope', 'cartList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', 'inventoryList', CartController]);
+function CartController($scope, $http,  $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, inventoryList){
 
   //Initialization purposes
   $scope.cart = [];
@@ -106,17 +106,22 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
   $scope.checkOut = function() {
     console.log($scope.userName);
     console.log($scope.cart[0].item_id);
-    console.log($scope.cart[0].quantity);
+    console.log($scope.cart[0].selectedQuantity);
 
     var test = JSON.stringify($scope.cart);
     console.log(test);
 
     //$http.post('/checkout', $scope.cart)
-    thingsAPI.checkout($scope.cart[0].item_id, $scope.userName, $scope.cart[0].quantity)
+    thingsAPI.checkout($scope.cart[0].item_id, $scope.userName, $scope.cart[0].selectedQuantity)
     .then(function(response){
+      console.log(response);
       console.log(response.status);
+      console.log(response.data);
       if(response.status === 200){
-              $location.path("home");
+        thingsAPI.getView().then(function (response) {
+            inventoryList.setInventory(response.data);
+        });
+              //$location.path("home");
               //$scope.apply();
       }
       //Else 404 error....Could need another modal

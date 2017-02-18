@@ -1,11 +1,12 @@
 var app = angular.module('catthings_app');
 
 //Inventory Controller
-app.controller('InventoryController', ['$scope', '$http',  '$location', 'cartList', InventoryController]);
-function InventoryController($scope, $http,  $location, cartList) {
+app.controller('InventoryController', ['$scope', '$http',  '$location', 'cartList', 'thingsAPI', 'inventoryList', InventoryController]);
+function InventoryController($scope, $http,  $location, cartList, thingsAPI, inventoryList) {
   //Get latest inventory data from database
-  $http.get("https://things.cs.pdx.edu:3000/view").then(function (response) {
-      $scope.inventory = response.data;
+  thingsAPI.getView().then(function (response) {
+      inventoryList.setInventory(response.data);
+      $scope.inventory=inventoryList.getInventory();
       console.log($scope.inventory);
   });
 
@@ -31,4 +32,9 @@ function InventoryController($scope, $http,  $location, cartList) {
       }
     });
 
+    //Watch for inventory changes
+    $scope.$watch(function(){return inventoryList.getInventory()},
+      function(newValue, oldValue){
+        $scope.inventory = newValue;
+    });
 }
