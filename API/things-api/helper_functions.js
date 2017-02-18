@@ -43,8 +43,15 @@ module.exports = {
               done();
 
               if(err) {
+                // If the error is because they checked out too many items,
+                if (err.toString().includes("items_quantity_check")) {
+                  // Respond with conflict (409) status
+                  res.status(409);
+                  res.jsonp("ERROR: Transaction not completed because it would result in an item with a negative quantity.");
+                } else {
                   console.error('error running query', err);
                   retFunc(err, null, res);
+                }
               } else {
                   retFunc(null, 'Transaction Completed Successfully', res);
               }
