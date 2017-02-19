@@ -4,6 +4,7 @@
   "description": "This API will serve the Cat Things web app.",
   "main": "index.js",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.16.0",
     "command-line-args": "^4.0.1",
     "cookie-parser": "^1.4.3",

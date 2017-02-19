@@ -8,6 +8,7 @@ app.factory('thingsAPI', ['$http', function($http){
   var _admin = false;
   var _token = null;
   var _user = 'Guest';
+
   //For local dev mode comment out the first line and uncomment the second...
   var _urlBase = 'https://things.cs.pdx.edu:3000/';
   //var _urlBase = 'https://localhost:3000/';
