@@ -134,9 +134,9 @@ Important Notes:
 
     ----------------------------------------------------------------------------
     INSERT INTO users (username, password, user_type) VALUES
-        ('admin', 'hashedpassword', true);
+        ('admin', 'cat', true);
     INSERT INTO users (username, password) VALUES
-        ('user', 'hashedpassword');
+        ('user', 'cat');
 	
 
 
