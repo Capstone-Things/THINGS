@@ -39,12 +39,12 @@ module.exports = (req, res) => {
               }
               //if our user exsits, lets check their password.
               //bcyrpt compare
-              bcrypt.compare(password, data.password, function(err, res){
+              bcrypt.compare(password, data.password, function(err, result){
                 if(err){
                   console.error('Error in bcrypt module authentication failed.')
                   res.sendSatus(401);
                 }
-                if(!res){
+                if(!result){
                   //if we are here, the password did not match.
                   return console.error('invalid password');
                   res.sendStatus(401);//invalid password

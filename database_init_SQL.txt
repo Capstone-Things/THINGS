@@ -133,11 +133,12 @@ Important Notes:
         ('Stuff', 3);
 
     ----------------------------------------------------------------------------
+    --the password for these 2 test users is 'cat'--
     INSERT INTO users (username, password, user_type) VALUES
-        ('admin', 'cat', true);
+        ('admin', '$2a$10$X79.QYL2UnMDChg9adWRLel1w/Mn9b3GfBEL3rUdiYcA2LqaPsoaO', true);
     INSERT INTO users (username, password) VALUES
-        ('user', 'cat');
-	
+        ('user', '$2a$10$X79.QYL2UnMDChg9adWRLel1w/Mn9b3GfBEL3rUdiYcA2LqaPsoaO');
+
 
 
 -- Perform some Transaction --
