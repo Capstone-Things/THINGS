@@ -36,7 +36,7 @@ app.factory('thingsAPI', ['$http', function($http){
     return $http.get(_urlBase+'view');
   }
 
-  //checkout
+  //checkout ==eventually to become person and cart==
   obj.checkout = (id, person, qty)=>{
     var req = {
       method: 'POST',
@@ -44,8 +44,12 @@ app.factory('thingsAPI', ['$http', function($http){
       headers: {
         'x-access-token': _token
       },
-      data: items
+      //data: items
     }
+
+    return $http(req);
+    }//end checkout
+
 
     //log out
     obj.logOut = ()=>{
@@ -53,11 +57,6 @@ app.factory('thingsAPI', ['$http', function($http){
       _admin = false;
       _token = null;
     };
-
-    return $http(req);
-  }
-
-
 
   return obj;//return the object
 }]);

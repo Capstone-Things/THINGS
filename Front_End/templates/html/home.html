@@ -45,7 +45,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="item in inventory">
+          <tr ng-repeat="item in inventory | orderBy: 'name'">
             <td><input type="checkbox" ng-model="item.carted" ng-change="addToCart(item)"/></td>
             <td>{{ item.name }}</td>
             <td>{{ item.description }}</td>
@@ -79,7 +79,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="selected in cart">
+            <tr ng-repeat="selected in cart | orderBy:'name'">
               <td><input type="checkbox" ng-model="selected.checked"/></td>
               <td>{{ selected.name }}</td>
               <td>{{ selected.description }}</td>

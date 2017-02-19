@@ -13,9 +13,10 @@ app.controller('LoginCheckController', ['$scope', '$location', 'thingsAPI',
         function(response){
             if(response.status == 200){
               console.log(response);
-              console.log(response.headers);
+              console.log(response.headers());
+              console.log(response.headers('token'));
               thingsAPI.setUserName(response.headers('username'));
-              thingsAPI.setadmin(response.headers('admin'));
+              thingsAPI.setAdmin(response.headers('admin'));
               thingsAPI.setToken(response.headers('token'));
               $location.path('home');
             }
