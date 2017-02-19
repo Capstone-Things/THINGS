@@ -1,6 +1,6 @@
 //this  is a temporary script not intended for distribution in the final product.
 //this is a workaround untill a create user module can be created.
-//It can be called with node passwordHasher passwordHasher
+//It can be called with node passwordHasher.js <passwordToHash>
 //the hash of the password will be printed and you may store it in the database
 //manually.
 
