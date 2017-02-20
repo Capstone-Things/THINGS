@@ -38,10 +38,15 @@ routes.post('/checkin/:id/:person/:qty', checkin);
 routes.put('/add/:name/:desc/:price/:thresh', addNewItem);
 routes.post('/tagitem/:id/:tag', addTag);
 routes.get('/shopping_list', shoppingList);
-routes.get('/stats/:name', stats);
+
+//Statistics
+routes.get('/stats/:item_id', stats.item_id);
+routes.get('/stats/avg/:item_id', stats.avg)
+
+//History
 routes.get('/history/recent/:entries?', history.recent);
 routes.get('/history/by_item/:name/:entries?', history.item);
-routes.get('/history/by_tag/:tag/:entreis?', history.tag);
+routes.get('/history/by_tag/:tag/:entries?', history.tag);
 routes.get('/history/by_range/:start_date/:end_date', history.timespan);
 //this is an inline route handler...
 //this is where you land if you goto GET https://localhost:3000/a/admin/
