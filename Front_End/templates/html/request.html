@@ -1,28 +1,12 @@
-<body>
-  <nav class="navbar navbar-default" ng-controller="NavBarController">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="#">CAT</a>
-        <button type="button" class="navbar-toggle" ng-click="isCollapsed = !isCollapsed">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-      </div>
-      <div class="collapse navbar-collapse" uib-collapse="isCollapsed">
-        <ul class="nav navbar-nav">
-          <li><a href="home.html">Inventory</a></li>
-          <li class="active"><a ng-href="#request">Request Item</a></li>
-          <li><a ng-href="#shoppinglist">Shopping List</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a class="navbar-right" href="cart.html">Cart <i class="fa fa-shopping-cart"></i></a></li>
-          <li><a class="navbar-right" href="login.html">Logout <i class="fa fa-sign-out"></i></a></li>
-        </ul>
+<html lang="en">
+  <head>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="templates/css/home.css" />
+  </head>
 
-    </div>
-  </nav>
+<body>
+  <!-- Navigation Bar-->
+  <bootstrap-navbar></bootstrap-navbar>
 
   <div class="container">
   <form role="form" class="request-form" ng-app "catthings_app" ng-controller="RequestController">

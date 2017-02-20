@@ -1,7 +1,7 @@
 /*global angular*/
 //var app = angular.module("catthings_app");
 var app = angular.module("catthings_app",
-  ['datatables','ui.bootstrap', 'ngMockE2E', 'ui.router']);
+  ['datatables','ui.bootstrap', 'ngMockE2E', 'ui.router', 'navbarapp']);
 //UI Router Config
 app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
 
@@ -29,6 +29,10 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
         .state('checkin', {
           url: "/checkin",
           templateUrl: 'templates/html/checkin.html'
+        })
+        .state('admin',{
+          url: "/admin",
+          templateUrl: 'templates/html/admin.html'
         });
    $sceDelegateProvider.resourceUrlWhitelist([
      'self',
@@ -63,6 +67,8 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/cart.html').passThrough();
     $httpBackend.whenGET('templates/html/request.html').passThrough();
     $httpBackend.whenGET('templates/html/shoppinglist.html').passThrough();
+    $httpBackend.whenGET('templates/html/bootstrapNavbar.html').passThrough();
+    $httpBackend.whenGET('templates/html/admin.html').passThrough();
 
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
     $httpBackend.whenGET("http://localhost:3000/view").passThrough();
