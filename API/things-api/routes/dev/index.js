@@ -6,7 +6,7 @@ const sdelete = require('./sdelete');
 const svTags = require('./sv_tags');
 const svTransactions = require('./sv_transactions');
 const name_to_id = require('./name_to_id');
-const stmt = require('./stmts');
+//const stmt = require('./stmts');
 //add route handelers for subfolders here:
 
 
