@@ -44,6 +44,22 @@
 
         <!-- Add a table that searches DB for an item with that name that admin selects to check in
              This takes care of items with multiple names -->
+       <table datatable="ng" class="table table-bordered">
+         <thead class="thead-inverse">
+           <tr>
+             <th><b>Name</b></th>
+             <th><b>Description</b></th>
+             <th><b>Quantity</b></th>
+           </tr>
+         </thead>
+         <tbody>
+           <tr ng-repeat="item in stuff | orderBy:'name'">
+             <td>{{ item.name }}</td>
+             <td>{{ item.description }}</td>
+             <td>{{ item.quantity }}</td>
+           </tr>
+         </tbody>
+        </table>
 
         <div class="form-group">
           <label for="quantityNeeded">Quantity:</label>

@@ -28,7 +28,7 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
         })
         .state('checkin', {
           url: "/checkin",
-          templateUrl: 'templates/html/checkin.html'
+          templateUrl: 'templates/html/checkIn.html'
         });
    $sceDelegateProvider.resourceUrlWhitelist([
      'self',
@@ -63,6 +63,7 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/cart.html').passThrough();
     $httpBackend.whenGET('templates/html/request.html').passThrough();
     $httpBackend.whenGET('templates/html/shoppinglist.html').passThrough();
+    $httpBackend.whenGET('templates/html/checkIn.html').passThrough();
 
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
     $httpBackend.whenGET("http://localhost:3000/view").passThrough();
