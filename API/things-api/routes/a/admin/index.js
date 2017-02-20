@@ -40,8 +40,8 @@ routes.post('/tagitem/:id/:tag', addTag);
 routes.get('/shopping_list', shoppingList);
 
 //Statistics
-routes.get('/stats/:item_id', stats.item_id);
-routes.get('/stats/avg/:item_id', stats.avg)
+routes.get('/stats/netperday/:item_id', stats.item_id);
+routes.get('/stats/avgperday/:item_id', stats.avg)
 
 //History
 routes.get('/history/recent/:entries?', history.recent);

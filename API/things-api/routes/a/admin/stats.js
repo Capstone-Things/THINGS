@@ -3,7 +3,7 @@ module.exports = {
 
 
   /****************************************************
-  * /path     a/admin/stats/avg/:item_id
+  * /path     a/admin/stats/avgperday/:item_id
   * /params   :item_id - item_id of what we are looking for
   *
   *
@@ -33,7 +33,7 @@ module.exports = {
     });
   },
   /****************************************************
-  * /path     a/admin/stats/:item_id
+  * /path     a/admin/stats/netperday/:item_id
   * /params   :item_id - item_id of what we are looking for
   *
   *
