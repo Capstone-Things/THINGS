@@ -30,7 +30,7 @@ Important Notes:
     CREATE SCHEMA things;
 
     -------------------------------------------------------------------
-    CREATE TABLE items (
+    CREATE TABLE all_items (
         item_id SERIAL,
         item_name   text    NOT NULL,
         description text,
@@ -48,7 +48,7 @@ Important Notes:
     -------------------------------------------------------------------
     CREATE TABLE transactions (
         transaction_id  SERIAL,
-        item_id         int NOT NULL REFERENCES items(item_id),
+        item_id         int NOT NULL REFERENCES all_items(item_id),
         person          text    NOT NULL DEFAULT 'anonymous',
         qty_changed     int		 NOT NULL,
         qty_remaining   int,
@@ -59,7 +59,7 @@ Important Notes:
     -------------------------------------------------------------------
     CREATE TABLE tags (
         tag_name    text,
-        item_id int REFERENCES items (item_id),
+        item_id int REFERENCES all_items (item_id),
         PRIMARY KEY (tag_name, item_id)
     );
 
@@ -72,20 +72,15 @@ Important Notes:
     );
 
     -------------------------------------------------------------------
-    CREATE VIEW inventory AS
-        SELECT *
-        FROM items NATURAL JOIN tags;
-
-    -------------------------------------------------------------------
     CREATE FUNCTION set_qty_remaining() RETURNS trigger AS $set_qty_remaining$
         BEGIN
-            UPDATE items
+            UPDATE all_items
             SET quantity = (quantity + NEW.qty_changed)
             WHERE item_id = NEW.item_id;
 
             NEW.qty_remaining = (
                 SELECT quantity
-                FROM items
+                FROM all_items
                 WHERE item_id = NEW.item_id
             );
 
@@ -101,7 +96,18 @@ Important Notes:
     -------------------------------------------------------------------
     CREATE OR REPLACE FUNCTION item_id_with_name(text)
     RETURNS int LANGUAGE SQL AS
-    $$ SELECT item_id FROM items WHERE item_name = $1; $$;
+    $$ SELECT item_id FROM all_items WHERE item_name = $1; $$;
+
+    -------------------------------------------------------------------
+    CREATE VIEW items AS
+        SELECT *
+        FROM all_items
+        WHERE is_hidden = false;
+
+    -------------------------------------------------------------------
+    CREATE VIEW inventory AS
+        SELECT *
+        FROM items NATURAL JOIN tags;
 
 
 -- Insert Data Example --
@@ -145,6 +151,15 @@ Important Notes:
         ('I/O device', 5);
     INSERT INTO tags VALUES
         ('Electronics', 5);
+
+
+    -- Add some hidden items --
+    ----------------------------------------------------------------------------
+    INSERT INTO items (item_name, description, price, quantity, threshold, is_hidden) VALUES
+        ('Poop Tarts', 'A not-so tasty snack.', 0.0, 10, 5, true);
+    INSERT INTO items (item_name, description, price, quantity, threshold, is_hidden) VALUES
+        ('kechanical meyboard', 'typing', 19.00, 5, 2, true);
+ 
 
 
     ----------------------------------------------------------------------------
