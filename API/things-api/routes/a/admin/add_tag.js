@@ -31,6 +31,8 @@ module.exports = (req,res) => {
               else if (err.toString().includes("duplicate key value violates unique constraint")) {
                 res.status(400);
                 res.jsonp("ERROR: A tag with that name already exists for that item. An item cannot have duplicate tags.");
+              } else {
+                res.app.locals.helpers.errResultHandler(err, null, res);
               }
           } // No error
           else {
