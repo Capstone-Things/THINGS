@@ -57,6 +57,39 @@ module.exports = {
               }
           });
       });
-  }
+  
 
-};
+},
+
+
+  doThresholdCheck: function(id, retFunc, res) {
+
+
+    res.app.locals.pool.connect(function(err, client, done) {
+        if(err) {
+            return console.error('error fetching client from pool', err);
+    }
+    
+    client.query('SELECT threshold, quantity from items where item_id = $1', [id], function(err, res) {
+
+        done();
+
+        if(err) {
+            console.error('Threshold and quantity were not received properly', err);
+            retFunc(err, null, res);
+        }
+        else {
+            retFunc(null, 'Threshold found successfully', res);
+
+            //res2.rows.q
+
+            if(res.rows[0].quantity <= res.rows[0].threshold) //send emmail to administrator
+            console.log("Send email to administrator");  
+            //console.log("thresh = " + res2.rows[0].threshold + "/qty remaining=" +res2.rows[0].quantity);
+        }
+
+
+    });
+  });
+ }
+}
