@@ -25,7 +25,7 @@ function checkinList ($rootScope) {
         var newCheckin=[];
         var toUncheck=[];
             angular.forEach(toCheckin,function(item){
-              if(!item.checked){
+              if(!item.uncheckin){
                 newCheckin.push(item);
               }
               else{
@@ -45,4 +45,5 @@ function checkinList ($rootScope) {
         }
         $rootScope.$broadcast("RemoveCheckin", toCheckin);
       }
+    }
 }
