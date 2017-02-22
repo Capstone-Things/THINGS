@@ -61,7 +61,7 @@ module.exports = {
 
 },
 
-
+/*
   doThresholdCheck: function(id, retFunc, res) {
 
 
@@ -92,4 +92,5 @@ module.exports = {
     });
   });
  }
+ */
 }

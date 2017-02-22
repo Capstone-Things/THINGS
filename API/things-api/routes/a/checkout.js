@@ -19,6 +19,6 @@ module.exports = (req, res) =>{
     res.app.locals.helpers.transaction(req.params.id, req.params.person, -req.params.qty,
       req.app.locals.helpers.errResultHandler, res);
 
-    res.app.locals.helpers.doThresholdCheck(req.params.id, res.app.locals.helpers.errResultHandler, res);      
+   // res.app.locals.helpers.doThresholdCheck(req.params.id, res.app.locals.helpers.errResultHandler, res);      
   }
 };
