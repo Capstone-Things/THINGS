@@ -15,11 +15,38 @@ module.exports = {
   * /author     Luke
   * /date       2/7/2017
   ****************************************************/
+
+
   errResultHandler: function(err, result, res) {
+
+      const util = require('util');
+
+      console.log("Err = " );
+
+      console.log(util.inspect(err, { showHidden: false, depth: 1 }));
+
+      console.log("----------------------------------------");
+
+      console.log("Result = ");
+
+      console.log(util.inspect(result, { showHidden: false, depth: 1 }));
+
+      console.log("------------------------------------------");
+
+      console.log("Res.status = ");
+
+      console.log(util.inspect(res.status, { showHidden: false, depth: 1 }));
+
+
+      console.log("------------------------------------------");
+
+
       if (err) {
-        res.status(500);
+        res.status(500); 
         res.jsonp('Database Error');
       } else {
+
+        console.log("Result 2 = " + result);
         res.status(200);
         res.jsonp(result);
       }
@@ -61,7 +88,7 @@ module.exports = {
 
 },
 
-/*
+
   doThresholdCheck: function(id, retFunc, res) {
 
 
@@ -70,7 +97,7 @@ module.exports = {
             return console.error('error fetching client from pool', err);
     }
     
-    client.query('SELECT threshold, quantity from items where item_id = $1', [id], function(err, res) {
+    client.query('SELECT threshold, quantity from items where item_id = $1', [id], function(err, result) {
 
         done();
 
@@ -83,7 +110,7 @@ module.exports = {
 
             //res2.rows.q
 
-            if(res.rows[0].quantity <= res.rows[0].threshold) //send emmail to administrator
+            if(result.rows[0].quantity <= result.rows[0].threshold) //send emmail to administrator
             console.log("Send email to administrator");  
             //console.log("thresh = " + res2.rows[0].threshold + "/qty remaining=" +res2.rows[0].quantity);
         }
@@ -92,5 +119,4 @@ module.exports = {
     });
   });
  }
- */
 }
