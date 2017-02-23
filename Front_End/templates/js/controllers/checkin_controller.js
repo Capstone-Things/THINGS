@@ -1,12 +1,14 @@
 var app = angular.module("catthings_app");
 
-app.controller('CheckInController', ['$scope', '$http',  '$location', '$rootScope', 'inventoryList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', 'checkinList', CheckInController]);
-function CheckInController($scope, $http,  $location, $rootScope, inventoryList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, checkinList){
+app.controller('CheckInController', ['$scope', '$http', '$location', '$rootScope', 'inventoryList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', 'checkinList', CheckInController]);
+function CheckInController($scope, $http, $location, $rootScope, inventoryList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, checkinList){
   $scope.checkin=[];
   $scope.person={};
   $scope.searchQuery = '';
-  $scope.emptyNameError = false;
+  $scope.emptyNameError = true;
   $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('sDom', 'rtip');
+  var dti;
+  var dtInstanceCallback = dtInstanceCallback;
 
   $scope.dtColumns = [
     DTColumnDefBuilder.newColumnDef(0).withOption('searchable', false),
@@ -16,16 +18,16 @@ function CheckInController($scope, $http,  $location, $rootScope, inventoryList,
   ]
 
   $scope.dtInstanceCallback = function(dtInstance){
-    $scope.dti = dtInstance;
+    dti = dtInstance;
   };
 
   $scope.searchTable = function(){
     if($scope.searchQuery == null){
-      $scope.dti.DataTable.search("").draw();
+      dti.DataTable.search("").draw();
     }
     else{
-      $scope.dti.DataTable.search($scope.searchQuery);
-      $scope.dti.DataTable.search($scope.searchQuery).draw();
+      dti.DataTable.search($scope.searchQuery);
+      dti.DataTable.search($scope.searchQuery).draw();
     }
   };
 
@@ -85,7 +87,6 @@ function CheckInController($scope, $http,  $location, $rootScope, inventoryList,
   $scope.checkCheckin = function(){
     if($scope.emptyNameError == true){
       if(angular.isUndefined($scope.person.name)){
-        console.log("Returning TRUE");
         return true;
       }
     }
@@ -112,20 +113,17 @@ function CheckInController($scope, $http,  $location, $rootScope, inventoryList,
 
   //Check In
   $scope.confirm = function(){
-    console.log($scope.checkin);
     thingsAPI.checkin($scope.checkin[0].item_id, $scope.person, $scope.checkin[0].selectedQuantity)
     .then(function(response){
-      console.log(response);
-      console.log(response.status);
-      console.log(response.data);
       if(response.status === 200){
         thingsAPI.getView().then(function (response) {
-            inventoryList.setInventory(response.data);
-            $scope.stuff=inventoryList.getInventory();
-            $scope.dti.rerender();
+          inventoryList.setInventory(response.data);
+          $scope.stuff=inventoryList.getInventory();
+          $scope.checkin.length = 0; //Bizare way to clear array
+          $scope.checkinEmpty = true;
+          $scope.checkinNotEmpty = false;
         });
       }
-      //Else 404 error....Could need another modal
     });
   }
 
@@ -151,12 +149,4 @@ function CheckInController($scope, $http,  $location, $rootScope, inventoryList,
       }
     }
   });
-
-/*
-  //Watch for inventory changes
-  $scope.$watch(function(){return inventoryList.getInventory()},
-    function(newValue, oldValue){
-      $scope.stuff = newValue;
-  });
-  */
 }
