@@ -3,9 +3,10 @@ var app = angular.module("catthings_app");
 app.controller('CheckInController', ['$scope', '$http',  '$location', '$rootScope', 'inventoryList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', 'checkinList', CheckInController]);
 function CheckInController($scope, $http,  $location, $rootScope, inventoryList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, checkinList){
   $scope.checkin=[];
+  $scope.person={};
   $scope.searchQuery = '';
   $scope.emptyNameError = false;
-  $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('sDom', 'rtip', 'select');
+  $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('sDom', 'rtip');
 
   $scope.dtColumns = [
     DTColumnDefBuilder.newColumnDef(0).withOption('searchable', false),
@@ -15,16 +16,16 @@ function CheckInController($scope, $http,  $location, $rootScope, inventoryList,
   ]
 
   $scope.dtInstanceCallback = function(dtInstance){
-    $scope.dtInstance = dtInstance;
+    $scope.dti = dtInstance;
   };
 
   $scope.searchTable = function(){
     if($scope.searchQuery == null){
-      $scope.dtInstance.DataTable.search("").draw();
+      $scope.dti.DataTable.search("").draw();
     }
     else{
-      $scope.dtInstance.DataTable.search($scope.searchQuery);
-      $scope.dtInstance.DataTable.search($scope.searchQuery).draw();
+      $scope.dti.DataTable.search($scope.searchQuery);
+      $scope.dti.DataTable.search($scope.searchQuery).draw();
     }
   };
 
@@ -66,41 +67,28 @@ function CheckInController($scope, $http,  $location, $rootScope, inventoryList,
   }
 
   //Check name
-  $scope.checkName = function(){
-    if(angular.isUndefined($scope.person)){
+  $scope.checkPerson = function(){
+    if(angular.isUndefined($scope.person.name)){
       $scope.emptyNameError = true;
-      return true;
     }
     else{
-      if($scope.person.length == 0){
+      if($scope.person.name.length == 0){
         $scope.emptyNameError = true;
-        return true;
       }
       else{
         $scope.emptyNameError = false;
-        return false;
       }
     }
   }
 
   //Check Quantity
   $scope.checkCheckin = function(){
-    /*
-    console.log($scope.person);
-    if(angular.isUndefined($scope.person)){
-      $scope.emptyNameError = true;
-      return true;
-    }
-    else{
-      if($scope.person.length == 0){
-        $scope.emptyNameError = true;
+    if($scope.emptyNameError == true){
+      if(angular.isUndefined($scope.person.name)){
+        console.log("Returning TRUE");
         return true;
       }
-      else{
-        $scope.emptyNameError = false;
-      }
     }
-    */
     for(var i = 0; i < $scope.checkin.length; i++){
       if($scope.checkin[i].selectedQuantity == null){ //Not all items have selected quantities
         return true;
@@ -120,6 +108,25 @@ function CheckInController($scope, $http,  $location, $rootScope, inventoryList,
       $scope.checkin[i].zeroQuantity = false;
     }
     return false;
+  }
+
+  //Check In
+  $scope.confirm = function(){
+    console.log($scope.checkin);
+    thingsAPI.checkin($scope.checkin[0].item_id, $scope.person, $scope.checkin[0].selectedQuantity)
+    .then(function(response){
+      console.log(response);
+      console.log(response.status);
+      console.log(response.data);
+      if(response.status === 200){
+        thingsAPI.getView().then(function (response) {
+            inventoryList.setInventory(response.data);
+            $scope.stuff=inventoryList.getInventory();
+            $scope.dti.rerender();
+        });
+      }
+      //Else 404 error....Could need another modal
+    });
   }
 
   //Broadcast for when items are added to Checkin
@@ -145,9 +152,11 @@ function CheckInController($scope, $http,  $location, $rootScope, inventoryList,
     }
   });
 
+/*
   //Watch for inventory changes
   $scope.$watch(function(){return inventoryList.getInventory()},
     function(newValue, oldValue){
       $scope.stuff = newValue;
   });
+  */
 }
