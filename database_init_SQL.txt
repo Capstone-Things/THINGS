@@ -30,7 +30,7 @@ Important Notes:
     CREATE SCHEMA things;
 
     -------------------------------------------------------------------
-    CREATE TABLE items (
+    CREATE TABLE all_items (
         item_id SERIAL,
         item_name   text    NOT NULL,
         description text,
@@ -48,7 +48,7 @@ Important Notes:
     -------------------------------------------------------------------
     CREATE TABLE transactions (
         transaction_id  SERIAL,
-        item_id         int NOT NULL REFERENCES items(item_id),
+        item_id         int NOT NULL REFERENCES all_items(item_id),
         person          text    NOT NULL DEFAULT 'anonymous',
         qty_changed     int		 NOT NULL,
         qty_remaining   int,
@@ -59,7 +59,7 @@ Important Notes:
     -------------------------------------------------------------------
     CREATE TABLE tags (
         tag_name    text,
-        item_id int REFERENCES items (item_id),
+        item_id int REFERENCES all_items (item_id),
         PRIMARY KEY (tag_name, item_id)
     );
 
@@ -72,20 +72,15 @@ Important Notes:
     );
 
     -------------------------------------------------------------------
-    CREATE VIEW inventory AS
-        SELECT *
-        FROM items NATURAL JOIN tags;
-
-    -------------------------------------------------------------------
     CREATE FUNCTION set_qty_remaining() RETURNS trigger AS $set_qty_remaining$
         BEGIN
-            UPDATE items
+            UPDATE all_items
             SET quantity = (quantity + NEW.qty_changed)
             WHERE item_id = NEW.item_id;
 
             NEW.qty_remaining = (
                 SELECT quantity
-                FROM items
+                FROM all_items
                 WHERE item_id = NEW.item_id
             );
 
@@ -101,7 +96,18 @@ Important Notes:
     -------------------------------------------------------------------
     CREATE OR REPLACE FUNCTION item_id_with_name(text)
     RETURNS int LANGUAGE SQL AS
-    $$ SELECT item_id FROM items WHERE item_name = $1; $$;
+    $$ SELECT item_id FROM all_items WHERE item_name = $1; $$;
+
+    -------------------------------------------------------------------
+    CREATE VIEW items AS
+        SELECT *
+        FROM all_items
+        WHERE is_hidden = false;
+
+    -------------------------------------------------------------------
+    CREATE VIEW inventory AS
+        SELECT *
+        FROM items NATURAL JOIN tags;
 
 
 -- Insert Data Example --
@@ -119,8 +125,6 @@ Important Notes:
         ('Black & White Printer Ink', 'For Printer In FAB 88', 27.99, 8, 5);
     INSERT INTO tags VALUES
         ('Printer Supplies', 2);
-    INSERT INTO tags VALUES
-        ('Stuff', 2);
 
     ----------------------------------------------------------------------------
     INSERT INTO items (item_name, description , price, quantity, threshold) VALUES
@@ -130,7 +134,33 @@ Important Notes:
     INSERT INTO tags VALUES
         ('Electronics', 3);
     INSERT INTO tags VALUES
-        ('Stuff', 3);
+        ('Projector Accessories', 3);
+
+    ----------------------------------------------------------------------------
+    INSERT INTO items (item_name, description , price, quantity, threshold) VALUES
+        ('mechanical keyboard', 'typing', 19.00, 5, 2);
+    INSERT INTO tags VALUES
+        ('I/O device', 4);
+    INSERT INTO tags VALUES
+        ('Electronics', 4);
+
+    ----------------------------------------------------------------------------
+    INSERT INTO items (item_name, description , price, quantity, threshold) VALUES
+        ('keyboard', 'typing', 19.00, 3, 2);
+    INSERT INTO tags VALUES
+        ('I/O device', 5);
+    INSERT INTO tags VALUES
+        ('Electronics', 5);
+
+
+    -- Add some hidden items --
+    ----------------------------------------------------------------------------
+    INSERT INTO items (item_name, description, price, quantity, threshold, is_hidden) VALUES
+        ('Poop Tarts', 'A not-so tasty snack.', 0.0, 10, 5, true);
+    INSERT INTO items (item_name, description, price, quantity, threshold, is_hidden) VALUES
+        ('kechanical meyboard', 'typing', 19.00, 5, 2, true);
+ 
+
 
     ----------------------------------------------------------------------------
     --the password for these 2 test users is 'cat'--
@@ -138,6 +168,21 @@ Important Notes:
         ('admin', '$2a$10$X79.QYL2UnMDChg9adWRLel1w/Mn9b3GfBEL3rUdiYcA2LqaPsoaO', true);
     INSERT INTO users (username, password) VALUES
         ('user', '$2a$10$X79.QYL2UnMDChg9adWRLel1w/Mn9b3GfBEL3rUdiYcA2LqaPsoaO');
+
+
+    -- Items that will be below threshold to test shopping cart --
+    ----------------------------------------------------------------------------
+    INSERT INTO items (item_name, description, price, quantity, threshold) VALUES
+        ('Gummy Bears', 'A tasty, chewy snack.', 3.50, 5, 10);
+    INSERT INTO items (item_name, description, price, quantity, threshold) VALUES
+        ('Paper', '8.5x11 white printer paper.', 5.60, 5, 6);
+    INSERT INTO items (item_name, description, price, quantity, threshold) VALUES
+        ('Golf Balls', 'Used in a boring activity.', 1.99, 20, 25);
+    INSERT INTO items (item_name, description, price, quantity, threshold) VALUES
+        ('Erasers', 'For the end of a pencil', 0.50, 20, 25);
+    INSERT INTO items (item_name, description, price, quantity, threshold) VALUES
+        ('Pens', 'Black ink pens.', 12.99, 9, 12);
+
 
 
 
@@ -148,7 +193,7 @@ Important Notes:
     INSERT INTO transactions(item_id, person, qty_changed) VALUES
     (item_id_with_name('Black & White Printer Ink'), 'lukekaz9', -2);
 
-    -- Seven Pop-Tarts are added to the inventory by joeShmo. --
+    -- Seven P op-Tarts are added to the inventory by joeShmo. --
     ----------------------------------------------------------------------------
     INSERT INTO transactions(item_id, person, qty_changed) VALUES
     (item_id_with_name('Pop-Tarts'), 'joeShmo', 7);

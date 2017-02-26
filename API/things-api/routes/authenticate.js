@@ -58,6 +58,7 @@ module.exports = (req, res) => {
                   };
                   //this will create the token using our secret, and set to expire in 1 week
                   var token = jwt.sign(payload, res.app.locals.tokenSecret, {expiresIn: '7d'});
+                  res.set('Access-Control-Expose-Headers', 'token, username, admin');
                   res.set('token', token);//attatch the token as a header
                   res.set('username', data.username);// attatch the username as a header
                   res.set('admin', data.admin);// attatch admin status as a header
