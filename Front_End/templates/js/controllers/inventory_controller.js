@@ -10,6 +10,7 @@ function InventoryController($scope, $http,  $location, cartList, thingsAPI, inv
       console.log($scope.inventory);
   });
 
+  //Checkout: Add to Cart
   $scope.addToCart = function(item){
       if(item.carted == true){ //Checked
         //Make copy of the item to add to cart
