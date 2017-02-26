@@ -23,7 +23,6 @@ module.exports = (req, res) =>{
 
       res.app.locals.helpers.doThresholdCheck(req.params.id, req.app.locals.helpers.errResultHandler, res);      
 
-      //pushing changes up to github, committing
-
+    
   }
 };

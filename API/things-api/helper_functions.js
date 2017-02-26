@@ -49,6 +49,7 @@ module.exports = {
         console.log("Result 2 = " + result);
         res.status(200);
         res.jsonp(result);
+ 
       }
   },
 
@@ -78,9 +79,11 @@ module.exports = {
                 } else {
                   console.error('error running query', err);
                   retFunc(err, null, res);
+                  
                 }
               } else {
-                  retFunc(null, 'Transaction Completed Successfully', res);
+                 retFunc(null, 'Transaction Completed Successfully', res);
+                
               }
           });
       });
@@ -106,13 +109,19 @@ module.exports = {
             retFunc(err, null, res);
         }
         else {
-            retFunc(null, 'Threshold found successfully', res);
+
+            console.log("Threshold for this item is:" + result.rows[0].threshold);
+            
+
+           
 
             //res2.rows.q
 
             if(result.rows[0].quantity <= result.rows[0].threshold) //send emmail to administrator
             console.log("Send email to administrator");  
             //console.log("thresh = " + res2.rows[0].threshold + "/qty remaining=" +res2.rows[0].quantity);
+
+            return retFunc(null, 'Threshold found successfully', res);
         }
 
 
