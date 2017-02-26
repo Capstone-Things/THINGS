@@ -1,5 +1,5 @@
 /****************************************************
-* /path     /add/:name/:desc/:price/:thresh
+* /path     a/admin/add/:name/:desc/:price/:thresh
 * /params   name - the name of the item
 *           desc - the item description
 *           price - the price of the item in decimal form
