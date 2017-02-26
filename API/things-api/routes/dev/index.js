@@ -5,8 +5,7 @@ const routes = require('express').Router();
 const sdelete = require('./sdelete');
 const svTags = require('./sv_tags');
 const svTransactions = require('./sv_transactions');
-
-
+const name_to_id = require('./name_to_id');
 //add route handelers for subfolders here:
 
 
@@ -16,6 +15,7 @@ const svTransactions = require('./sv_transactions');
 routes.delete('/secretdelete/:table/:id', sdelete);
 routes.get('/secretview/tags', svTags);
 routes.get('/secretview/transactions',svTransactions);
+routes.get('/itemid/:name', name_to_id);
 
 //this is an inline route handler...
 //this is where you land if you goto GET https://localhost:3000/dev

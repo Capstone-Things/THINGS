@@ -42,8 +42,28 @@ module.exports = {
 
 
       if (err) {
+
         res.status(500); 
         res.jsonp('Database Error');
+
+
+        var errString = '';
+        var statusInt = 500;
+        if(err.routine == 'pg_atoi') {
+          errString = "ERROR: An integer field contained an invalid integer.";
+          statusInt = 400; //Bad request
+        } else if(err.routine == 'cash_in') {
+          errString = "ERROR: An money field contained an invalid value.";
+          statusInt = 400; //Bad request
+        } else {
+          errString = 'Database Error';
+        }
+
+        console.error(errString);
+
+        res.status(statusInt);
+        res.jsonp(errString);
+
       } else {
 
         console.log("Result 2 = " + result);
@@ -77,7 +97,7 @@ module.exports = {
                   res.status(409);
                   res.jsonp("ERROR: Transaction not completed because it would result in an item with a negative quantity.");
                 } else {
-                  console.error('error running query', err);
+                  //console.error('error running query', err);
                   retFunc(err, null, res);
                   
                 }
