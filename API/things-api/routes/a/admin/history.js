@@ -54,8 +54,13 @@ module.exports= {
         if(name === 'undefined') {
             console.log('Nobueno')
         }
-        //TODO:> Cut down on the attributes
-        client.query('SELECT * FROM transactions AS t, items AS i WHERE i.item_name = $2 AND t.item_id = i.item_id ORDER BY timestamp DESC LIMIT $1', [entries, name], function(err, result) {
+
+        // Columns cannot be parameterized in node-pg
+        var columns = 'i.item_id, i.item_name, t.transaction_id, t.person,  t.qty_changed, t.qty_remaining, t.timestamp'
+
+        var stmt = 'SELECT '  + columns + ' FROM transactions AS t, items AS i WHERE i.item_name = $1 AND t.item_id = i.item_id ORDER BY timestamp DESC LIMIT $2'
+
+        client.query(stmt, [name, entries], function(err, result) {
             done();
            res.app.locals.helpers.errResultHandler(err, result.rows, res);
         });
@@ -124,5 +129,4 @@ module.exports= {
         });
     });
   }
-
 }
