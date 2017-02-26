@@ -5,7 +5,6 @@ app.controller('LoginCheckController', ['$scope', '$location', 'thingsAPI',
   function ($scope, $location,  thingsAPI) {
     // Can be used for Admin login
     $scope.user = {};
-    $scope.showAdminLogin = false;
 
     $scope.LoginCheck = function() {
       var loginData = $scope.user;
@@ -18,7 +17,15 @@ app.controller('LoginCheckController', ['$scope', '$location', 'thingsAPI',
               thingsAPI.setUserName(response.headers('username'));
               thingsAPI.setAdmin(response.headers('admin'));
               thingsAPI.setToken(response.headers('token'));
-              $location.path('home');
+              console.log(response.headers('admin'));
+              if(thingsAPI.getAdmin() == 'true')
+              {
+                $location.path('admin');
+              }
+              else
+              {
+                $location.path('home');
+              }
             }
        },
        function(err, response){
@@ -26,7 +33,4 @@ app.controller('LoginCheckController', ['$scope', '$location', 'thingsAPI',
        }
       );
     };
-  $scope.SetAdminLogin = function() {
-    $scope.showAdminLogin = !$scope.showAdminLogin;
-  }
 }]);

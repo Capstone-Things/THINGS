@@ -47,10 +47,20 @@ app.factory('thingsAPI', ['$http', function($http){
       },
       //data: items
     }
-
     return $http(req);
     }//end checkout
 
+    //checkin ==eventually to become person and checkinTable==
+    obj.checkin = (id, person, qty)=>{
+      var req = {
+        method: 'POST',
+        url: `${_urlBase}a/admin/checkin/${id}/${person}/${qty}`,
+        headers: {
+          'x-access-token': _token
+        }
+      }
+      return $http(req);
+    }
 
     //log out
     obj.logOut = ()=>{
