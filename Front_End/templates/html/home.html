@@ -12,7 +12,7 @@
     <!-- Navigation Bar-->
 
     <bootstrap-navbar></bootstrap-navbar>
-    
+
     <!--Inventory Table -->
     <div class="container" ng-app="catthings_app" align="center" ng-controller="InventoryController">
       <table datatable="ng" class="table table-bordered" id="inventoryTable">
@@ -26,7 +26,7 @@
         </thead>
         <tbody>
           <tr ng-repeat="item in inventory | orderBy: 'name'">
-            <td><input type="checkbox" ng-model="item.carted" ng-change="addToCart(item)"/></td>
+            <td><button type="button" ng-click="addToCart(item)">Add</button></td>
             <td>{{ item.name }}</td>
             <td>{{ item.description }}</td>
             <td>{{ item.quantity }}</td>
@@ -79,7 +79,7 @@
           </tbody>
         </table>
         <div class="btn-group">
-          <button  type="button" class="btn btn-danger" ng-click=removeSelected()>Remove</button>
+          <button type="button" class="btn btn-danger" ng-click=removeSelected()>Remove</button>
           <button type="submit" class="btn btn-success" ng-disabled="checkQuantity()" ng-click=checkOut()>Checkout</button>
         </div>
       </div>
