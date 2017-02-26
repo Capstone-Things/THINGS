@@ -1,0 +1,26 @@
+<nav class="navbar navbar-default" ng-controller="NavBarController">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">CAT</a>
+      <button type="button" class="navbar-toggle" ng-click="isCollapsed = !isCollapsed">
+          <span class="sr-only">Toggle navigation</span>
+  				<span class="icon-bar"></span>
+  				<span class="icon-bar"></span>
+  				<span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse" uib-collapse="isCollapsed">
+      <ul class="nav navbar-nav">
+        <li ng-class="{ active: isActive('/admin')}" ng-show="credential.isAdmin"><a href="#admin">Admin</a></li>
+        <li ng-class="{ active: isActive('/home')}"><a href="#home">Home</a></li>
+        <li ng-class="{ active: isActive('/request')}"><a href="#request">Request</a></li>
+        <li ng-class="{ active: isActive('/shoppinglist')}"><a href="#shoppinglist">Shopping List</a></li>
+        <li ng-class="{ active: isActive('/checkin')}"><a href="#checkin">Check In</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <!--<li><a> Welcome | {{ credential.isAdmin }}</a></li> -->
+        <li><a class="navbar-right" ng-href="#login">Logout <i class="fa fa-sign-out"></i></a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
