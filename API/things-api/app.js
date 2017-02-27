@@ -10,12 +10,12 @@ var morgan = require('morgan');//for logging requests
 var cors = require('cors');//package to handle Cross Origin Resource Sharing
 var routes = require('./routes');
 var helpers = require('./helper_functions')
-var tokenSecret = fs.readFileSync('API/things-api/conf/jwtSecret.key', 'utf-8').replace(/\s/g, '');
+var tokenSecret = fs.readFileSync('./conf/jwtSecret.key', 'utf-8').replace(/\s/g, '');
 
 //Import Config files
 var db_info = require('./conf/db/db_info'); //This file contains all of the configuration info needed to connect to the database.
-var keyFile =  fs.readFileSync('API/things-api/conf/ssl/server.key'); //the key for SSL
-var certFile=  fs.readFileSync('API/things-api/conf/ssl/server.crt'); //ssl cert(self signed)
+var keyFile =  fs.readFileSync('./conf/ssl/server.key'); //the key for SSL
+var certFile=  fs.readFileSync('./conf/ssl/server.crt'); //ssl cert(self signed)
 
 //setup command line args
 const optionDefinitions = [

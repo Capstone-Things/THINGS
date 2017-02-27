@@ -63,12 +63,15 @@ module.exports = {
 
         res.status(statusInt);
         res.jsonp(errString);
+        return;
 
       } else {
 
         console.log("Result 2 = " + result);
         res.status(200);
         res.jsonp(result);
+        return;
+
  
       }
   },
