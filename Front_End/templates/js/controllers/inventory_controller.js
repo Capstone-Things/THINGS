@@ -12,6 +12,11 @@ function InventoryController($scope, $http,  $location, cartList, thingsAPI, inv
 
   //Checkout: Add to Cart
   $scope.addToCart = function(item){
+    var cartItem = angular.copy(item);
+    cartItem.check = false;
+    cartItem.selectedQuantity = 1;
+    cartList.addToCart(cartItem);
+    /*
       if(item.carted == true){ //Checked
         //Make copy of the item to add to cart
         var cartItem = angular.copy(item);
@@ -21,7 +26,9 @@ function InventoryController($scope, $http,  $location, cartList, thingsAPI, inv
       else{ //Unchecked
         cartList.removeFromCart(item);
       }
+      */
     }
+
     //Uncheck items in inventory table that have been removed from Cart
     $scope.$on("Uncheck", function(event, toUncheck){
       for(var i = 0; i < toUncheck.length; i++){

@@ -13,6 +13,9 @@ function cartList ($rootScope) {
         //Make sure it's not in cart
         for(var i = 0; i < cart.length; i++){
           if (cart[i].item_id === item.item_id){
+            if(cart[i].selectedQuantity < cart[i].quantity){
+              cart[i].selectedQuantity = cart[i].selectedQuantity + 1;
+            }
             doesExist = true;
           }
         }
