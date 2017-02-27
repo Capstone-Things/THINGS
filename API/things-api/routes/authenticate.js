@@ -42,7 +42,7 @@ module.exports = (req, res) => {
               bcrypt.compare(password, data.password, function(err, result){
                 if(err){
                   console.error('Error in bcrypt module authentication failed.')
-                  res.sendSatus(401);
+                  res.sendStatus(401);
                 }
                 if(!result){
                   //if we are here, the password did not match.
