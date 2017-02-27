@@ -1,4 +1,5 @@
 var nodemailer = require('nodemailer');
+var time = require('node-datetime');
 
 /****************************************************
 * Path: /request.js
@@ -17,6 +18,8 @@ module.exports = (req, res) => {
   var person = req.body.personName;
   var addr = req.body.email;
   var date = req.body.date;
+  var datetime = time.create();
+  var timereq = datetime.format('m/d/Y H:M:S');
 
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport({
@@ -32,7 +35,7 @@ let mailOptions = {
   from: '"CAT-Things-User" <catthingsuser@yahoo.com>', // sender address
   to: 'catthingsuser@yahoo.com', // list of receivers
   subject: 'New Inventory Request from a User', // Subject line
-  text: 'A user named ' + person + ' has requested ' + num + ' ' + name + ' which is needed by ' + date + '\n' + 'With the following description: ' + desc + '\n' + 'Additional Information from user: ' + msg + '\n' + 'To contact ' + person + ' send an email to ' + addr + '\n'
+  text: 'A user named ' + person + ' has requested ' + num + ' ' + name + ' which is needed by ' + date + '. This request was sent on ' + timereq + '\n' + 'With the following description: ' + desc + '\n' + 'Additional Information from user: ' + msg + '\n' + 'To contact ' + person + ' send an email to ' + addr + '\n'
 };
 
 // send mail with defined transport object

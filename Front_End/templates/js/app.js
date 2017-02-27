@@ -26,6 +26,10 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
           url: "/shoppinglist",
           templateUrl: 'templates/html/shoppinglist.html'
         })
+        .state('additem',{
+          url: "/additem",
+          templateUrl: 'templates/html/additem.html'
+        })
         .state('checkin', {
           url: "/checkin",
           templateUrl: 'templates/html/checkin.html'
@@ -63,6 +67,7 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/cart.html').passThrough();
     $httpBackend.whenGET('templates/html/request.html').passThrough();
     $httpBackend.whenGET('templates/html/shoppinglist.html').passThrough();
+    $httpBackend.whenGET('templates/html/additem.html').passThrough();
 
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
     $httpBackend.whenGET("http://localhost:3000/view").passThrough();
