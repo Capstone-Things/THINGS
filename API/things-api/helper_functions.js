@@ -105,7 +105,7 @@ module.exports = {
                   
                 }
               } else {
-                 retFunc(null, 'Transaction Completed Successfully', res);
+                 return retFunc(null, 'Transaction Completed Successfully', res);
                 
               }
           });
