@@ -30,6 +30,10 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
           url: "/additem",
           templateUrl: 'templates/html/additem.html'
         })
+        .state('viewhistory',{
+          url: "/viewhistory",
+          templateUrl: 'templates/html/viewhistory.html'
+        })
         .state('checkin', {
           url: "/checkin",
           templateUrl: 'templates/html/checkin.html'
@@ -75,5 +79,7 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
     $httpBackend.whenPOST(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
     $httpBackend.whenPOST(/https:\/\/localhost:3000\/*/).passThrough();
+    $httpBackend.whenPUT(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
+    $httpBackend.whenPUT(/https:\/\/localhost:3000\/*/).passThrough();
 
 });

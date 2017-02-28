@@ -36,17 +36,27 @@ app.factory('thingsAPI', ['$http', function($http){
   obj.getView = ()=>{
     return $http.get(_urlBase+'view');
   }
+
+  //get history
+  obj.getHistory = ()=>{
+
+  }
   //add new item
   obj.add = (name, desc, price, thresh)=>{
     var req = {
-      method : 'POST',
-      url: `${_urlBase}a/admin/add_new_item/${name}/${desc}/${price}/${thresh}`,
+      method : 'PUT',
+      url: `${_urlBase}a/admin/add/${name}/${desc}/${price}/${thresh}`,
       headers: {
         'x-access-token': _token
       },
     }
 
     return $http(req);
+  }
+
+  //request item
+  obj.request = (qData) => {
+    return $http.post(_urlBase+'request', qData);
   }
 
   //checkout ==eventually to become person and cart==
