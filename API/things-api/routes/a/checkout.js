@@ -21,7 +21,7 @@ module.exports = (req, res) =>{
 
 
 
-      res.app.locals.helpers.doThresholdCheck(req.params.id, req.app.locals.helpers.errResultHandler, res);      
+    res2.app.locals.helpers.doThresholdCheck(req.params.id, req.app.locals.helpers.errResultHandler, res2);      
 
     
   }

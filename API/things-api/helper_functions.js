@@ -63,14 +63,19 @@ module.exports = {
 
         res.status(statusInt);
         res.jsonp(errString);
-        return;
+        
 
       } else {
 
         console.log("Result 2 = " + result);
         res.status(200);
-        res.jsonp(result);
-        return;
+
+        //console.log("res.jsonp(result) = " + res.jsonp(result));
+
+        //if(res.jsonp(result) === null)
+         res.jsonp(result);
+        //else
+        //return;
 
  
       }
@@ -115,7 +120,7 @@ module.exports = {
 },
 
 
-  doThresholdCheck: function(id, retFunc, res) {
+  doThresholdCheck: function(id, retFunc, res2) {
 
 
     res.app.locals.pool.connect(function(err, client, done) {
@@ -129,7 +134,7 @@ module.exports = {
 
         if(err) {
             console.error('Threshold and quantity were not received properly', err);
-            retFunc(err, null, res);
+            retFunc(err, null, res2);
         }
         else {
 
@@ -144,7 +149,7 @@ module.exports = {
             console.log("Send email to administrator");  
             //console.log("thresh = " + res2.rows[0].threshold + "/qty remaining=" +res2.rows[0].quantity);
 
-            return retFunc(null, 'Threshold found successfully', res);
+            retFunc(null, 'Threshold found successfully', res2);
         }
 
 
