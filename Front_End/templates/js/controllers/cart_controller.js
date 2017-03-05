@@ -104,27 +104,35 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
 
   //Checkout
   $scope.checkOut = function() {
-    console.log($scope.userName);
-    console.log($scope.cart[0].item_id);
-    console.log($scope.cart[0].selectedQuantity);
+    var loopPromises = [];
 
-    var test = JSON.stringify($scope.cart);
-    console.log(test);
+    for(var i = 0; i < $scope.cart.length; i++){
+      //$http.post('/checkout', $scope.cart)
+      thingsAPI.checkout($scope.cart[i].item_id, $scope.userName, $scope.cart[i].selectedQuantity)
+      .then(function(response){
+        //Everything went smoothly
+        if(response.status === 200){
+          return;
+        }
 
-    //$http.post('/checkout', $scope.cart)
-    thingsAPI.checkout($scope.cart[0].item_id, $scope.userName, $scope.cart[0].selectedQuantity)
-    .then(function(response){
-      console.log(response);
-      console.log(response.status);
-      console.log(response.data);
-      if(response.status === 200){
-        thingsAPI.getView().then(function (response) {
-            inventoryList.setInventory(response.data);
-        });
-              //$location.path("home");
-              //$scope.apply();
-      }
-      //Else 404 error....Could need another modal
+        //Bad Request
+        /*
+        if(response.status === 400){
+
+        }
+
+        //Forbidden
+        if(response.status === 403){
+
+        }
+        */
+      });
+    }
+
+    //Update inventory with new quantities
+    thingsAPI.getView().then(function (response) {
+      inventoryList.setInventory(response.data);
     });
+
   }
 }
