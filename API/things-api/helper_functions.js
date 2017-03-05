@@ -21,19 +21,19 @@ module.exports = {
 
       const util = require('util');
 
-      console.log("Err = " );
+      console.log(" errRH: Err = " );
 
       console.log(util.inspect(err, { showHidden: false, depth: 1 }));
 
       console.log("----------------------------------------");
 
-      console.log("Result = ");
+      console.log("errRH: Result = ");
 
       console.log(util.inspect(result, { showHidden: false, depth: 1 }));
 
       console.log("------------------------------------------");
 
-      console.log("Res.status = ");
+      console.log("errRH : Res.status = ");
 
       console.log(util.inspect(res.status, { showHidden: false, depth: 1 }));
 
@@ -67,13 +67,15 @@ module.exports = {
 
       } else {
 
-        console.log("Result 2 = " + result);
+        console.log("errRH: Result 2 = " + result);
         res.status(200);
 
         //console.log("res.jsonp(result) = " + res.jsonp(result));
 
         //if(res.jsonp(result) === null)
-         res.jsonp(result);
+        console.log("errRH: calling res.json before completed--------------------" );
+        res.jsonp(result);
+        console.log("errRH: completed--------------------" );
         //else
         //return;
 
@@ -110,7 +112,7 @@ module.exports = {
                   
                 }
               } else {
-                 return retFunc(null, 'Transaction Completed Successfully', res);
+                  retFunc(null, 'transaction: Transaction Completed Successfully', res);
                 
               }
           });
@@ -120,7 +122,7 @@ module.exports = {
 },
 
 
-  doThresholdCheck: function(id, retFunc, res2) {
+  doThresholdCheck: function(id, retFunc, res) {
 
 
     res.app.locals.pool.connect(function(err, client, done) {
@@ -134,11 +136,12 @@ module.exports = {
 
         if(err) {
             console.error('Threshold and quantity were not received properly', err);
-            retFunc(err, null, res2);
+            //retFunc(err, null, res2);
         }
         else {
 
             console.log("Threshold for this item is:" + result.rows[0].threshold);
+            console.log("Quantity for this item is:" + result.rows[0].quantity);
             
 
            
@@ -146,10 +149,11 @@ module.exports = {
             //res2.rows.q
 
             if(result.rows[0].quantity <= result.rows[0].threshold) //send emmail to administrator
-            console.log("Send email to administrator");  
+               console.log("Send email to administrator");  
             //console.log("thresh = " + res2.rows[0].threshold + "/qty remaining=" +res2.rows[0].quantity);
 
-            retFunc(null, 'Threshold found successfully', res2);
+            //retFunc(null, 'Threshold found successfully', res);
+           //retFunc(null, result, res);
         }
 
 

@@ -9,6 +9,7 @@
 ****************************************************/
 module.exports = (req, res) =>{
 
+
   // If the value to checkin is negative
   if (req.params.qty < 0) {
     // Respond with forbidden (403) status
@@ -19,9 +20,10 @@ module.exports = (req, res) =>{
     res.app.locals.helpers.transaction(req.params.id, req.params.person, -req.params.qty,
       req.app.locals.helpers.errResultHandler, res);
 
+    console.log("checkout - call to transaction completed");
 
-
-    res2.app.locals.helpers.doThresholdCheck(req.params.id, req.app.locals.helpers.errResultHandler, res2);      
+    res.app.locals.helpers.doThresholdCheck(req.params.id, req.app.locals.helpers.errResultHandler, res);      
+    console.log("checkout - call to doThreshold completed");
 
     
   }
