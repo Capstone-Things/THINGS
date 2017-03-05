@@ -113,18 +113,24 @@ function CheckInController($scope, $http, $location, $rootScope, inventoryList, 
 
   //Check In
   $scope.confirm = function(){
-    thingsAPI.checkin($scope.checkin[0].item_id, $scope.person, $scope.checkin[0].selectedQuantity)
-    .then(function(response){
-      if(response.status === 200){
-        thingsAPI.getView().then(function (response) {
-          inventoryList.setInventory(response.data);
-          $scope.stuff=inventoryList.getInventory();
-          $scope.checkin.length = 0; //Bizare way to clear array
-          $scope.checkinEmpty = true;
-          $scope.checkinNotEmpty = false;
-        });
-      }
-    });
+    console.log($scope.checkin);
+    for(var i = 0; i < $scope.checkin.length; i++){
+      thingsAPI.checkin($scope.checkin[i].item_id, $scope.person, $scope.checkin[i].selectedQuantity)
+      .then(function(response){
+        if(response.status === 200){
+          if(i == $scope.checkin.length - 1){
+            console.log("i is equal to checkin length");
+            thingsAPI.getView().then(function (response) {
+              inventoryList.setInventory(response.data);
+              $scope.stuff=inventoryList.getInventory();
+              $scope.checkin.length = 0; //Bizare way to clear array
+              $scope.checkinEmpty = true;
+              $scope.checkinNotEmpty = false;
+            });
+          }
+        }
+      });
+    }
   }
 
   //Broadcast for when items are added to Checkin

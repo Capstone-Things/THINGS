@@ -130,7 +130,7 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
     }
 
     //Update inventory with new quantities
-    thingsAPI.getView().then(function (response) {
+    thingsAPI.getView().then(function(response) {
       inventoryList.setInventory(response.data);
     });
 
