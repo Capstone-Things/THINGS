@@ -114,11 +114,13 @@ function CheckInController($scope, $http, $location, $rootScope, inventoryList, 
   //Check In
   $scope.confirm = function(){
     console.log($scope.checkin);
-    for(var i = 0; i < $scope.checkin.length; i++){
+    for(var i; i < $scope.checkin.length; i++){
       thingsAPI.checkin($scope.checkin[i].item_id, $scope.person, $scope.checkin[i].selectedQuantity)
       .then(function(response){
         if(response.status === 200){
-          if(i == $scope.checkin.length - 1){
+          console.log(response.status);
+          console.log(parseInt(i) == parseInt(($scope.checkin.length - 1)));
+          if(i === ($scope.checkin.length - 1)){
             console.log("i is equal to checkin length");
             thingsAPI.getView().then(function (response) {
               inventoryList.setInventory(response.data);

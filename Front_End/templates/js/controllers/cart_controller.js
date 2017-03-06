@@ -1,8 +1,8 @@
 var app = angular.module("catthings_app");
 
 //============Cart Controller============
-app.controller('CartController', ['$scope', '$http',  '$location', '$rootScope', 'cartList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', 'inventoryList', CartController]);
-function CartController($scope, $http,  $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, inventoryList){
+app.controller('CartController', ['$scope', '$http',  '$location', '$rootScope', 'cartList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', 'inventoryList', '$q', CartController]);
+function CartController($scope, $http,  $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, inventoryList, $q){
 
   //Initialization purposes
   $scope.cart = [];
@@ -104,35 +104,27 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
 
   //Checkout
   $scope.checkOut = function() {
-    var loopPromises = [];
+    var promises = [];
+    var errors = [];
 
     for(var i = 0; i < $scope.cart.length; i++){
-      //$http.post('/checkout', $scope.cart)
-      thingsAPI.checkout($scope.cart[i].item_id, $scope.userName, $scope.cart[i].selectedQuantity)
-      .then(function(response){
-        //Everything went smoothly
-        if(response.status === 200){
-          return;
-        }
-
-        //Bad Request
-        /*
-        if(response.status === 400){
-
-        }
-
-        //Forbidden
-        if(response.status === 403){
-
-        }
-        */
+      var promise = thingsAPI.checkout($scope.cart[i].item_id, $scope.userName, $scope.cart[i].selectedQuantity)
+      .catch(function(err){
+        console.log(err);
       });
+      promises.push(promise);
     }
 
-    //Update inventory with new quantities
-    thingsAPI.getView().then(function(response) {
-      inventoryList.setInventory(response.data);
+    $q.all(promises).then(function(){
+      for(var j = 0; j < promises.length; j++){
+        if(angular.isUndefined(promises[j].$$state.value)){
+          console.log("Undefined");
+        }
+      }
+      //Update inventory with new quantities
+      thingsAPI.getView().then(function(response) {
+        inventoryList.setInventory(response.data);
+      });
     });
-
   }
 }
