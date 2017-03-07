@@ -12,6 +12,7 @@ var routes = require('./routes');
 var helpers = require('./helper_functions')
 var tokenSecret = fs.readFileSync('./conf/jwtSecret.key', 'utf-8').replace(/\s/g, '');
 const nodemailer = require('nodemailer');
+const email_auth = require('./conf/email_auth');
 
 //Import Config files
 var db_info = require('./conf/db/db_info'); //This file contains all of the configuration info needed to connect to the database.
@@ -36,10 +37,8 @@ var pool = new pg.Pool(db_info.config); //This is the pool that DB client connec
 
 var smtpTransport = nodemailer.createTransport({
     service: "gmail",
-    auth: {
-        user: "susmita.awasthi@gmail.com",
-        pass: "yourpass"
-    }
+    auth: email_auth.auth
+
 });
 
 //any global helper functions for our templates should go here:
