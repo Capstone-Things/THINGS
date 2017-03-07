@@ -106,3 +106,32 @@
     CREATE VIEW inventory AS
         SELECT *
         FROM items NATURAL JOIN tags;
+
+    -------------------------------------------------------------------
+    CREATE VIEW checkout_per_day AS
+        SELECT a.item_name, a.item_id, b.checkout_per_day, a.day_of_week
+        FROM
+            (       
+                SELECT *
+                FROM
+                (
+                    SELECT item_id, item_name
+                    FROM items
+                ) aa
+                CROSS JOIN
+                (
+                    SELECT '1' AS weekdaynum, 'Sunday' AS day_of_week  UNION ALL
+                    SELECT '2', 'Monday'                 UNION ALL
+                    SELECT '3', 'Tuesday'                UNION ALL
+                    SELECT '4', 'Wednesday'              UNION ALL
+                    SELECT '5', 'Thursday'               UNION ALL
+                    SELECT '6', 'Friday'                 UNION ALL
+                    SELECT '7', 'Saturday'
+                ) bb
+            ) a
+        LEFT JOIN
+        (SELECT item_id, item_name, SUM(qty_changed) AS checkout_per_day, to_char(timestamp, 'D') AS weekdaynum
+            FROM (items NATURAL JOIN transactions)
+            WHERE qty_changed < 0
+            GROUP BY item_id, item_name, weekdaynum) AS b
+        ON a.item_id = b.item_id AND a.weekdaynum = b.weekdaynum;
