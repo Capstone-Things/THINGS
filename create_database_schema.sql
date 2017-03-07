@@ -108,8 +108,9 @@
         FROM items NATURAL JOIN tags;
 
     -------------------------------------------------------------------
-    CREATE VIEW checkout_per_day AS
-        SELECT a.item_name, a.item_id, b.checkout_per_day, a.day_of_week
+    CREATE OR REPLACE VIEW checkout_per_day AS
+        SELECT a.item_name, a.item_id,
+            CASE WHEN b.checkout_per_day is NULL THEN 0 ELSE b.checkout_per_day END AS checkout_per_day , a.day_of_week
         FROM
             (       
                 SELECT *
@@ -132,6 +133,7 @@
         LEFT JOIN
         (SELECT item_id, item_name, SUM(qty_changed) AS checkout_per_day, to_char(timestamp, 'D') AS weekdaynum
             FROM (items NATURAL JOIN transactions)
-            WHERE qty_changed < 0
+            WHERE qty_changed < 0 AND timestamp > (current_timestamp - INTERVAL '3 months')
             GROUP BY item_id, item_name, weekdaynum) AS b
         ON a.item_id = b.item_id AND a.weekdaynum = b.weekdaynum;
+
