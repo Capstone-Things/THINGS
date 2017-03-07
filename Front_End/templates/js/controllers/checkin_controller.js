@@ -1,7 +1,7 @@
 var app = angular.module("catthings_app");
 
-app.controller('CheckInController', ['$scope', '$http', '$location', '$rootScope', 'inventoryList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', 'checkinList', CheckInController]);
-function CheckInController($scope, $http, $location, $rootScope, inventoryList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, checkinList){
+app.controller('CheckInController', ['$scope', '$http', '$location', '$rootScope', 'inventoryList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', 'checkinList', '$q', CheckInController]);
+function CheckInController($scope, $http, $location, $rootScope, inventoryList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, checkinList, $q){
   $scope.checkin=[];
   $scope.person={};
   $scope.searchQuery = '';
@@ -113,26 +113,26 @@ function CheckInController($scope, $http, $location, $rootScope, inventoryList, 
 
   //Check In
   $scope.confirm = function(){
-    console.log($scope.checkin);
-    for(var i; i < $scope.checkin.length; i++){
-      thingsAPI.checkin($scope.checkin[i].item_id, $scope.person, $scope.checkin[i].selectedQuantity)
-      .then(function(response){
-        if(response.status === 200){
-          console.log(response.status);
-          console.log(parseInt(i) == parseInt(($scope.checkin.length - 1)));
-          if(i === ($scope.checkin.length - 1)){
-            console.log("i is equal to checkin length");
-            thingsAPI.getView().then(function (response) {
-              inventoryList.setInventory(response.data);
-              $scope.stuff=inventoryList.getInventory();
-              $scope.checkin.length = 0; //Bizare way to clear array
-              $scope.checkinEmpty = true;
-              $scope.checkinNotEmpty = false;
-            });
-          }
-        }
+    var promises = [];
+
+    for(var i = 0; i < $scope.checkin.length; i++){
+      var promise = thingsAPI.checkin($scope.checkin[i].item_id, $scope.person, $scope.checkin[i].selectedQuantity)
+      .catch(function(err){
+        console.log(err);
       });
+      promises.push(promise);
     }
+
+    $q.all(promises).then(function(){
+      //Update inventory with new quantities
+      thingsAPI.getView().then(function(response) {
+        inventoryList.setInventory(response.data);
+        $scope.stuff=inventoryList.getInventory();
+        $scope.checkin.length = 0; //Bizare way to clear array
+        $scope.checkinEmpty = true;
+        $scope.checkinNotEmpty = false;
+      });
+    });
   }
 
   //Broadcast for when items are added to Checkin
