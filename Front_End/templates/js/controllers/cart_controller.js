@@ -1,8 +1,8 @@
 var app = angular.module("catthings_app");
 
 //============Cart Controller============
-app.controller('CartController', ['$scope', '$http',  '$location', '$rootScope', 'cartList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', 'inventoryList', '$q', CartController]);
-function CartController($scope, $http,  $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, inventoryList, $q){
+app.controller('CartController', ['$scope', '$http',  '$location', '$rootScope', 'cartList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', 'inventoryList', '$q', '$window', CartController]);
+function CartController($scope, $http,  $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, inventoryList, $q, $window){
 
   //Initialization purposes
   $scope.cart = [];
@@ -105,21 +105,22 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
   //Checkout
   $scope.checkOut = function() {
     var promises = [];
-    var errors = [];
-
     for(var i = 0; i < $scope.cart.length; i++){
-      var promise = thingsAPI.checkout($scope.cart[i].item_id, $scope.userName, $scope.cart[i].selectedQuantity)
-      .catch(function(err){
-        console.log(err);
-      });
-      promises.push(promise);
+      promises.push(thingsAPI.checkout($scope.cart[i].item_id, $scope.userName, $scope.cart[i].selectedQuantity));
     }
 
-    $q.all(promises).then(function(){
-      for(var j = 0; j < promises.length; j++){
-        if(angular.isUndefined(promises[j].$$state.value)){
-          console.log("Undefined");
+    //Once all promises are completed (i.e. all API calls are done)
+    $q.all(promises).then(function(results){
+      var failed = [];
+      for(var j = 0; j < results.length; j++){
+        if(results[j].success == false){
+          console.log("Unable to check out " + inventoryList.getItemName(results[j].item_id));
+          failed.push(inventoryList.getItemName(results[j].item_id));
         }
+      }
+      //Display any error messages
+      if(failed.length > 0){
+        $window.alert("Unable to check out the following item(s):\n" + failed);
       }
       //Update inventory with new quantities
       thingsAPI.getView().then(function(response) {
