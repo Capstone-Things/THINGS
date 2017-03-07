@@ -3,9 +3,9 @@
 * /params   id
 *           person
 *           qty
-* /brief    Route to remove some :qty from inventory
+* /brief    Route to remove some :qty from inventory 
 *
-* /author   Luke
+* /author   Luke and Susmita Awasthi
 ****************************************************/
 module.exports = (req, res) =>{
 
@@ -20,10 +20,8 @@ module.exports = (req, res) =>{
     res.app.locals.helpers.transaction(req.params.id, req.params.person, -req.params.qty,
       req.app.locals.helpers.errResultHandler, res);
 
-    console.log("checkout - call to transaction completed");
 
-    res.app.locals.helpers.doThresholdCheck(req.params.id, req.app.locals.helpers.errResultHandler, res);      
-    console.log("checkout - call to doThreshold completed");
+    res.app.locals.helpers.doThresholdCheck(req.params.id, req.params.qty, req.app.locals.helpers.errResultHandler, res);      
 
     
   }

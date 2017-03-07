@@ -8,6 +8,9 @@ const test = require('./test');
 const auth = require('./authenticate');
 const view = require('./view_items');
 const request = require('./request');
+//added below----
+
+//var nodemailer = require('nodemailer');
 
 //add route handelers for subfolders here:
 routes.use('/a', secure_routes);

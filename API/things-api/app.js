@@ -11,6 +11,7 @@ var cors = require('cors');//package to handle Cross Origin Resource Sharing
 var routes = require('./routes');
 var helpers = require('./helper_functions')
 var tokenSecret = fs.readFileSync('./conf/jwtSecret.key', 'utf-8').replace(/\s/g, '');
+const nodemailer = require('nodemailer');
 
 //Import Config files
 var db_info = require('./conf/db/db_info'); //This file contains all of the configuration info needed to connect to the database.
@@ -33,11 +34,19 @@ app.use(morgan('dev')); // enables console output for dev purpouses on requests
 app.use(cors()); // allow cross origin resource sharing
 var pool = new pg.Pool(db_info.config); //This is the pool that DB client connections live in.
 
+var smtpTransport = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: "susmita.awasthi@gmail.com",
+        pass: "yourpass"
+    }
+});
+
 //any global helper functions for our templates should go here:
 app.locals.helpers = helpers;
 app.locals.tokenSecret = tokenSecret;
 app.locals.options = options;
-
+app.locals.smtpTransport = smtpTransport;
 // We need to be able to access the pool from our templates,
 // store the pool in app.locals
 app.locals.pool = pool;
