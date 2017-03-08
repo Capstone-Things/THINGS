@@ -7,7 +7,7 @@ module.exports = {
   *
   *
   * /brief    Returns average weekly consumption of item
-  *           
+  *
   *
   * /author   Andrew McCann
   * /date     2/26/2017
@@ -24,7 +24,7 @@ module.exports = {
             done();
             return(console.error('Invalid ID number', err));
         }
-        
+
         // If you want to change this rolling window that is used to calculate the average,
         // just alter the INTERVAL amount per SQL guidelines.
         client.query("SELECT weekly.item_name, weekly.item_id, AVG(sum) AS weekly_avg FROM (SELECT i.item_name, i.item_id, SUM(ABS(t.qty_changed)) FROM transactions AS t, items AS i WHERE t.item_id = $1 AND t.item_id = i.item_id AND t.qty_changed < 0 AND t.timestamp > (current_timestamp - INTERVAL '3 months') GROUP BY i.item_name, i.item_id, date_trunc('week', timestamp)) AS weekly GROUP BY 1,2", [id], function(err, result) {
@@ -38,7 +38,7 @@ module.exports = {
   * /params   :item_id - item_id of what we are looking for
   *
   *
-  * /brief    Returns the rough day count between most recent 
+  * /brief    Returns the rough day count between most recent
   *           checkin, and threshold.
   *
   * /author   Andrew McCann
@@ -87,7 +87,9 @@ module.exports = {
             return(console.error('Invalid ID number', err));
         }
 
-        client.query("SELECT i.item_name, i.item_id, ABS(SUM(t.qty_changed)) AS checkout_per_day, to_char(timestamp, 'day') AS dow FROM transactions AS t, items AS i WHERE t.item_id = $1 AND t.item_id = i.item_id AND t.qty_changed < 0 AND t.timestamp > (current_timestamp - INTERVAL '3 months') GROUP BY i.item_id, i.item_name, dow", [id], function(err, result) {
+        // OLD QUERY: SELECT i.item_name, i.item_id, ABS(SUM(t.qty_changed)) AS checkout_per_day, to_char(timestamp, 'day') AS dow FROM transactions AS t, items AS i WHERE t.item_id = $1 AND t.item_id = i.item_id AND t.qty_changed < 0 AND t.timestamp > (current_timestamp - INTERVAL '3 months') GROUP BY i.item_id, i.item_name, dow
+
+        client.query("SELECT * FROM checkout_per_day WHERE item_id = $1", [id], function(err, result) {
             done();
             res.app.locals.helpers.errResultHandler(err, result.rows, res);
         });
