@@ -1,7 +1,7 @@
 var app = angular.module("catthings_app");
 
-app.controller('CheckInController', ['$scope', '$http', '$location', '$rootScope', 'inventoryList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', 'checkinList', CheckInController]);
-function CheckInController($scope, $http, $location, $rootScope, inventoryList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, checkinList){
+app.controller('CheckInController', ['$scope', '$http', '$location', '$rootScope', 'inventoryList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', 'checkinList', '$q', '$window', CheckInController]);
+function CheckInController($scope, $http, $location, $rootScope, inventoryList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, checkinList, $q, $window){
   $scope.checkin=[];
   $scope.person={};
   $scope.searchQuery = '';
@@ -113,17 +113,32 @@ function CheckInController($scope, $http, $location, $rootScope, inventoryList, 
 
   //Check In
   $scope.confirm = function(){
-    thingsAPI.checkin($scope.checkin[0].item_id, $scope.person, $scope.checkin[0].selectedQuantity)
-    .then(function(response){
-      if(response.status === 200){
-        thingsAPI.getView().then(function (response) {
-          inventoryList.setInventory(response.data);
-          $scope.stuff=inventoryList.getInventory();
-          $scope.checkin.length = 0; //Bizare way to clear array
-          $scope.checkinEmpty = true;
-          $scope.checkinNotEmpty = false;
-        });
+    var promises = [];
+    for(var i = 0; i < $scope.checkin.length; i++){
+      promises.push(thingsAPI.checkin($scope.checkin[i].item_id, $scope.person, $scope.checkin[i].selectedQuantity));
+    }
+
+    $q.all(promises).then(function(results){
+      var failed = [];
+      for(var j = 0; j < results.length; j++){
+        console.log(results[j]);
+        if(results[j].success == false){
+          console.log("Unable to check in " + inventoryList.getItemName(results[j].item_id));
+          failed.push(inventoryList.getItemName(results[j].item_id));
+        }
       }
+      //Display any error messages
+      if(failed.length > 0){
+        $window.alert("Unable to check in the following item(s):\n" + failed);
+      }
+      //Update inventory with new quantities
+      thingsAPI.getView().then(function(response) {
+        inventoryList.setInventory(response.data);
+        $scope.stuff=inventoryList.getInventory();
+        $scope.checkin.length = 0; //Bizare way to clear array
+        $scope.checkinEmpty = true;
+        $scope.checkinNotEmpty = false;
+      });
     });
   }
 

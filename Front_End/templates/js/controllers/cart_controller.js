@@ -1,8 +1,8 @@
 var app = angular.module("catthings_app");
 
 //============Cart Controller============
-app.controller('CartController', ['$scope', '$http',  '$location', '$rootScope', 'cartList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', 'inventoryList', CartController]);
-function CartController($scope, $http,  $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, inventoryList){
+app.controller('CartController', ['$scope', '$http',  '$location', '$rootScope', 'cartList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', 'inventoryList', '$q', '$window', CartController]);
+function CartController($scope, $http,  $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, inventoryList, $q, $window){
 
   //Initialization purposes
   $scope.cart = [];
@@ -104,27 +104,28 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
 
   //Checkout
   $scope.checkOut = function() {
-    console.log($scope.userName);
-    console.log($scope.cart[0].item_id);
-    console.log($scope.cart[0].selectedQuantity);
+    var promises = [];
+    for(var i = 0; i < $scope.cart.length; i++){
+      promises.push(thingsAPI.checkout($scope.cart[i].item_id, $scope.userName, $scope.cart[i].selectedQuantity));
+    }
 
-    var test = JSON.stringify($scope.cart);
-    console.log(test);
-
-    //$http.post('/checkout', $scope.cart)
-    thingsAPI.checkout($scope.cart[0].item_id, $scope.userName, $scope.cart[0].selectedQuantity)
-    .then(function(response){
-      console.log(response);
-      console.log(response.status);
-      console.log(response.data);
-      if(response.status === 200){
-        thingsAPI.getView().then(function (response) {
-            inventoryList.setInventory(response.data);
-        });
-              //$location.path("home");
-              //$scope.apply();
+    //Once all promises are completed (i.e. all API calls are done)
+    $q.all(promises).then(function(results){
+      var failed = [];
+      for(var j = 0; j < results.length; j++){
+        if(results[j].success == false){
+          console.log("Unable to check out " + inventoryList.getItemName(results[j].item_id));
+          failed.push(inventoryList.getItemName(results[j].item_id));
+        }
       }
-      //Else 404 error....Could need another modal
+      //Display any error messages
+      if(failed.length > 0){
+        $window.alert("Unable to check out the following item(s):\n" + failed);
+      }
+      //Update inventory with new quantities
+      thingsAPI.getView().then(function(response) {
+        inventoryList.setInventory(response.data);
+      });
     });
   }
 }

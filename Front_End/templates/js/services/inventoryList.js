@@ -11,6 +11,16 @@ function inventoryList()
   obj.getInventory = ()=>{return inventory;}
 
   //Set Inventory
-  obj.setInventory = (newInventory) =>{inventory = newInventory;}
+  obj.setInventory = (newInventory) => {inventory = newInventory;}
+
+  //Get item name using item_id
+  obj.getItemName = (item_id) => {
+    for(var i = 0; i < inventory.length; i++){
+      if (inventory[i].item_id == item_id){
+        return inventory[i].name;
+      }
+    }
+    return "No item found";
+  }
   return obj;
 }
