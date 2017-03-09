@@ -110,7 +110,7 @@
     -------------------------------------------------------------------
     CREATE OR REPLACE VIEW checkout_per_day AS
         SELECT a.item_name, a.item_id,
-            CASE WHEN b.checkout_per_day is NULL THEN 0 ELSE b.checkout_per_day END AS checkout_per_day , a.day_of_week
+            CASE WHEN b.checkout_per_day is NULL THEN 0 ELSE ABS(b.checkout_per_day) END AS checkout_per_day , a.day_of_week
         FROM
             (       
                 SELECT *
