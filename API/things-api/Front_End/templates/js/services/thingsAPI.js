@@ -10,8 +10,8 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
   var _user = 'Guest';
 
   //For local dev mode comment out the first line and uncomment the second...
-  var _urlBase = 'https://things.cs.pdx.edu:3000/';
-  //var _urlBase = 'https://localhost:3000/';
+  var _urlBase = 'https://things.cs.pdx.edu:3000/api/';
+  //var _urlBase = 'https://localhost:3000/api/';
 
 
   var obj = {}; //this is the object that will be handed to our controller.
