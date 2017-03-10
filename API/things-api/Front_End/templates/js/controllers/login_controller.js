@@ -18,14 +18,7 @@ app.controller('LoginCheckController', ['$scope', '$location', 'thingsAPI',
               thingsAPI.setAdmin(response.headers('admin'));
               thingsAPI.setToken(response.headers('token'));
               console.log(response.headers('admin'));
-              if(thingsAPI.getAdmin() == 'true')
-              {
-                $location.path('admin');
-              }
-              else
-              {
-                $location.path('home');
-              }
+              $location.path('home');
             }
        },
        function(err, response){
