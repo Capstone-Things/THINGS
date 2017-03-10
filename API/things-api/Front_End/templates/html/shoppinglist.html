@@ -10,22 +10,22 @@
     
     <!--Inventory Table -->
     <div class="container" ng-app="catthings_app" align="center" ng-controller="ShoppingListController">
-      <table datatable="ng" class="row-border hover">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Quantity</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="item in shoppingList">
-            <td>{{ item.name }}</td>
-            <td>{{ item.description }}</td>
-            <td>{{ item.quantity }}</td>
-          </tr>
-        </tbody>
-      </table>
+        <table datatable="ng" class="table table-bordered" id="inventoryTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in shoppingList">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.quantity }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <!--Cart Table -->
