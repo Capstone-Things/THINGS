@@ -1,36 +1,45 @@
+//the view history controller. This controller acts as a middleman between the view history html page and the API
+//this controller packages up data for the view history page to use to display its entries
+//written by Austen Ruzicka
+
 var app = angular.module('catthings_app');
 
 //Inventory Controller
-app.controller('HistoryController', ['$scope', '$http',  '$location', 'thingsAPI', 'historyList', historyController]);
-function HistoryController($scope, $http,  $location, thingsAPI, historyList) {
-  //empty history list
-  $scope.history = historyList.getHistory();
+app.controller('HistoryController', ['$scope', '$http',  '$location', 'thingsAPI', HistoryController]);
+function HistoryController($scope, $http,  $location, thingsAPI) {
+  //empty history lists
+  $scope.recentHistory = {};
+  $scope.itemHistory = {};
+  $scope.tagHistory = {};
+  $scope.dateHistory = {};
 
-  $scope.addToCart = function(item){
-      if(item.carted == true){ //Checked
-        //Make copy of the item to add to cart
-        var cartItem = angular.copy(item);
-        cartItem.check = false;
-        cartList.addToCart(cartItem);
+  //gets the last 15 transactions to display if no number is specified, otherwise get that number of transactions
+  $scope.getRecentHistory = function(){
+      if($scope.numRecent >= 1)
+      {
+        $scope.recentHistory = thingsAPI.getRecent($scope.numRecent)
+        .then(function(response){
+          console.log(response);
+          console.log(response.status);
+          console.log(response.data);
+          if(response.status === 200){
+                return; //do nothing
+            }
+          });
+          //Else 404 error...
       }
-      else{ //Unchecked
-        cartList.removeFromCart(item);
+      else
+      {
+        $scope.recentHistory = thingsAPI.getRecent(0)
+            .then(function(response){
+              console.log(response);
+              console.log(response.status);
+              console.log(response.data);
+              if(response.status === 200){
+                    return; //do nothing
+                }
+              });
+              //Else 404 error...
       }
-    }
-    //Uncheck items in inventory table that have been removed from Cart
-    $scope.$on("Uncheck", function(event, toUncheck){
-      for(var i = 0; i < toUncheck.length; i++){
-        for(var j = 0; j < $scope.inventory.length; j++){
-          if ($scope.inventory[j].item_id == toUncheck[i]){
-            $scope.inventory[j].carted = false;
-          }
-        }
-      }
-    });
-
-    //Watch for inventory changes
-    $scope.$watch(function(){return inventoryList.getInventory()},
-      function(newValue, oldValue){
-        $scope.inventory = newValue;
-    });
+  }
 }

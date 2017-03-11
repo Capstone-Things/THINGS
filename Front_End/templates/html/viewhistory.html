@@ -1,3 +1,6 @@
+<!--View history page-->
+<!--Written by Austen Ruzicka-->
+
 <!-- Navigation Bar-->
 <nav class="navbar navbar-default" ng-controller="NavBarController">
   <div class="container-fluid">
@@ -22,23 +25,40 @@
     </div>
   </div>
 </nav>
-<!--Inventory Table -->
+
+<!--Recent History Table and Fields-->
+<div class="container">
+<form role="form" class="recent-form" ng-app "catthings_app" ng-controller="HistoryController">
+  <div class="form-group">
+    <label for="numRecent">Number of Recent Transactions:</label>
+    <input type="number" ng-model="numRecent" name = "numRecent" placeholder="Number of recent transactions to display" class="form-control" min="0" optional>
+  </div>
+  <div class="form-group">
+    <input type="submit" ng-click=getRecentHistory() value="Get Recent Transactions">
+  </div>
+</form>
+</div>
+
 <div class="container" ng-app="catthings_app" align="center" ng-controller="HistoryController">
-  <table datatable="ng" class="table table-bordered" id="historyTable">
+  <table datatable="ng" class="table table-bordered" id="recentHistoryTable">
     <thead class="thead-inverse">
       <tr>
-        <th><b>Add to Cart</b></th>
-        <th><b>Name</b></th>
-        <th><b>Description</b></th>
-        <th><b>Quantity</b></th>
+        <th><b>Transaction ID</b></th>
+        <th><b>Item ID</b></th>
+        <th><b>Person</b></th>
+        <th><b>Quantity Changed</b></th>
+        <th><b>Quantity Remaining</b></th>
+        <th><b>Time of Transaction</b></th>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="item in history | orderBy: 'name'">
-        <td><input type="checkbox" ng-model="item.carted" ng-change="addToCart(item)"/></td>
-        <td>{{ item.name }}</td>
-        <td>{{ item.description }}</td>
-        <td>{{ item.quantity }}</td>
+      <tr ng-repeat="item in recentHistory">
+        <td>{{ item.transaction_id }}</td>
+        <td>{{ item.item_id }}</td>
+        <td>{{ item.person }}</td>
+        <td>{{ item.qty_changed }}</td>
+        <td>{{ item.qty_remaining }}</td>
+        <td>{{ item.timestamp }}</td>
       </tr>
     </tbody>
   </table>

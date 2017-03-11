@@ -72,6 +72,7 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/request.html').passThrough();
     $httpBackend.whenGET('templates/html/shoppinglist.html').passThrough();
     $httpBackend.whenGET('templates/html/additem.html').passThrough();
+    $httpBackend.whenGET('templates/html/viewhistory.html').passThrough();
 
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
     $httpBackend.whenGET("http://localhost:3000/view").passThrough();

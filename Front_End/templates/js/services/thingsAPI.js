@@ -10,8 +10,8 @@ app.factory('thingsAPI', ['$http', function($http){
   var _user = 'Guest';
 
   //For local dev mode comment out the first line and uncomment the second...
-  var _urlBase = 'https://things.cs.pdx.edu:3000/';
-  //var _urlBase = 'https://localhost:3000/';
+  //var _urlBase = 'https://things.cs.pdx.edu:3000/';
+  var _urlBase = 'https://localhost:3000/';
 
 
   var obj = {}; //this is the object that will be handed to our controller.
@@ -52,6 +52,32 @@ app.factory('thingsAPI', ['$http', function($http){
     }
 
     return $http(req);
+  }
+
+  obj.getRecent = (num) =>{
+    if(num >= 1)
+    {
+      var req = {
+        method : 'GET',
+        url: `${_urlBase}a/admin/history/recent/${num}`,
+        headers: {
+          'x-access-token': _token
+        },
+      }
+      return $http(req);
+    }
+    else
+    {
+      num = 0;
+      var req = {
+        method : 'GET',
+        url: `${_urlBase}a/admin/history/recent/${num}`,
+        headers: {
+          'x-access-token': _token
+        },
+      }
+      return $http(req);
+    }
   }
 
   //request item
