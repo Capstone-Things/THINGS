@@ -122,9 +122,15 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
       if(failed.length > 0){
         $window.alert("Unable to check out the following item(s):\n" + failed);
       }
+      else{
+        $window.alert("All items successfully checked out!");
+      }
       //Update inventory with new quantities
       thingsAPI.getView().then(function(response) {
         inventoryList.setInventory(response.data);
+        $scope.cart.length = 0;
+        $scope.cartEmpty = true;
+        $scope.cartNotEmpty = false;
       });
     });
   }
