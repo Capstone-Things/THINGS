@@ -52,7 +52,7 @@
 
 .page-wrapper {
     background: url(../images/background.png);
-    height: 100vh;
+    height: 100%;
 }
 
 .panel-body{
