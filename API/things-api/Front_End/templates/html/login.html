@@ -4,10 +4,11 @@
 </head>
 
 <div class="inner-bg">
-    <div class="container">
+    <div class="container" ng-controller="LoginCheckController" >
         <div class="row">
             <div class="col-sm-6 col-sm-offset-3 form-box">
                 <div class="form-box">
+                    <p class="text-danger" ng-show="errorMessage">{{ errorMessage }}</p>
                     <div class="form-top">
                         <div class="form-top-left">
                             <h3>CAT Inventory Management System</h3>
@@ -18,10 +19,9 @@
                         </div>
                     </div>
                 <div class="form-bottom">
-                    <form role="form" class="login-form" ng-controller="LoginCheckController" >
+                    <form role="form" class="login-form">
                         <div class="form-group">
                             <div ng-switch on="showAdminLogin">
-                                <label class="sr-only" for="username">UserName</label>
                                 <input type="text" ng-model="user.username" name="username" placeholder="Username" class="form-username form-control" required>
                                 <input type="password" ng-model="user.password" name="password" placeholder="password" class="form-password form-control" required>
                             </div>
