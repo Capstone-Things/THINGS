@@ -37,6 +37,7 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
     return $http.get(_urlBase+'view');
   }
 
+
   //Add new item
   obj.add = (name, desc, price, thresh)=>{
     var req = {
