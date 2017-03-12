@@ -27,12 +27,12 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
   obj.setUserName = (user)=>{_user=user};
   obj.setAdmin = (admin)=>{_admin=admin};
 
-  //route calls
+  //Route calls
   obj.authenticate=(loginData)=>{
     return $http.post(_urlBase+'authenticate', loginData);
   }
 
-  //get view
+  //Get view
   obj.getView = ()=>{
     return $http.get(_urlBase+'view');
   }
@@ -76,7 +76,7 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
     }
   }
 
-  //checkout
+  //Checkout
   obj.checkout = (id, person, qty)=>{
     var req = {
       method: 'POST',
@@ -109,7 +109,7 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
     return deferred.promise;
     }//end checkout
 
-    //checkin
+    //Checkin
     obj.checkin = (id, person, qty)=>{
       var req = {
         method: 'POST',
@@ -142,12 +142,12 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
       return deferred.promise;
     }
 
-    //log out
+    //Log out
     obj.logOut = ()=>{
       _name = 'Guest';
       _admin = false;
       _token = null;
     };
 
-  return obj;//return the object
+  return obj; //Return the object
 }]);
