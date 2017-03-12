@@ -4,9 +4,15 @@ var app = angular.module("catthings_app");
 app.controller('CartController', ['$scope', '$http',  '$location', '$rootScope', 'cartList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', 'inventoryList', '$q', '$window', CartController]);
 function CartController($scope, $http,  $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, inventoryList, $q, $window){
 
+
   //Initialization purposes
   $scope.cart = [];
-  $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('sDom', 'rtip');
+  $scope.dtOptions = {
+     paging: false,
+     searching: false,
+     info: false
+  };
+
   $scope.emptyNameError = true;
 
   function check(){
