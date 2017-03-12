@@ -49,7 +49,8 @@ app.locals.smtpTransport = smtpTransport;
 // We need to be able to access the pool from our templates,
 // store the pool in app.locals
 app.locals.pool = pool;
-app.use('/', routes);//import our routs this will import the routes
+app.use('/', express.static('Front_End'))
+app.use('/api', routes);//import our routs this will import the routes
 
 //This will launch our server, and pass it to the express app.
 https.createServer({

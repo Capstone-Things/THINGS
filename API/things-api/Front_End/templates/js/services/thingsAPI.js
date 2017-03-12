@@ -3,15 +3,15 @@ var app = angular.module('catthings_app');
 
 //This Factory will act as a global doorway to the THIGNS API, all controllers
 //will have access to this service.
-app.factory('thingsAPI', ['$http', function($http){
+app.factory('thingsAPI', ['$http', '$q', function($http, $q){
 //private Variables
   var _admin = false;
   var _token = null;
   var _user = 'Guest';
 
   //For local dev mode comment out the first line and uncomment the second...
-  var _urlBase = 'https://things.cs.pdx.edu:3000/';
-  //var _urlBase = 'https://localhost:3000/';
+  var _urlBase = 'https://things.cs.pdx.edu:3000/api/';
+  //var _urlBase = 'https://localhost:3000/api/';
 
 
   var obj = {}; //this is the object that will be handed to our controller.
@@ -37,7 +37,7 @@ app.factory('thingsAPI', ['$http', function($http){
     return $http.get(_urlBase+'view');
   }
 
-  //checkout ==eventually to become person and cart==
+  //checkout
   obj.checkout = (id, person, qty)=>{
     var req = {
       method: 'POST',
@@ -45,12 +45,33 @@ app.factory('thingsAPI', ['$http', function($http){
       headers: {
         'x-access-token': _token
       },
-      //data: items
     }
-    return $http(req);
+    //return $http(req);
+
+    var deferred = $q.defer();
+    var promise = $http(req);
+    promise.success(function(){
+      deferred.resolve({
+        success: true,
+        item_id: id,
+        name: person,
+        quantity: qty
+      });
+    });
+    promise.error(function(err, stat){
+      deferred.resolve({
+        success: false,
+        item_id: id,
+        name: person,
+        quantity: qty,
+        error: err,
+        status: stat
+      });
+    });
+    return deferred.promise;
     }//end checkout
 
-    //checkin ==eventually to become person and checkinTable==
+    //checkin
     obj.checkin = (id, person, qty)=>{
       var req = {
         method: 'POST',
@@ -59,7 +80,29 @@ app.factory('thingsAPI', ['$http', function($http){
           'x-access-token': _token
         }
       }
-      return $http(req);
+      //return $http(req);
+
+      var deferred = $q.defer();
+      var promise = $http(req);
+      promise.success(function(){
+        deferred.resolve({
+          success: true,
+          item_id: id,
+          name: person,
+          quantity: qty
+        });
+      });
+      promise.error(function(err, stat){
+        deferred.resolve({
+          success: false,
+          item_id: id,
+          name: person,
+          quantity: qty,
+          error: err,
+          status: stat
+        });
+      });
+      return deferred.promise;
     }
 
     //log out
