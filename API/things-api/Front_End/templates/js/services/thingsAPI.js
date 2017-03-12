@@ -41,7 +41,7 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
   obj.add = (name, desc, price, thresh)=>{
     var req = {
       method : 'POST',
-      url: `${_urlBase}a/admin/add_new_item/${name}/${desc}/${price}/${thresh}`,
+      url: `${_urlBase}a/admin/add/${name}/${desc}/${price}/${thresh}`,
       headers: {
         'x-access-token': _token
       }
