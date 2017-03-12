@@ -131,6 +131,9 @@ function CheckInController($scope, $http, $location, $rootScope, inventoryList, 
       if(failed.length > 0){
         $window.alert("Unable to check in the following item(s):\n" + failed);
       }
+      else{
+        $window.alert("All items successfully checked in!");
+      }
       //Update inventory with new quantities
       thingsAPI.getView().then(function(response) {
         inventoryList.setInventory(response.data);
