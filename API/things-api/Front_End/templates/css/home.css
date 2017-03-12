@@ -51,9 +51,8 @@
 }
 
 .page-wrapper {
-    min-height: 1000px;
     background: url(../images/background.png);
-    height: 100%;
+    height: 100vh;
 }
 
 .panel-body{
@@ -62,7 +61,7 @@
 
 .page-inner {
     display: table;
-    height: 100%;
+    height: 100vh;
     position: relative;
     width: 80%;
     margin: 0 auto;
