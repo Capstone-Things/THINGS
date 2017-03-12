@@ -37,6 +37,45 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
     return $http.get(_urlBase+'view');
   }
 
+  //Add new item
+  obj.add = (name, desc, price, thresh)=>{
+    var req = {
+      method : 'POST',
+      url: `${_urlBase}a/admin/add_new_item/${name}/${desc}/${price}/${thresh}`,
+      headers: {
+        'x-access-token': _token
+      }
+    }
+    return $http(req);
+  }
+
+  //Get recent transaction based on input number
+  obj.getRecent = (num) =>{
+    if(num >= 1)
+    {
+      var req = {
+        method : 'GET',
+        url: `${_urlBase}a/admin/history/recent/${num}`,
+        headers: {
+          'x-access-token': _token
+        },
+      }
+      return $http(req);
+    }
+    else
+    {
+      num = 0;
+      var req = {
+        method : 'GET',
+        url: `${_urlBase}a/admin/history/recent/${num}`,
+        headers: {
+          'x-access-token': _token
+        },
+      }
+      return $http(req);
+    }
+  }
+
   //checkout
   obj.checkout = (id, person, qty)=>{
     var req = {
@@ -46,7 +85,6 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
         'x-access-token': _token
       },
     }
-    //return $http(req);
 
     var deferred = $q.defer();
     var promise = $http(req);
@@ -80,7 +118,6 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
           'x-access-token': _token
         }
       }
-      //return $http(req);
 
       var deferred = $q.defer();
       var promise = $http(req);

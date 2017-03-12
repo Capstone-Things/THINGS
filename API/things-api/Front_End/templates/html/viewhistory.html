@@ -1,0 +1,44 @@
+<!--View history page-->
+
+<!-- Navigation Bar-->
+<bootstrap-navbar></bootstrap-navbar>
+
+<!--Recent History Table and Fields-->
+<div ng-controller="HistoryController">
+  <div class="container">
+  <form role="form" class="recent-form" ng-app "catthings_app">
+    <div class="form-group">
+      <label for="numRecent">Number of Recent Transactions:</label>
+      <input type="number" ng-model="numRecent" name = "numRecent" placeholder="Gets last 15 if nothing specified" class="form-control" min="1" optional>
+    </div>
+    <div class="form-group">
+      <input type="submit" ng-click=getRecentHistory() value="Get Recent Transactions">
+    </div>
+  </form>
+  </div>
+
+  <div class="container" ng-app="catthings_app" align="center">
+    <table datatable="ng" class="table table-bordered" id="recentHistoryTable">
+      <thead class="thead-inverse">
+        <tr>
+          <th><b>Transaction ID</b></th>
+          <th><b>Item ID</b></th>
+          <th><b>Person</b></th>
+          <th><b>Quantity Changed</b></th>
+          <th><b>Quantity Remaining</b></th>
+          <th><b>Time of Transaction</b></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in recentHistory">
+          <td>{{ item.transaction_id }}</td>
+          <td>{{ item.item_id }}</td>
+          <td>{{ item.person }}</td>
+          <td>{{ item.qty_changed }}</td>
+          <td>{{ item.qty_remaining }}</td>
+          <td>{{ item.timestamp }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

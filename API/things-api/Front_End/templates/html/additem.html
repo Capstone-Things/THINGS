@@ -1,0 +1,35 @@
+<!--add item page which allows an admin to insert a new item into the database by filling in fields here
+which are packaged and sent to the API which will insert the item into the database
+written by Austen Ruzicka-->
+<head>
+    <link rel="stylesheet" type="text/css" href="templates/css/form-elements.css" />
+</head>
+
+<body>
+  <!--Navigation Bar -->
+  <bootstrap-navbar></bootstrap-navbar>
+
+  <div class="container">
+  <form role="form" class="add-form" ng-app "catthings_app" ng-controller="NewItemController">
+    <div class="form-group">
+      <label for="itemName">Name:</label>
+      <input type="text" ng-model="itemName" name = "itemName" placeholder="Name of item" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="price">Price:</label>
+      <input type="number" ng-model="price" name = "price" class="form-control" min="0" required>
+    </div>
+    <div class="form-group">
+      <label for="threshold">Threshold:</label>
+      <input type="number" ng-model="threshold" name = "threshold" placeholder="When the number in the database falls below threshold, admin is notified" class="form-control" min="0" required>
+    </div>
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <textarea cols="50" rows="4" ng-model="description" name="description" placeholder="Describe the item" class = "form-control" required></textarea>
+    </div>
+    <div class="form-group">
+      <input type="submit" ng-click=addNewItem() value="Submit">
+    </div>
+  </form>
+  </div>
+</body>
