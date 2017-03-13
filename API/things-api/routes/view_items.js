@@ -18,16 +18,17 @@ module.exports = (req, res) => {
           }
  
          
-          client.query('SELECT tag_name FROM tags t, all_items a WHERE t.item_id = a.item_id', [], function(err, result) {
+          client.query('SELECT item_id, name, quantity, threshold FROM all_items', [], function(err, resultItems) {
                //call `done()` to release the client back to the pool
                done();
 
                 if(err) {
-                    console.log("iTEM was not received properly", err);
+                    console.log("Item was not received properly", err);
                 }
 
-                else {
-                        client.query('SELECT tag_name FROM tags t, all_items a WHERE t.item_id = a.item_id', [], function(err, result) {
+                else { //add tags 
+                    for (i=0; i < resultItems.length ; i++) {
+                        client.query('SELECT tag_name FROM tags WHERE item_id = $1', [resultItems.rows[i].item_id], function(err, resultTags) {
                             //call `done()` to release the client back to the pool
                             done();
 
@@ -45,8 +46,9 @@ module.exports = (req, res) => {
                         }); /* end of Client query for getting tags*/
                     
                 }
-
+            
                 res.app.locals.helpers.errResultHandler(err, result.rows, res);
+            }
           });
         });
     
