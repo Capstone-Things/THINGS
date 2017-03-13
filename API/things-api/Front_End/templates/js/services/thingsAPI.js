@@ -51,6 +51,60 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
   }
 
   //Get recent transaction based on input number
+  obj.getItemHistory = (num, item) =>{
+    if(num >= 1)
+    {
+      var req = {
+        method : 'GET',
+        url: `${_urlBase}a/admin/history/by_item/${item}/${num}`,
+        headers: {
+          'x-access-token': _token
+        },
+      }
+      return $http(req);
+    }
+    else
+    {
+      num = 0;
+      var req = {
+        method : 'GET',
+        url: `${_urlBase}a/admin/history/by_item/${item}/${num}`,
+        headers: {
+          'x-access-token': _token
+        },
+      }
+      return $http(req);
+    }
+  }
+
+  //Get recent transaction based on tag and input number
+  obj.getTagHistory = (num, tag) =>{
+    if(num >= 1)
+    {
+      var req = {
+        method : 'GET',
+        url: `${_urlBase}a/admin/history/by_tag/${tag}/${num}`,
+        headers: {
+          'x-access-token': _token
+        },
+      }
+      return $http(req);
+    }
+    else
+    {
+      num = 0;
+      var req = {
+        method : 'GET',
+        url: `${_urlBase}a/admin/history/by_tag/${tag}/${num}`,
+        headers: {
+          'x-access-token': _token
+        },
+      }
+      return $http(req);
+    }
+  }
+
+  //Get recent transaction based on input number
   obj.getRecent = (num) =>{
     if(num >= 1)
     {
@@ -75,6 +129,18 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
       }
       return $http(req);
     }
+  }
+
+  //Get range of transactions based on start and end date
+  obj.getDateHistory = (start, end) =>{
+    var req = {
+      method : 'GET',
+      url: `${_urlBase}a/admin/history/by_range/${start}/${end}`,
+      headers: {
+        'x-access-token': _token
+      },
+    }
+      return $http(req);
   }
 
   //Checkout
@@ -147,7 +213,7 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
     obj.request = (qData) => {
       return $http.post(_urlBase+'request', qData);
     }
-    
+
     //Log out
     obj.logOut = ()=>{
       _name = 'Guest';
