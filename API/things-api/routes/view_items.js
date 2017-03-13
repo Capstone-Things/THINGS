@@ -1,5 +1,7 @@
 module.exports = (req, res) => {
 
+    const util = require('util');
+
 
   /****************************************************
   * /path     /view
@@ -18,10 +20,10 @@ module.exports = (req, res) => {
           }
  
          
-          client.query('SELECT item_id, item_name, quantity, threshold  FROM all_items', [], function(err, resultItems) {
+          client.query('SELECT item_id, item_name, quantity, threshold  FROM all_items order by item_id', [], function(err, resultItems) {
                //call `done()` to release the client back to the pool
                //done();
-                const util = require('util');
+                //const util = require('util');
                 var newResult 
 
                 console.log(util.inspect(resultItems, { showHidden: true, depth: 1 }));
@@ -33,39 +35,62 @@ module.exports = (req, res) => {
                     console.log("Inside tags for loop");
                     i=0;
                     console.log("Inside tags for loop - i="+ i +"/ length="+resultItems.length);
-                    for (i=0; i < resultItems.rowCount ; i++) {
+                   client.query('SELECT item_id, tag_name FROM tags order by item_id' , [], function(err, resultTags) {
+                        //call `done()` to release the client back to the pool
+                        done();
+                      
+                        console.log('resulTags inspect');
+                        console.log(util.inspect(resultTags.rows[0], { showHidden: true, depth: 1 }));
+                       console.log('end ------------------------------resulTags inspect');
+                        if(err) {
+                            console.log("Tag name was not received properly", err);
+                        }
 
-                        console.log("Inside tags - loop ");
-                        client.query('SELECT item_id, tag_name FROM tags' , [], function(err, resultTags) {
-                            //call `done()` to release the client back to the pool
-                            done();
+                        else {
+                            //add resultTags for this one item to the resultItems array
 
-                            if(err) {
-                                console.log("Tag name was not received properly", err);
-                            }
+                            //resultItems.rows[i].push(resultTags);
+                            //for (j=0; j < resultTags.rowCount; j++){
+                                var items=[];
+                                j=0;
+                                for (i=0; i < resultItems.rowCount; i++){
+                                    var itemTags = [];
+                                    for (; j < resultTags.rowCount && resultItems.rows[i].item_id == resultTags.rows[j].item_id ; j++){
+                                        itemTags.push(resultTags.rows[j].tag_name);
+                                    }
+                                    //if (resultItem.rows[i].item_id == resultTags.rows[j].item_id){
+                                    //    resultItems.rows[i].tags.push({tags:resultTags.rows[j]});
+                                    //}
+                                    items.push({item_id: resultItems.rows[i].item_id,
+                                                item_name: resultItems.rows[i].item_name,
+                                                quantity: resultItems.rows[i].quantity,
+                                                threshold: resultItems.rows[i].threshold,
+                                                tags: itemTags});
 
-                            else {
-                                //add resultTags for this one item to the resultItems array
-
-		                        //resultItems.rows[i].push(resultTags);
-                                for (j=0; j < resultTags.rowCount; j++){
-                                    resultItems.rows[i].tags.push(resultTags.rows[j]);
                                 }
-                                //resultItems.rows[i].push(resultTags);
+                                //res.contentType('application/json');
+                                //res.send(JSON.stringify(items));
+                                console.log('Array items 0----');
+                                // const util = require('util');
+                              console.log(util.inspect(items[0], { showHidden: true, depth: 1 }));
+ 
 
-                                //console.log("resultTags");
+                            //}
+                            //resultItems.rows[i].push(resultTags);
 
-                                const util = require('util');
+                            //console.log("resultTags");
 
-                                console.log(util.inspect(resultItems, { showHidden: true, depth: 1 }));
+                            //const util = require('util');
 
-                                //resultItems.rows.push(resultTags);
-                            }           
+                            console.log(util.inspect(resultItems, { showHidden: true, depth: 1 }));
 
-                            res.app.locals.helpers.errResultHandler(err, resultTags.rows, res);
+                            //resultItems.rows.push(resultTags);
+                        }           
+
+//                        res.app.locals.helpers.errResultHandler(err, resultTags.rows, res);
                         }); /* end of Client query for getting tags*/
                     
-                } //end of adding tags for loop
+
                 for(i = 0; i < resultItems.length; i++) {
                     console.log("ResultItems array:");
                     console.log(resultItems.rows[i]);
@@ -81,10 +106,3 @@ module.exports = (req, res) => {
     
 }
 
-function item(id, name, qty, thresh, tags) {
-    this.item_id = id;
-    this.item_name = name;
-    this.quantity = qty;
-    this.threshold = thresh;
-    this.tags = tags;
-}
