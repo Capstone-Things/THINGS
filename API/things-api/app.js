@@ -13,6 +13,7 @@ var helpers = require('./helper_functions')
 var tokenSecret = fs.readFileSync('./conf/jwtSecret.key', 'utf-8').replace(/\s/g, '');
 const nodemailer = require('nodemailer');
 const email_auth = require('./conf/email_auth');
+const mailopt = require('./conf/mailopt');
 
 //Import Config files
 var db_info = require('./conf/db/db_info'); //This file contains all of the configuration info needed to connect to the database.
@@ -43,6 +44,7 @@ var smtpTransport = nodemailer.createTransport({
 
 //any global helper functions for our templates should go here:
 app.locals.helpers = helpers;
+app.locals.mailopt = mailopt;
 app.locals.tokenSecret = tokenSecret;
 app.locals.options = options;
 app.locals.smtpTransport = smtpTransport;

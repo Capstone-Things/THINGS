@@ -67,8 +67,11 @@ module.exports = {
   ****************************************************/
 
  var: mailOptions = {
-    from: '"Susmita Awasthi" <susmita.awasthi@gmail.com>', // sender address
-    to: 'Susmita PSU, <susmita@pdx.edu>', // list of receivers
+
+   from: res.app.locals.mailopt.mail.from,
+   to: res.app.locals.mailopt.mail.to,
+    //from: '"Susmita Awasthi" <susmita.awasthi@gmail.com>', // sender address
+    //to: 'Susmita PSU, <susmita@pdx.edu>', // list of receivers
     subject: 'CATTHINGS Notice: Item Below Threshold', // Subject line
     text: "", // plain text body
     html: '<b></b>' // html body
@@ -87,7 +90,6 @@ module.exports = {
           if(err) {
               return console.error('error fetching client from pool', err);
           }
-
            client.query('INSERT INTO transactions(item_id, person, qty_changed) VALUES ($1, $2, $3)', [id, person, qty], function(err, result) {
               //call `done()` to release the client back to the pool
               done();
@@ -128,7 +130,6 @@ module.exports = {
 
   doThresholdCheck: function(id, qty, retFunc, res) {
 
-   
     res.app.locals.pool.connect(function(err, client, done) {
     if(err) {
       return console.error('error fetching client from pool', err);

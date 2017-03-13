@@ -1,4 +1,4 @@
-var nodemailer = require('nodemailer');
+//var nodemailer = require('nodemailer');
 
 /****************************************************
 * Path: /request.js
@@ -14,7 +14,7 @@ module.exports = (req, res) => {
   var num = req.body.quantityNeeded;
   var desc = req.body.description;
   var msg = req.body.message;
-
+/*
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport({
   service: 'yahoo',
@@ -23,11 +23,15 @@ let transporter = nodemailer.createTransport({
       pass: 'testing12345'
   }
 });
+*/
 
 // setup email data with unicode symbols
 let mailOptions = {
-  from: '"CAT-Things-User" <catthingsuser@yahoo.com>', // sender address
-  to: 'catthingsuser@yahoo.com', // list of receivers
+
+  from: mailopt.mail.from,
+  to: mailopt.mail.to,
+  //from: '"CAT-Things-User" <catthingsuser@yahoo.com>', // sender address
+  //to: 'catthingsuser@yahoo.com', // list of receivers
   subject: 'New Inventory Request from a User', // Subject line
   text: 'A user has requested ' + num + ' ' + name + '\n' + 'With the following description: ' + desc + '\n' + 'Additional Information from user: ' + msg
 };
