@@ -16,23 +16,38 @@ module.exports = (req, res) => {
           if(err) {
               return console.error('error fetching client from pool', err);
           }
-          //call `done()` to release the client back to the pool
-          done();
  
          
-           client.query('SELECT tag_name FROM tags t, all_items a WHERE t.item_id = a.item_id', [], function(err, result) {
- 
-           if(err) {
-            console.log("Tag name was not received properly", err);
-           }
+          client.query('SELECT tag_name FROM tags t, all_items a WHERE t.item_id = a.item_id', [], function(err, result) {
+               //call `done()` to release the client back to the pool
+               done();
 
-           else {
-            
-           }
+                if(err) {
+                    console.log("iTEM was not received properly", err);
+                }
 
+                else {
+                        client.query('SELECT tag_name FROM tags t, all_items a WHERE t.item_id = a.item_id', [], function(err, result) {
+                            //call `done()` to release the client back to the pool
+                            done();
 
+                            if(err) {
+                                console.log("Tag name was not received properly", err);
+                            }
 
-              res.app.locals.helpers.errResultHandler(err, result.rows, res);
+                            else {
+                                //add resultTags for this one item to the resultItems array
+
+		                        resultItems.rows[i].push(resultTags);
+                            }           
+
+                            res.app.locals.helpers.errResultHandler(err, result.rows, res);
+                        }); /* end of Client query for getting tags*/
+                    
+                }
+
+                res.app.locals.helpers.errResultHandler(err, result.rows, res);
           });
-      });
+        });
+    
 }
