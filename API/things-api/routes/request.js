@@ -1,9 +1,10 @@
 var nodemailer = require('nodemailer');
+var time = require('node-datetime');
 
 /****************************************************
 * Path: /request.js
 * HTTP Method: POST
-* Params: itemName, quantityNeeded, description, message
+* Params: itemName, quantityNeeded, personName, email, date, description, message
 * Brief: This route will package up info from a user and e-mail it to a CAT admin
 *
 * Author: Austen Ruzicka
@@ -14,6 +15,11 @@ module.exports = (req, res) => {
   var num = req.body.quantityNeeded;
   var desc = req.body.description;
   var msg = req.body.message;
+  var person = req.body.personName;
+  var addr = req.body.email;
+  var date = req.body.date;
+  var datetime = time.create();
+  var timereq = datetime.format('m/d/Y H:M:S');
 
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport({
@@ -29,7 +35,7 @@ let mailOptions = {
   from: '"CAT-Things-User" <catthingsuser@yahoo.com>', // sender address
   to: 'catthingsuser@yahoo.com', // list of receivers
   subject: 'New Inventory Request from a User', // Subject line
-  text: 'A user has requested ' + num + ' ' + name + '\n' + 'With the following description: ' + desc + '\n' + 'Additional Information from user: ' + msg
+  text: 'A user named ' + person + ' has requested ' + num + ' ' + name + ' which is needed by ' + date + '. This request was sent on ' + timereq + '\n' + 'With the following description: ' + desc + '\n' + 'Additional Information from user: ' + msg + '\n' + 'To contact ' + person + ' send an email to ' + addr + '\n'
 };
 
 // send mail with defined transport object

@@ -143,6 +143,11 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
       return deferred.promise;
     }
 
+    //Request new item
+    obj.request = (qData) => {
+      return $http.post(_urlBase+'request', qData);
+    }
+    
     //Log out
     obj.logOut = ()=>{
       _name = 'Guest';

@@ -19,6 +19,18 @@
       <input type="number" ng-model="question.quantityNeeded" name = "quantityNeeded" placeholder="Number requested" class="form-control" min="0" required>
     </div>
     <div class="form-group">
+      <label for="personName">Your Name:</label>
+      <input type="text" ng-model="question.personName" name="personName" class = "form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Your E-mail:</label>
+      <input type "email" ng-model="question.email" name="email" class = "form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="date">Date Needed:</label>
+      <input type "date" ng-model="question.date" name="date" placeholder="When is this item needed?" class = "form-control" required>
+    </div>
+    <div class="form-group">
       <label for="description">Description:</label>
       <textarea cols="50" rows="4" ng-model="question.description" name="description" placeholder="Describe the item, including where it can be bought" class = "form-control" required></textarea>
     </div>
