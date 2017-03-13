@@ -1,6 +1,7 @@
 module.exports = (req, res) => {
 
     const util = require('util');
+    var items = [];
 
 
   /****************************************************
@@ -24,9 +25,9 @@ module.exports = (req, res) => {
                //call `done()` to release the client back to the pool
                //done();
                 //const util = require('util');
-                var newResult 
+               // var newResult 
 
-                console.log(util.inspect(resultItems, { showHidden: true, depth: 1 }));
+               // console.log(util.inspect(resultItems, { showHidden: true, depth: 1 }));
                 if(err) {
                     console.log("Item was not received properly", err);
                 }
@@ -51,7 +52,7 @@ module.exports = (req, res) => {
 
                             //resultItems.rows[i].push(resultTags);
                             //for (j=0; j < resultTags.rowCount; j++){
-                                var items=[];
+                               // var items=[];
                                 j=0;
                                 for (i=0; i < resultItems.rowCount; i++){
                                     var itemTags = [];
@@ -68,8 +69,10 @@ module.exports = (req, res) => {
                                                 tags: itemTags});
 
                                 }
-                                //res.contentType('application/json');
-                                //res.send(JSON.stringify(items));
+
+
+                              // res.contentType('application/json');
+                               // res.send(JSON.stringify(items));
                                 console.log('Array items 0----');
                                 // const util = require('util');
                               console.log(util.inspect(items[0], { showHidden: true, depth: 1 }));
@@ -82,27 +85,33 @@ module.exports = (req, res) => {
 
                             //const util = require('util');
 
-                            console.log(util.inspect(resultItems, { showHidden: true, depth: 1 }));
+                            //console.log(util.inspect(resultItems, { showHidden: true, depth: 1 }));
 
                             //resultItems.rows.push(resultTags);
-                        }           
 
-//                        res.app.locals.helpers.errResultHandler(err, resultTags.rows, res);
+
+                        }   
+
+                        
+                         //res.contentType('application/json');
+                        // res.send(JSON.stringify(items));
+                        //console.log('Items[0] right before rse.jsonp--------------');
+                        //console.log(util.inspect(items[0], { showHidden: true, depth: 1 }));
+
+                        //res.jsonp(items);        
+
+                        //res.app.locals.helpers.errResultHandler(err, items, res);
                         }); /* end of Client query for getting tags*/
                     
 
-                for(i = 0; i < resultItems.length; i++) {
-                    console.log("ResultItems array:");
-                    console.log(resultItems.rows[i]);
-                    //console.log(resultItems.rows[i].item_id);
-                    //console.log(resultItems.rows[i].resultTags);
-
-                }
-                res.app.locals.helpers.errResultHandler(err, resultItems.rows, res);
+                //res.app.locals.helpers.errResultHandler(err, resultItems.rows, res);
+                //res.app.locals.helpers.errResultHandler(err, items, res);     
             } //end of success of first SQL query (resultItems)
-          });
-        });
+            res.app.locals.helpers.errResultHandler(err, items, res);
+
+          }); //End of SELECT first query
+        }); //end of pools.connect
     
     
-}
+}//end of beg of function
 
