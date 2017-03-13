@@ -16,6 +16,10 @@ written by Austen Ruzicka-->
       <input type="text" ng-model="itemName" name = "itemName" placeholder="Name of item" class="form-control" required>
     </div>
     <div class="form-group">
+      <label for="Quantity">Initial quantity:</label>
+      <input type="number" ng-model="qty" name = "qty" class="form-control" min="0" required>
+    </div>
+    <div class="form-group">
       <label for="price">Price:</label>
       <input type="number" ng-model="price" name = "price" class="form-control" min="0" required>
     </div>
@@ -26,6 +30,10 @@ written by Austen Ruzicka-->
     <div class="form-group">
       <label for="description">Description:</label>
       <textarea cols="50" rows="4" ng-model="description" name="description" placeholder="Describe the item" class = "form-control" required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="Tags">Tags:</label>
+      <input type="text" ng-model="tags" name = "tags" placeholder="insert tags seperated by commas" class="form-control" required>
     </div>
     <div class="form-group">
       <input type="submit" ng-click=addNewItem() value="Submit">

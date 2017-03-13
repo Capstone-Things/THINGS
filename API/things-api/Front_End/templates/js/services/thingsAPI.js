@@ -10,8 +10,8 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
   var _user = 'Guest';
 
   //For local dev mode comment out the first line and uncomment the second...
-  var _urlBase = 'https://things.cs.pdx.edu:3000/api/';
-  //var _urlBase = 'https://localhost:3000/api/';
+  //var _urlBase = 'https://things.cs.pdx.edu:3000/api/';
+  var _urlBase = 'https://localhost:3000/api/';
 
 
   var obj = {}; //this is the object that will be handed to our controller.
@@ -39,10 +39,11 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
 
 
   //Add new item
-  obj.add = (name, desc, price, thresh)=>{
+  //api/a/admin/add/:name/:qty/:desc/:price/:thresh/:user/:tag
+  obj.add = (name, qty, desc, price, thresh, tags)=>{
     var req = {
       method : 'POST',
-      url: `${_urlBase}a/admin/add/${name}/${desc}/${price}/${thresh}`,
+      url: `${_urlBase}a/admin/add/${name}/${qty}/${desc}/${price}/${thresh}/${_user}/${tags}`,
       headers: {
         'x-access-token': _token
       }
@@ -141,6 +142,18 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
         });
       });
       return deferred.promise;
+    };
+
+    //Method to get the shopping list from the API
+    obj.shoppingList = () => {
+      var req = {
+        method: 'GET',
+        url: `${_urlBase}a/admin/shopping_list`,
+        headers: {
+          'x-access-token': _token
+        }
+      }
+      return $http(req);
     }
 
     //Log out

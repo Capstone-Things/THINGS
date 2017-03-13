@@ -35,7 +35,7 @@ routes.use(function(req, res, next){
 
 //add route handelers for this directorys routes here:
 routes.post('/checkin/:id/:person/:qty', checkin);
-routes.post('/add/:name/:desc/:price/:thresh', addNewItem);
+routes.post('/add/:name/:qty/:desc/:price/:thresh/:user/:tags', addNewItem);
 routes.post('/tagitem/:id/:tag', addTag);
 routes.get('/shopping_list', shoppingList);
 
