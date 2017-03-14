@@ -7,7 +7,6 @@ const dev = require('./dev/');
 const test = require('./test');
 const auth = require('./authenticate');
 const view = require('./view_items');
-const request = require('./request');
 
 //add route handelers for subfolders here:
 routes.use('/a', secure_routes);
@@ -19,7 +18,6 @@ routes.use('/dev', dev);
 routes.get('/test', test);
 routes.get('/view', view);
 routes.post('/authenticate', auth);
-routes.post('/request', request)
 
 //this is an inline route handler...
 //this is where you land if you goto GET https://localhost:3000/

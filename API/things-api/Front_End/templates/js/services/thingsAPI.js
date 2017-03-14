@@ -211,7 +211,7 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
 
     //Request new item
     obj.request = (qData) => {
-      return $http.post(_urlBase+'request', qData);
+      return $http.post(_urlBase+'a/request', qData);
     }
 
     //Log out

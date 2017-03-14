@@ -1,3 +1,5 @@
+//note: nodemailer code comes from samples on https://nodemailer.com/about/
+
 var nodemailer = require('nodemailer');
 var time = require('node-datetime');
 
