@@ -13,7 +13,7 @@ module.exports=(req,res) => {
         if(err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query('SELECT item_name AS name, description, price FROM items WHERE quantity < threshold', [], function(err, result) {
+        client.query('SELECT item_name AS name, description, price, quantity FROM items WHERE quantity < threshold', [], function(err, result) {
             //call `done()` to release the client back to the pool
             done();
             res.app.locals.helpers.errResultHandler(err, result.rows, res);
