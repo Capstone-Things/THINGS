@@ -36,6 +36,20 @@ app.use(morgan('dev')); // enables console output for dev purpouses on requests
 app.use(cors()); // allow cross origin resource sharing
 var pool = new pg.Pool(db_info.config); //This is the pool that DB client connections live in.
 
+let mailOptions = {
+
+  from: mailopt.mail.from,
+  to: mailopt.mail.to,
+  subject: '',
+  text: '',
+  html: '<b></b>'
+  //from: '"CAT-Things-User" <catthingsuser@yahoo.com>', // sender address
+  //to: 'catthingsuser@yahoo.com', // list of receivers
+  //subject: 'New Inventory Request from a User', // Subject line
+  //text: 'A user has requested ' + num + ' ' + name + '\n' + 'With the following description: ' + desc + '\n' + 'Additional Information from user: ' + msg
+};
+
+
 var smtpTransport = nodemailer.createTransport({
     service: "gmail",
     auth: email_auth.auth
@@ -44,7 +58,8 @@ var smtpTransport = nodemailer.createTransport({
 
 //any global helper functions for our templates should go here:
 app.locals.helpers = helpers;
-app.locals.mailopt = mailopt;
+app.locals.mailOptions = mailOptions;
+//app.locals.mailopt = mailopt;
 app.locals.tokenSecret = tokenSecret;
 app.locals.options = options;
 app.locals.smtpTransport = smtpTransport;

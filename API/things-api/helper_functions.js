@@ -65,7 +65,7 @@ module.exports = {
   * /author     Susmita Awasthi
   * /date       3/5/2017
   ****************************************************/
-
+/*
  var: mailOptions = {
 
    from: res.app.locals.mailopt.mail.from,
@@ -76,7 +76,10 @@ module.exports = {
     text: "", // plain text body
     html: '<b></b>' // html body
 },
+*/
 
+//app.locals.mailOptions.subject = 'CATTHINGS Notice: Item Below Threshold'; // Subject line
+//app.locals.mailOptions.text = "";
 
   /****************************************************
   * /func name  transaction
@@ -142,7 +145,10 @@ module.exports = {
     else {
       if((result.rows[0].quantity - qty) <= result.rows[0].threshold) { //send email to administrator
         console.log("Sending email to administrator: ");
-        mailOptions.html =  mailOptions.html 
+        app.locals.mailOptions.subject = 'CATTHINGS Notice: Item Below Threshold'; // Subject line
+        app.locals.mailOptions.text = "";
+
+        app.locals.mailOptions.html =  app.locals.mailOptions.html 
         + "This is to inform you that the following item is at or below its threshold level in the THINGS inventory. "
         + "The details of the item are: " + "<br>" + "<br>" 
         + "Item ID: " + result.rows[0].item_id + "<br>"

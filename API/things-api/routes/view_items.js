@@ -19,7 +19,7 @@ module.exports = (req, res) => {
         }
  
          
-    client.query('SELECT item_id, item_name, quantity, threshold  FROM all_items order by item_id', [], function(err, resultItems) {
+    client.query('SELECT item_id, item_name, quantity, threshold, price FROM all_items order by item_id', [], function(err, resultItems) {
         //call `done()` to release the client back to the pool
         //done();
             
@@ -51,6 +51,7 @@ module.exports = (req, res) => {
                                     item_name: resultItems.rows[i].item_name,
                                     quantity: resultItems.rows[i].quantity,
                                     threshold: resultItems.rows[i].threshold,
+                                    price: resultItems.rows[i].price,
                                     tags: itemTags});
                         }
                     }      

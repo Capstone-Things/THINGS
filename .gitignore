@@ -8,3 +8,5 @@
 *.csr
 *.crt
 *email_auth.js
+*mailopt.js
+

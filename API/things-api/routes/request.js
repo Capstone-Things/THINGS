@@ -26,6 +26,9 @@ let transporter = nodemailer.createTransport({
 */
 
 // setup email data with unicode symbols
+mailOptions.subject = 'New Inventory Request from a User'; // Subject line
+mailOptions.text = 'A user has requested ' + num + ' ' + name + '\n' + 'With the following description: ' + desc + '\n' + 'Additional Information from user: ' + msg;
+/*
 let mailOptions = {
 
   from: mailopt.mail.from,
@@ -35,7 +38,7 @@ let mailOptions = {
   subject: 'New Inventory Request from a User', // Subject line
   text: 'A user has requested ' + num + ' ' + name + '\n' + 'With the following description: ' + desc + '\n' + 'Additional Information from user: ' + msg
 };
-
+*/
 // send mail with defined transport object
 transporter.sendMail(mailOptions, (error, info) => {
   if (error) {
