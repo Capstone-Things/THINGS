@@ -1,0 +1,176 @@
+<!--View history page-->
+
+<!-- Navigation Bar-->
+<bootstrap-navbar></bootstrap-navbar>
+
+<!--Recent History Table and Fields-->
+<div ng-controller="HistoryController">
+  <div class="container">
+  <form role="form" class="recent-form" ng-app "catthings_app">
+    <div class="form-group">
+      <label for="numRecent">Number of Recent Transactions:</label>
+      <input type="number" ng-model="numRecent" name = "numRecent" placeholder="Gets last 15 if nothing specified" class="form-control" min="1" optional>
+    </div>
+    <div class="form-group">
+      <input type="submit" ng-click=getRecentHistory() value="Get Recent Transactions">
+    </div>
+  </form>
+  </div>
+
+  <div class="container" ng-app="catthings_app" align="center">
+    <table datatable="ng" class="table table-bordered" id="recentHistoryTable">
+      <thead class="thead-inverse">
+        <tr>
+          <th><b>Transaction ID</b></th>
+          <th><b>Item ID</b></th>
+          <th><b>Person</b></th>
+          <th><b>Quantity Changed</b></th>
+          <th><b>Quantity Remaining</b></th>
+          <th><b>Time of Transaction</b></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in recentHistory">
+          <td>{{ item.transaction_id }}</td>
+          <td>{{ item.item_id }}</td>
+          <td>{{ item.person }}</td>
+          <td>{{ item.qty_changed }}</td>
+          <td>{{ item.qty_remaining }}</td>
+          <td>{{ item.timestamp }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!--Item History Table and Fields-->
+<div ng-controller="HistoryController">
+  <div class="container">
+  <form role="form" class="item-form" ng-app "catthings_app">
+    <div class="form-group">
+      <label for="num">Number of Recent Transactions:</label>
+      <input type="number" ng-model="num" name = "num" placeholder="Gets last 15 if nothing specified" class="form-control" min="1" optional>
+    </div>
+    <div class="form-group">
+      <label for="item">Name of Item:</label>
+      <input type="text" ng-model="item" name = "item" placeholder="Name of Item" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <input type="submit" ng-click=getItemHistory() value="Get Recent Transactions of Item by Name">
+    </div>
+  </form>
+  </div>
+
+  <div class="container" ng-app="catthings_app" align="center">
+    <table datatable="ng" class="table table-bordered" id="itemHistoryTable">
+      <thead class="thead-inverse">
+        <tr>
+          <th><b>Transaction ID</b></th>
+          <th><b>Item ID</b></th>
+          <th><b>Person</b></th>
+          <th><b>Quantity Changed</b></th>
+          <th><b>Quantity Remaining</b></th>
+          <th><b>Time of Transaction</b></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in itemHistory">
+          <td>{{ item.transaction_id }}</td>
+          <td>{{ item.item_id }}</td>
+          <td>{{ item.person }}</td>
+          <td>{{ item.qty_changed }}</td>
+          <td>{{ item.qty_remaining }}</td>
+          <td>{{ item.timestamp }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!--Tag History Table and Fields-->
+<div ng-controller="HistoryController">
+  <div class="container">
+  <form role="form" class="tag-form" ng-app "catthings_app">
+    <div class="form-group">
+      <label for="number">Number of Recent Transactions:</label>
+      <input type="number" ng-model="number" name = "number" placeholder="Gets last 15 if nothing specified" class="form-control" min="1" optional>
+    </div>
+    <div class="form-group">
+      <label for="tag">Tag of Item:</label>
+      <input type="text" ng-model="tag" name = "tag" placeholder="Tag of Item" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <input type="submit" ng-click=getTagHistory() value="Get Recent Transactions of Item by Tag">
+    </div>
+  </form>
+  </div>
+
+  <div class="container" ng-app="catthings_app" align="center">
+    <table datatable="ng" class="table table-bordered" id="tagHistoryTable">
+      <thead class="thead-inverse">
+        <tr>
+          <th><b>Transaction ID</b></th>
+          <th><b>Item ID</b></th>
+          <th><b>Person</b></th>
+          <th><b>Quantity Changed</b></th>
+          <th><b>Quantity Remaining</b></th>
+          <th><b>Time of Transaction</b></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in tagHistory">
+          <td>{{ item.transaction_id }}</td>
+          <td>{{ item.item_id }}</td>
+          <td>{{ item.person }}</td>
+          <td>{{ item.qty_changed }}</td>
+          <td>{{ item.qty_remaining }}</td>
+          <td>{{ item.timestamp }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!--Date History Table and Fields-->
+<div ng-controller="HistoryController">
+  <div class="container">
+  <form role="form" class="date-form" ng-app "catthings_app">
+    <div class="form-group">
+      <label for="startDate">Start Date:</label>
+      <input type="date" ng-model="startDate" name = "startDate" placeholder="Start Date" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="endDate">End Date:</label>
+      <input type="date" ng-model="endDate" name = "endDate" placeholder="End Date" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <input type="submit" ng-click=getDateHistory() value="Get Range of Transactions by Date">
+    </div>
+  </form>
+  </div>
+
+  <div class="container" ng-app="catthings_app" align="center">
+    <table datatable="ng" class="table table-bordered" id="dateHistoryTable">
+      <thead class="thead-inverse">
+        <tr>
+          <th><b>Transaction ID</b></th>
+          <th><b>Item ID</b></th>
+          <th><b>Person</b></th>
+          <th><b>Quantity Changed</b></th>
+          <th><b>Quantity Remaining</b></th>
+          <th><b>Time of Transaction</b></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in dateHistory">
+          <td>{{ item.transaction_id }}</td>
+          <td>{{ item.item_id }}</td>
+          <td>{{ item.person }}</td>
+          <td>{{ item.qty_changed }}</td>
+          <td>{{ item.qty_remaining }}</td>
+          <td>{{ item.timestamp }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

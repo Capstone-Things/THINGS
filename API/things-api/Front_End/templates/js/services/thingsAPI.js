@@ -27,17 +27,123 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
   obj.setUserName = (user)=>{_user=user};
   obj.setAdmin = (admin)=>{_admin=admin};
 
-  //route calls
+  //Route calls
   obj.authenticate=(loginData)=>{
     return $http.post(_urlBase+'authenticate', loginData);
   }
 
-  //get view
+  //Get view
   obj.getView = ()=>{
     return $http.get(_urlBase+'view');
   }
 
-  //checkout
+
+  //Add new item
+  obj.add = (name, desc, price, thresh)=>{
+    var req = {
+      method : 'POST',
+      url: `${_urlBase}a/admin/add/${name}/${desc}/${price}/${thresh}`,
+      headers: {
+        'x-access-token': _token
+      }
+    }
+    return $http(req);
+  }
+
+  //Get recent transaction based on input number
+  obj.getItemHistory = (num, item) =>{
+    if(num >= 1)
+    {
+      var req = {
+        method : 'GET',
+        url: `${_urlBase}a/admin/history/by_item/${item}/${num}`,
+        headers: {
+          'x-access-token': _token
+        },
+      }
+      return $http(req);
+    }
+    else
+    {
+      num = 0;
+      var req = {
+        method : 'GET',
+        url: `${_urlBase}a/admin/history/by_item/${item}/${num}`,
+        headers: {
+          'x-access-token': _token
+        },
+      }
+      return $http(req);
+    }
+  }
+
+  //Get recent transaction based on tag and input number
+  obj.getTagHistory = (num, tag) =>{
+    if(num >= 1)
+    {
+      var req = {
+        method : 'GET',
+        url: `${_urlBase}a/admin/history/by_tag/${tag}/${num}`,
+        headers: {
+          'x-access-token': _token
+        },
+      }
+      return $http(req);
+    }
+    else
+    {
+      num = 0;
+      var req = {
+        method : 'GET',
+        url: `${_urlBase}a/admin/history/by_tag/${tag}/${num}`,
+        headers: {
+          'x-access-token': _token
+        },
+      }
+      return $http(req);
+    }
+  }
+
+  //Get recent transaction based on input number
+  obj.getRecent = (num) =>{
+    if(num >= 1)
+    {
+      var req = {
+        method : 'GET',
+        url: `${_urlBase}a/admin/history/recent/${num}`,
+        headers: {
+          'x-access-token': _token
+        },
+      }
+      return $http(req);
+    }
+    else
+    {
+      num = 0;
+      var req = {
+        method : 'GET',
+        url: `${_urlBase}a/admin/history/recent/${num}`,
+        headers: {
+          'x-access-token': _token
+        },
+      }
+      return $http(req);
+    }
+  }
+
+  //Get range of transactions based on start and end date
+  obj.getDateHistory = (start, end) =>{
+    var req = {
+      method : 'GET',
+      url: `${_urlBase}a/admin/history/by_range/${start}/${end}`,
+      headers: {
+        'x-access-token': _token
+      },
+    }
+      return $http(req);
+  }
+
+  //Checkout
   obj.checkout = (id, person, qty)=>{
     var req = {
       method: 'POST',
@@ -46,7 +152,6 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
         'x-access-token': _token
       },
     }
-    //return $http(req);
 
     var deferred = $q.defer();
     var promise = $http(req);
@@ -71,7 +176,7 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
     return deferred.promise;
     }//end checkout
 
-    //checkin
+    //Checkin
     obj.checkin = (id, person, qty)=>{
       var req = {
         method: 'POST',
@@ -80,7 +185,6 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
           'x-access-token': _token
         }
       }
-      //return $http(req);
 
       var deferred = $q.defer();
       var promise = $http(req);
@@ -105,12 +209,17 @@ app.factory('thingsAPI', ['$http', '$q', function($http, $q){
       return deferred.promise;
     }
 
-    //log out
+    //Request new item
+    obj.request = (qData) => {
+      return $http.post(_urlBase+'a/request', qData);
+    }
+
+    //Log out
     obj.logOut = ()=>{
       _name = 'Guest';
       _admin = false;
       _token = null;
     };
 
-  return obj;//return the object
+  return obj; //Return the object
 }]);

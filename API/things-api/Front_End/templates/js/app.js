@@ -26,6 +26,14 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
           url: "/shoppinglist",
           templateUrl: 'templates/html/shoppinglist.html'
         })
+        .state('additem',{
+          url: "/additem",
+          templateUrl: 'templates/html/additem.html'
+        })
+        .state('viewhistory',{
+          url: "/viewhistory",
+          templateUrl: 'templates/html/viewhistory.html'
+        })
         .state('checkin', {
           url: "/checkin",
 
@@ -40,6 +48,7 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
      'https://things.cs.pdx.edu:3000/**'
    ]);
 });
+
 
 app.run(function ($httpBackend) {
     var inventory = [{name: 'Pop Tarts', description: 'Yummy', quantity: '5'}, {name: 'Kool-Aid', description: 'Oh Yeah', quantity: '10'}, {name: 'Printer Ink', description: 'Ink for printer', quantity: '30'}];
@@ -74,7 +83,12 @@ app.run(function ($httpBackend) {
 
     $httpBackend.whenGET('templates/html/checkIn.html').passThrough();
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
+
+    $httpBackend.whenGET('templates/html/viewhistory.html').passThrough();
+    $httpBackend.whenGET('templates/html/additem.html').passThrough();
+
     $httpBackend.whenGET("http://localhost:3000/view").passThrough();
+
     $httpBackend.whenJSONP(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
     $httpBackend.whenGET(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
     $httpBackend.whenPOST(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
