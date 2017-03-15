@@ -1,7 +1,7 @@
 /*global angular*/
 //var app = angular.module("catthings_app");
 var app = angular.module("catthings_app",
-  ['datatables', 'ui.bootstrap', 'ngMockE2E', 'ui.router', 'navbarapp', 'chart.js']);
+  ['datatables', 'ui.bootstrap' , 'datatables.buttons', 'ngMockE2E', 'ui.router', 'navbarapp', 'chart.js']);
 //UI Router Config
 app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
 

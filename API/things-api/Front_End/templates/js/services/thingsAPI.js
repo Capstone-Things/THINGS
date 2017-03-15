@@ -37,6 +37,7 @@ app.factory('thingsAPI', ['$http', '$q', function ($http, $q) {
         return $http.get(_urlBase + 'view');
     }
 
+    //get Statistic
     obj.getStatistic = (name) => {
         var req = {
             method: 'GET',
@@ -48,6 +49,17 @@ app.factory('thingsAPI', ['$http', '$q', function ($http, $q) {
         return $http(req);
     }
 
+    //get ShoppingList
+    obj.getShoppingList = () => {
+        var req = {
+            method: 'GET',
+            url: `${_urlBase}a/admin/shoppinglist`,
+            headers: {
+                'x-access-token': _token
+            }
+        }
+        return $http(req);
+    }
 
     //checkout
     obj.checkout = (id, person, qty) => {
