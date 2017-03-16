@@ -15,14 +15,16 @@ module.exports = (req, res) => {
   //then return the results to the user
   var itemID = null;
   var values = '';
-  var query = '';
+  //var query = '';
   //parse the tags
   console.log(req.params.tags);
   var tags = req.params.tags.split(',')
   console.log(tags);
 
   //make initial item insert
-  query += `INSERT INTO all_items(item_name, description, price, threshold) VALUES (${req.params.name}, ${req.params.desc}, ${req.params.price}, ${req.params.thresh}); `
+  //query += 'INSERT INTO all_items(item_name, description, price, threshold) VALUES (${req.params.name}, ${req.params.desc}, ${req.params.price}, ${req.params.thresh});'
+
+
   //submit transaction to bring qty to initial value.
   //query += `INSERT INTO transactions(item_id, person, qty_changed) SELECT MAX(item_id), ${req.params.user}, ${req.params.qty} FROM all_items; `
   //add tags to item.
@@ -35,7 +37,7 @@ module.exports = (req, res) => {
         if(err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query(query, function(err, result) {
+        client.query('INSERT INTO all_items(item_name, description, price, threshold) VALUES ($1, $2, $3, $4)', [req.params.name, req.params.desc, req.params.price, req.params.thresh], function(err, result) {
             //call `done()` to release the client back to the pool
             done();
             console.log(result);
