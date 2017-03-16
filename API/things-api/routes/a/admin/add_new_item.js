@@ -15,23 +15,36 @@ module.exports = (req, res) => {
   //then return the results to the user
   var itemID = null;
   var values = '';
+  var query = '';
   //parse the tags
   console.log(req.params.tags);
   var tags = req.params.tags.split(',')
   console.log(tags);
 
+  //make initial item insert
+  query += `INSERT INTO all_items(item_name, description, price, threshold) VALUES (${req.params.name}, ${req.params.desc}, ${req.params.price}, ${req.params.thresh}); `
+  //submit transaction to bring qty to initial value.
+  //query += `INSERT INTO transactions(item_id, person, qty_changed) SELECT MAX(item_id), ${req.params.user}, ${req.params.qty} FROM all_items; `
+  //add tags to item.
+  for(i=0; i<tags.length; i++){
+    //build up the string of tags to insert
+  //  query += `INSERT INTO tags (tag_name, item_id) SELECT ${tags[i]}, MAX(itemID) FROM all_items; `
+
+  }// END FOR
       res.app.locals.pool.connect(function(err, client, done) {
         if(err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query('INSERT INTO items(item_name, description, price, threshold) VALUES ($1, $2, $3, $4)',
-        [req.params.name, req.params.desc, req.params.price, req.params.thresh], function(err, result) {
+        client.query(query, function(err, result) {
             //call `done()` to release the client back to the pool
+            done();
             console.log(result);
-            console.log(result.rows[0]);
-          //  res.app.locals.helpers.errResultHandler(err, 'Item Added Successfully', res);
+            console.log(result);
+            res.app.locals.helpers.errResultHandler(err, 'Item Added Successfully', res);
         });
-
+      });
+};
+/*
         //figure out the item id of our newly inserted item
         client.query('SELECT max(item_id) FROM all_items',[], function(err, result) {
            console.log(result.rows[0]);
@@ -40,7 +53,7 @@ module.exports = (req, res) => {
 
            for(i=0; i<tags.length; i++){
              //build up the string of tags to insert
-             values += `INSERT INTO tags (tag_name, item_id) VALUES ("${tags[i]}", "${itemID}"); `
+             values += `INSERT INTO tags (tag_name, item_id) VALUES ${tags[i]}SELECT MAX(itemID); `
            }// END FOR
            console.log(values);
         });
@@ -94,10 +107,6 @@ module.exports = (req, res) => {
            res.app.locals.helpers.errResultHandler(null, 'Transaction Completed Successfully', res);
        }
    });
-
+*/
     //return the client to the pool;
-    });
     //submit initial qty insert
-
-
-};
