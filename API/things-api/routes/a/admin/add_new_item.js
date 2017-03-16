@@ -26,11 +26,11 @@ module.exports = (req, res) => {
 
 
   //submit transaction to bring qty to initial value.
-  //query += `INSERT INTO transactions(item_id, person, qty_changed) SELECT MAX(item_id), ${req.params.user}, ${req.params.qty} FROM all_items; `
+  query += `INSERT INTO transactions(item_id, person, qty_changed) SELECT MAX(item_id), '${req.params.user}', ${req.params.qty} FROM all_items; `
   //add tags to item.
   for(i=0; i<tags.length; i++){
     //build up the string of tags to insert
-  //  query += `INSERT INTO tags (tag_name, item_id) SELECT ${tags[i]}, MAX(itemID) FROM all_items; `
+    query += `INSERT INTO tags (tag_name, item_id) SELECT '${tags[i]}', MAX(itemID) FROM all_items; `
 
   }// END FOR
 
