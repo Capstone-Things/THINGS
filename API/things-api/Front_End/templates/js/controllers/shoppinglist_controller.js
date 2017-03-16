@@ -1,10 +1,20 @@
 var app = angular.module("catthings_app");
 //=============Shopping List Controller=================
-app.controller('ShoppingListController', ['$scope', '$http', ShoppingListController]);
-function ShoppingListController($scope, $http) {
-  //Get latest inventory data from database
-  $http.get("https://things.cs.pdx.edu:3000/shoppinglist")
-  .success(function (data) {
-      $scope.shoppingList = data;
+app.controller('ShoppingListController', ['$scope', '$http', 'thingsAPI', 'DTOptionsBuilder' , ShoppingListController]);
+function ShoppingListController($scope, $http, thingsAPI, DTOptionsBuilder) {
+
+
+    $scope.dtOptions = new DTOptionsBuilder.newOptions()
+                        .withDOM('rtp')
+                        .withDisplayLength("50")
+                        .withButtons(['print']);
+
+    //Get latest inventory data from database
+  thingsAPI.getShoppingList().then(function (response) {
+      $scope.shoppingList = response.data;
+
+  }, function (err) {
+
+      console.log(err.data);
   });
 }

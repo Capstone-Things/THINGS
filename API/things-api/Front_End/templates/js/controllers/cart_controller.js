@@ -4,9 +4,15 @@ var app = angular.module("catthings_app");
 app.controller('CartController', ['$scope', '$http',  '$location', '$rootScope', 'cartList', 'DTOptionsBuilder', 'DTColumnDefBuilder', 'thingsAPI', 'inventoryList', '$q', '$window', CartController]);
 function CartController($scope, $http,  $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, inventoryList, $q, $window){
 
+
   //Initialization purposes
   $scope.cart = [];
-  $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('sDom', 'rtip');
+  $scope.dtOptions = {
+     paging: false,
+     searching: false,
+     info: false
+  };
+
   $scope.emptyNameError = true;
 
   function check(){
@@ -19,7 +25,6 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
       $scope.cartEmpty = false;
     }
   }
-  check()
 
   //Broadcast for when items are added to Cart
   $scope.$on("CartAdd", function(event, newCart){
@@ -53,19 +58,6 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
 
   //Check Quantity
   $scope.checkQuantity = function(){
-    if(angular.isUndefined($scope.userName)){
-      $scope.emptyNameError = true;
-      return true;
-    }
-    else{
-      if($scope.userName.length == 0){
-        $scope.emptyNameError = true;
-        return true;
-      }
-      else{
-        $scope.emptyNameError = false;
-      }
-    }
     for(var i = 0; i < $scope.cart.length; i++){
       if($scope.cart[i].selectedQuantity == null){ //Not all items have selected quantities
         return true;

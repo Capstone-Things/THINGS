@@ -1,7 +1,7 @@
 /*global angular*/
 //var app = angular.module("catthings_app");
 var app = angular.module("catthings_app",
-  ['datatables','ui.bootstrap', 'ngMockE2E', 'ui.router', 'navbarapp']);
+  ['datatables', 'ui.bootstrap' , 'datatables.buttons', 'ngMockE2E', 'ui.router', 'navbarapp', 'chart.js']);
 //UI Router Config
 app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
 
@@ -39,9 +39,9 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
 
           templateUrl: 'templates/html/checkIn.html'
         })
-        .state('admin',{
-          url: "/admin",
-          templateUrl: 'templates/html/admin.html'
+        .state('statistic',{
+          url: "/statistic",
+          templateUrl: 'templates/html/statistic.html'
         });
    $sceDelegateProvider.resourceUrlWhitelist([
      'self',
@@ -79,7 +79,7 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/shoppinglist.html').passThrough();
 
     $httpBackend.whenGET('templates/html/bootstrapNavbar.html').passThrough();
-    $httpBackend.whenGET('templates/html/admin.html').passThrough();
+    $httpBackend.whenGET('templates/html/statistic.html').passThrough();
 
     $httpBackend.whenGET('templates/html/checkIn.html').passThrough();
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
