@@ -13,16 +13,11 @@
       <ul class="nav navbar-nav">
         <li ng-class="{ active: isActive('/home')}"><a href="#home">Checkout</a></li>
         <li ng-class="{ active: isActive('/request')}"><a href="#request">Request</a></li>
-<<<<<<< HEAD
+
         <li ng-class="{ active: isActive('/shoppinglist')}" ng-show="credential.isAdmin"><a href="#shoppinglist">Shopping List</a></li>
         <li ng-class="{ active: isActive('/checkin')}" ng-show="credential.isAdmin"><a href="#checkin">Check In</a></li>
         <li ng-class="{ active: isActive('/statistic')}" ng-show="credential.isAdmin"><a href="#statistic">Statistics</a></li>
-=======
-        <li ng-class="{ active: isActive('/shoppinglist')}"><a href="#shoppinglist">Shopping List</a></li>
-        <li ng-class="{ active: isActive('/checkin')}"><a href="#checkin">Check In</a></li>
-        <li ng-class="{ active: isActive('/additem')}"><a href="#additem">Add Item</a></li>
-        <li ng-class="{ active: isActive('/viewhistory')}"><a href="#viewhistory">View History</a></li>
->>>>>>> refs/remotes/origin/master
+        <li ng-class="{ active: isActive('/viewhistory')}" ng-show="credential.isAdmin"><a href="#viewhistory">View History</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <!--<li><a> Welcome | {{ credential.isAdmin }}</a></li> -->
