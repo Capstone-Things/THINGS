@@ -7,3 +7,4 @@
 *.key
 *.csr
 *.crt
+*email_auth.js

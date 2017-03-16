@@ -22,7 +22,7 @@ module.exports = (req, res) => {
   console.log(tags);
 
   //make initial item insert
-  //query += 'INSERT INTO all_items(item_name, description, price, threshold) VALUES (${req.params.name}, ${req.params.desc}, ${req.params.price}, ${req.params.thresh});'
+  query += `INSERT INTO all_items(item_name, description, price, threshold) VALUES ('${req.params.name}', '${req.params.desc}', ${req.params.price}, ${req.params.thresh}); `
 
 
   //submit transaction to bring qty to initial value.
@@ -33,19 +33,23 @@ module.exports = (req, res) => {
   //  query += `INSERT INTO tags (tag_name, item_id) SELECT ${tags[i]}, MAX(itemID) FROM all_items; `
 
   }// END FOR
+
+  console.log(query);//DEV OUTPUT
+
+      //checkout a client from the pool
       res.app.locals.pool.connect(function(err, client, done) {
         if(err) {
             return console.error('error fetching client from pool', err);
         }
-        client.query('INSERT INTO all_items(item_name, description, price, threshold) VALUES ($1, $2, $3, $4)', [req.params.name, req.params.desc, req.params.price, req.params.thresh], function(err, result) {
+        //submit the query to the Database
+        client.query(query, function(err, result) {
             //call `done()` to release the client back to the pool
             done();
-            console.log(result);
-            console.log(result);
+            console.log(result);//DEV OUTPUT
             res.app.locals.helpers.errResultHandler(err, 'Item Added Successfully', res);
-        });
-      });
-};
+        }); // END QUERY
+      }); // END CONNECT
+}; //END MODULE
 /*
         //figure out the item id of our newly inserted item
         client.query('SELECT max(item_id) FROM all_items',[], function(err, result) {
