@@ -53,33 +53,7 @@ module.exports = {
   },
 
 
-/****************************************************
-  * /func name  Email Initialization
-  * /params     :err - the error that occured, null if none
-  *             :result - the result of the database query
-                        (either the rows returned or success message)
-                :res - the function to handle the responding the result
-  *
-  * /brief      Initializes email information such as sender, receiver, subject, etc. 
-  *
-  * /author     Susmita Awasthi
-  * /date       3/5/2017
-  ****************************************************/
-/*
- var: mailOptions = {
 
-   from: res.app.locals.mailopt.mail.from,
-   to: res.app.locals.mailopt.mail.to,
-    //from: '"Susmita Awasthi" <susmita.awasthi@gmail.com>', // sender address
-    //to: 'Susmita PSU, <susmita@pdx.edu>', // list of receivers
-    subject: 'CATTHINGS Notice: Item Below Threshold', // Subject line
-    text: "", // plain text body
-    html: '<b></b>' // html body
-},
-*/
-
-//app.locals.mailOptions.subject = 'CATTHINGS Notice: Item Below Threshold'; // Subject line
-//app.locals.mailOptions.text = "";
 
   /****************************************************
   * /func name  transaction
@@ -145,10 +119,11 @@ module.exports = {
     else {
       if((result.rows[0].quantity - qty) <= result.rows[0].threshold) { //send email to administrator
         console.log("Sending email to administrator: ");
-        app.locals.mailOptions.subject = 'CATTHINGS Notice: Item Below Threshold'; // Subject line
-        app.locals.mailOptions.text = "";
 
-        app.locals.mailOptions.html =  app.locals.mailOptions.html 
+        res.app.locals.mailOptions.subject = 'CATTHINGS Notice: Item Below Threshold'; // Subject line
+        res.app.locals.mailOptions.text = "";
+
+        res.app.locals.mailOptions.html =  res.app.locals.mailOptions.html 
         + "This is to inform you that the following item is at or below its threshold level in the THINGS inventory. "
         + "The details of the item are: " + "<br>" + "<br>" 
         + "Item ID: " + result.rows[0].item_id + "<br>"
@@ -158,7 +133,7 @@ module.exports = {
         + "Thank you, " + "<br>" + "<br>" + "<br>" 
         + "    CATTHINGS";
 
-        res.app.locals.smtpTransport.sendMail(mailOptions, function(error, response){
+        res.app.locals.smtpTransport.sendMail(res.app.locals.mailOptions, function(error, response){
         if(error){
           console.log(error);
           res.end("error");

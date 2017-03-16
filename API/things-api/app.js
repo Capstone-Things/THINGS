@@ -42,16 +42,13 @@ let mailOptions = {
   to: mailopt.mail.to,
   subject: '',
   text: '',
-  html: '<b></b>'
-  //from: '"CAT-Things-User" <catthingsuser@yahoo.com>', // sender address
-  //to: 'catthingsuser@yahoo.com', // list of receivers
-  //subject: 'New Inventory Request from a User', // Subject line
-  //text: 'A user has requested ' + num + ' ' + name + '\n' + 'With the following description: ' + desc + '\n' + 'Additional Information from user: ' + msg
+  html: ''
+  
 };
 
 
 var smtpTransport = nodemailer.createTransport({
-    service: "gmail",
+    service: "yahoo",
     auth: email_auth.auth
 
 });
