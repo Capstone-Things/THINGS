@@ -3,11 +3,12 @@
 * /params   id
 *           person
 *           qty
-* /brief    Route to remove some :qty from inventory
+* /brief    Route to remove some :qty from inventory 
 *
-* /author   Luke
+* /author   Luke and Susmita Awasthi
 ****************************************************/
 module.exports = (req, res) =>{
+
 
   // If the value to checkin is negative
   if (req.params.qty < 0) {
@@ -18,5 +19,10 @@ module.exports = (req, res) =>{
   } else {
     res.app.locals.helpers.transaction(req.params.id, req.params.person, -req.params.qty,
       req.app.locals.helpers.errResultHandler, res);
+
+
+    res.app.locals.helpers.doThresholdCheck(req.params.id, req.params.qty, req.app.locals.helpers.errResultHandler, res);      
+
+    
   }
 };

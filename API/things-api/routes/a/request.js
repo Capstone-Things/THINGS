@@ -1,7 +1,8 @@
+
 //note: nodemailer code comes from samples on https://nodemailer.com/about/
 
-var nodemailer = require('nodemailer');
 var time = require('node-datetime');
+
 
 /****************************************************
 * Path: /request.js
@@ -23,30 +24,22 @@ module.exports = (req, res) => {
   var datetime = time.create();
   var timereq = datetime.format('m/d/Y H:M:S');
 
-// create reusable transporter object using the default SMTP transport
-let transporter = nodemailer.createTransport({
-  service: 'yahoo',
-  auth: {
-      user: 'catthingsuser@yahoo.com',
-      pass: 'testing12345'
-  }
-});
 
 // setup email data with unicode symbols
-let mailOptions = {
-  from: '"CAT-Things-User" <catthingsuser@yahoo.com>', // sender address
-  to: 'catthingsuser@yahoo.com', // list of receivers
-  subject: 'New Inventory Request from a User', // Subject line
-  text: 'A user named ' + person + ' has requested ' + num + ' ' + name + ' which is needed by ' + date + '. This request was sent on ' + timereq + '\n' + 'With the following description: ' + desc + '\n' + 'Additional Information from user: ' + msg + '\n' + 'To contact ' + person + ' send an email to ' + addr + '\n'
-};
+res.app.locals.mailOptions.subject = 'New Inventory Request from a User'; // Subject line
 
-// send mail with defined transport object
-transporter.sendMail(mailOptions, (error, info) => {
-  if (error) {
-      return console.log(error);
-  }
-  console.log('Message %s sent: %s', info.messageId, info.response);
-  res.sendStatus(200);//send 200 response code.
-});
 
+res.app.locals.mailOptions.html =  res.app.locals.mailOptions.html + 'A user named ' + person + ' has requested ' + num + ' ' + name + ' which is needed by ' + date + '. This request was sent on ' + timereq + '\n' + 'With the following description: ' + desc + '\n' + 'Additional Information from user: ' + msg + '\n' + 'To contact ' + person + ' send an email to ' + addr + '\n';
+
+
+res.app.locals.smtpTransport.sendMail(res.app.locals.mailOptions, function(error, response){
+        if(error){
+          console.log(error);
+          res.end("error");
+        }
+        else{
+          console.log("Message sent: " + response.message);
+          res.end("sent");
+        }
+      });
 };
