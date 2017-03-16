@@ -7,6 +7,7 @@ var fs = require('fs');
 const routes = require('express').Router();
 const admin = require('./admin');
 const checkout = require('./checkout');
+const request = require('./request');
 
 //authorization middleware to verify user has a valid token
 const credential_check = function(req, res, next) {
@@ -49,6 +50,7 @@ routes.use('/admin', admin);
 
 //add route handelers for this directorys routes here:
 routes.post('/checkout/:id/:person/:qty', checkout);
+routes.post('/request', request)
 
 //this is an inline route handler...
 //this is where you land if you goto GET https://localhost:3000/a/

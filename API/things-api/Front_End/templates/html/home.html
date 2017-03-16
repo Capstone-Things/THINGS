@@ -37,7 +37,7 @@
                                     </thead>
                                     <tbody>
                                         <tr ng-repeat="item in inventory | orderBy: 'name'">
-                                            <td><button type="button" ng-click="addToCart(item)">Add</button></td>
+                                            <td><button type="button" class="btn btn-outline-primary" ng-click="addToCart(item)" data-ng-disabled="item.quantity < 1">Add</button></td>
                                             <td>{{ item.name }}</td>
                                             <td>{{ item.description }}</td>
                                             <td>{{ item.quantity }}</td>
@@ -59,12 +59,9 @@
 
                             <form role="form" class="form-horizontal form-groups-bordered">
                                 <div class="form-group">
-                                    <label for="field-1" class="col-sm-3 control-label">Name</label>
-                                    <div class="col-sm-5">
-                                        <input type="text" size="55" ng-model="userName" ng-required="true" ng-change="checkName()" />
-                                    </div>
-                                    <div class="emptyName" ng-show="emptyNameError">
-                                        <b>Name is required!</b>
+                                    <div align="center">
+                                        <label for="field-1" class="control-label">Name </label>
+                                        <input type="text" size="55" ng-model="userName" ng-required="true" placeholder="Default User"  />
                                     </div>
                                 </div>
                             </form>

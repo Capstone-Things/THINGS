@@ -25,7 +25,6 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
       $scope.cartEmpty = false;
     }
   }
-  check()
 
   //Broadcast for when items are added to Cart
   $scope.$on("CartAdd", function(event, newCart){
@@ -59,19 +58,6 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
 
   //Check Quantity
   $scope.checkQuantity = function(){
-    if(angular.isUndefined($scope.userName)){
-      $scope.emptyNameError = true;
-      return true;
-    }
-    else{
-      if($scope.userName.length == 0){
-        $scope.emptyNameError = true;
-        return true;
-      }
-      else{
-        $scope.emptyNameError = false;
-      }
-    }
     for(var i = 0; i < $scope.cart.length; i++){
       if($scope.cart[i].selectedQuantity == null){ //Not all items have selected quantities
         return true;
