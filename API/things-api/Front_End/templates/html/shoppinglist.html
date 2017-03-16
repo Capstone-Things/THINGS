@@ -1,42 +1,52 @@
-<html lang="en">
+﻿<html lang="en">
   <head>
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="templates/css/home.css" />
+      <meta charset="utf-8">
+      <title>CAT THINGS</title>
   </head>
 
   <body>
-    <!-- Navigation Bar-->
-    <bootstrap-navbar></bootstrap-navbar>
-    
-    <!--Inventory Table -->
-    <div class="container" ng-app="catthings_app" align="center" ng-controller="ShoppingListController">
-      <table datatable="ng" class="row-border hover">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Quantity</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="item in shoppingList">
-            <td>{{ item.name }}</td>
-            <td>{{ item.description }}</td>
-            <td>{{ item.quantity }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!--Cart Table -->
+      <div class="wrapper">
+          <!-- Navigation Bar-->
+          <bootstrap-navbar></bootstrap-navbar>
 
 
-    <!--Footer
-    <div class="footer-bottom-area container row col-md-8">
-      <div class="copyright">
-          <p>&copy; Computer Action Team. All Rights Reserved. </p>
+          <div class="page-wrapper">
+              <div class="page-inner">
+                  <div class="row" style="margin-left: 15px;">
+                      <div class="col-md-12">
+                          <h2>Shopping List</h2>
+                          <h5>View all items that are below threshold</h5>
+                      </div>
+                  </div>
+                  <hr>
+                  <!--Inventory Table -->
+                  <div class="container" ng-app="catthings_app" align="center" ng-controller="ShoppingListController">
+
+                      <div class="panel panel-default">
+                          <div class="panel-heading">Shopping List Table</div>
+                          <div class="panel-body">
+                              <table datatable="ng" dt-options="dtOptions" class="table table-bordered" id="inventoryTable">
+                                  <thead>
+                                      <tr>
+                                          <th>Name</th>
+                                          <th>Description</th>
+                                          <th>Quantity</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr ng-repeat="item in shoppingList">
+                                          <td>{{ item.name }}</td>
+                                          <td>{{ item.description }}</td>
+                                          <td>{{ item.quantity }}</td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
       </div>
-    </div>
-    -->
   </body>
 </html>

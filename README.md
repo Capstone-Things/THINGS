@@ -1,4 +1,4 @@
-# Cat Things
+﻿# Cat Things
  Cat things is a lightweight inventory control system developed for the CAT.
  Cat things will keep track of inventory levels, track usage trends,
  create shopping lists, and send alerts on low inventory.
@@ -52,7 +52,28 @@
         an online random number generator and copy pasted in.
         this link will give you a random 256 bytes, just copy it into the file.
         https://www.random.org/cgi-bin/randbyte?nbytes=256&format=h
-8. Launch the server from the things-api directory with
+8. Create a new file in API/things-api/conf/mailopt.js.
+9. Add the following lines  
+
+       ```javascript
+       exports.mail = {  
+       	from: '"name" <email-address>', // sender address
+  	to: 'destination' // list of receivers
+       };  
+
+   Where name is the name of the sender, email-address is their e-mail, and destination
+   is the address to send the e-mail to.
+10. Create another new file in API/things-api/conf/email_auth.js.
+11. Add the following lines  
+
+       ```javascript
+       exports.auth = {  
+       	user: "sender",
+  	pass: "pw"
+       };  
+   Where sender is the e-mail address used to send e-mails about requests and
+   inventory updates, and pw is the password to the account.
+12. Launch the server from the things-api directory with
 
        ```bash
        npm start
@@ -96,6 +117,3 @@ Your Pages site will use the layout and styles from the Jekyll theme you have se
 ### Support or Contact
 
 Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
-
-
-### Luke was here.

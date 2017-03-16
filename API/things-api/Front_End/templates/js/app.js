@@ -1,7 +1,7 @@
 /*global angular*/
 //var app = angular.module("catthings_app");
 var app = angular.module("catthings_app",
-  ['datatables','ui.bootstrap', 'ngMockE2E', 'ui.router', 'navbarapp']);
+  ['datatables', 'ui.bootstrap' , 'datatables.buttons', 'ngMockE2E', 'ui.router', 'navbarapp', 'chart.js']);
 //UI Router Config
 app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
 
@@ -26,20 +26,29 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
           url: "/shoppinglist",
           templateUrl: 'templates/html/shoppinglist.html'
         })
+        .state('additem',{
+          url: "/additem",
+          templateUrl: 'templates/html/additem.html'
+        })
+        .state('viewhistory',{
+          url: "/viewhistory",
+          templateUrl: 'templates/html/viewhistory.html'
+        })
         .state('checkin', {
           url: "/checkin",
 
           templateUrl: 'templates/html/checkIn.html'
         })
-        .state('admin',{
-          url: "/admin",
-          templateUrl: 'templates/html/admin.html'
+        .state('statistic',{
+          url: "/statistic",
+          templateUrl: 'templates/html/statistic.html'
         });
    $sceDelegateProvider.resourceUrlWhitelist([
      'self',
      'https://things.cs.pdx.edu:3000/**'
    ]);
 });
+
 
 app.run(function ($httpBackend) {
     var inventory = [{name: 'Pop Tarts', description: 'Yummy', quantity: '5'}, {name: 'Kool-Aid', description: 'Oh Yeah', quantity: '10'}, {name: 'Printer Ink', description: 'Ink for printer', quantity: '30'}];
@@ -70,11 +79,16 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET('templates/html/shoppinglist.html').passThrough();
 
     $httpBackend.whenGET('templates/html/bootstrapNavbar.html').passThrough();
-    $httpBackend.whenGET('templates/html/admin.html').passThrough();
+    $httpBackend.whenGET('templates/html/statistic.html').passThrough();
 
     $httpBackend.whenGET('templates/html/checkIn.html').passThrough();
     $httpBackend.whenGET('templates/html/promptQuantity.html').passThrough();
+
+    $httpBackend.whenGET('templates/html/viewhistory.html').passThrough();
+    $httpBackend.whenGET('templates/html/additem.html').passThrough();
+
     $httpBackend.whenGET("http://localhost:3000/view").passThrough();
+
     $httpBackend.whenJSONP(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
     $httpBackend.whenGET(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
     $httpBackend.whenPOST(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
