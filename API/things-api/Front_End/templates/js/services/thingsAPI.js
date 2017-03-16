@@ -41,7 +41,7 @@ app.factory('thingsAPI', ['$http', '$q', function ($http, $q) {
     obj.getShoppingList = () => {
         var req = {
             method: 'GET',
-            url: `${_urlBase}a/admin/shoppinglist`,
+            url: `${_urlBase}a/admin/shopping_list`,
             headers: {
                 'x-access-token': _token
             }

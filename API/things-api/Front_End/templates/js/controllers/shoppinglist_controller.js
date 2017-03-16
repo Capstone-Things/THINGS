@@ -10,7 +10,7 @@ function ShoppingListController($scope, $http, thingsAPI, DTOptionsBuilder) {
                         .withButtons(['print']);
 
     //Get latest inventory data from database
-  thingsAPI.getView().then(function (response) {
+  thingsAPI.getShoppingList().then(function (response) {
       $scope.shoppingList = response.data;
 
   }, function (err) {
