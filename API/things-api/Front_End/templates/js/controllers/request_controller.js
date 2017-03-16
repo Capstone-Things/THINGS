@@ -2,19 +2,20 @@ var app = angular.module("catthings_app");
 
 
 //Request Controller
-app.controller('RequestController', ['$scope', '$http', '$location', RequestController]);
-function RequestController($scope, $http, $location){
+app.controller('RequestController', ['$scope', '$http', '$location', '$window', 'thingsAPI', RequestController]);
+function RequestController($scope, $http, $location, $window, thingsAPI){
   $scope.question = {};
 
   //sendRequest
   $scope.sendRequest = function() {
     var qData = $scope.question;
-    $http.post('https://localhost:3000/request', qData).then(function(response){
-      console.log(response.status);
+    thingsAPI.request(qData).then(function(response){
       if(response.status === 200){
-              $location.path("home");
+        $window.alert("Request submitted succesfully");
       }
-      //Else 404 error....
+      else{
+        $window.alert("Unable to submit request. Please try again or contact an administrator");
+      }
     });
-  }
+  };
 }

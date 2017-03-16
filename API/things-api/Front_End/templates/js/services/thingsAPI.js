@@ -3,114 +3,241 @@ var app = angular.module('catthings_app');
 
 //This Factory will act as a global doorway to the THIGNS API, all controllers
 //will have access to this service.
-app.factory('thingsAPI', ['$http', '$q', function($http, $q){
-//private Variables
-  var _admin = false;
-  var _token = null;
-  var _user = 'Guest';
+app.factory('thingsAPI', ['$http', '$q', function ($http, $q) {
+    //private Variables
+    var _admin = false;
+    var _token = null;
+    var _user = 'Guest';
 
-  //For local dev mode comment out the first line and uncomment the second...
-  var _urlBase = 'https://things.cs.pdx.edu:3000/api/';
-  //var _urlBase = 'https://localhost:3000/api/';
+    //For local dev mode comment out the first line and uncomment the second...
+    var _urlBase = 'https://things.cs.pdx.edu:3000/api/';
+    //var _urlBase = 'https://localhost:3000/api/';
 
 
-  var obj = {}; //this is the object that will be handed to our controller.
-//Methods
+    var obj = {}; //this is the object that will be handed to our controller.
+    //Methods
 
-  //Getters
-  obj.getUserName = ()=>{return _user;}
-  obj.getBaseURL = () =>{return _urlBase;}
-  obj.getAdmin = ()=>{return _admin;}
+    //Getters
+    obj.getUserName = () => { return _user; }
+    obj.getBaseURL = () => { return _urlBase; }
+    obj.getAdmin = () => { return _admin; }
 
-  //Setters
-  obj.setToken = (token)=>{_token=token};
-  obj.setUserName = (user)=>{_user=user};
-  obj.setAdmin = (admin)=>{_admin=admin};
+    //Setters
+    obj.setToken = (token) => { _token = token };
+    obj.setUserName = (user) => { _user = user };
+    obj.setAdmin = (admin) => { _admin = admin };
 
-  //route calls
-  obj.authenticate=(loginData)=>{
-    return $http.post(_urlBase+'authenticate', loginData);
-  }
-
-  //get view
-  obj.getView = ()=>{
-    return $http.get(_urlBase+'view');
-  }
-
-  //checkout
-  obj.checkout = (id, person, qty)=>{
-    var req = {
-      method: 'POST',
-      url: `${_urlBase}a/checkout/${id}/${person}/${qty}`,
-      headers: {
-        'x-access-token': _token
-      },
+    //Route calls
+    obj.authenticate = (loginData) => {
+        return $http.post(_urlBase + 'authenticate', loginData);
     }
-    //return $http(req);
 
-    var deferred = $q.defer();
-    var promise = $http(req);
-    promise.success(function(){
-      deferred.resolve({
-        success: true,
-        item_id: id,
-        name: person,
-        quantity: qty
-      });
-    });
-    promise.error(function(err, stat){
-      deferred.resolve({
-        success: false,
-        item_id: id,
-        name: person,
-        quantity: qty,
-        error: err,
-        status: stat
-      });
-    });
-    return deferred.promise;
+    //Get view
+    obj.getView = () => {
+        return $http.get(_urlBase + 'view');
+    }
+
+    //get ShoppingList
+    obj.getShoppingList = () => {
+        var req = {
+            method: 'GET',
+            url: `${_urlBase}a/admin/shopping_list`,
+            headers: {
+                'x-access-token': _token
+            }
+        }
+        return $http(req);
+    }
+    
+    //get Statistic
+    obj.getStatistic = (name) => {
+        var req = {
+            method: 'GET',
+            url: `${_urlBase}a/admin/stats/avgperday/${name}`,
+            headers: {
+                'x-access-token': _token
+            }
+        }
+        return $http(req);
+    }
+
+
+    //Add new item
+    obj.add = (name, desc, price, thresh) => {
+        var req = {
+            method: 'POST',
+            url: `${_urlBase}a/admin/add/${name}/${desc}/${price}/${thresh}`,
+            headers: {
+                'x-access-token': _token
+            }
+        }
+        return $http(req);
+    }
+
+    //Get recent transaction based on input number
+    obj.getItemHistory = (num, item) => {
+        if (num >= 1) {
+            var req = {
+                method: 'GET',
+                url: `${_urlBase}a/admin/history/by_item/${item}/${num}`,
+                headers: {
+                    'x-access-token': _token
+                },
+            }
+            return $http(req);
+        }
+        else {
+            num = 0;
+            var req = {
+                method: 'GET',
+                url: `${_urlBase}a/admin/history/by_item/${item}/${num}`,
+                headers: {
+                    'x-access-token': _token
+                },
+            }
+            return $http(req);
+        }
+    }
+
+    //Get recent transaction based on tag and input number
+    obj.getTagHistory = (num, tag) => {
+        if (num >= 1) {
+            var req = {
+                method: 'GET',
+                url: `${_urlBase}a/admin/history/by_tag/${tag}/${num}`,
+                headers: {
+                    'x-access-token': _token
+                },
+            }
+            return $http(req);
+        }
+        else {
+            num = 0;
+            var req = {
+                method: 'GET',
+                url: `${_urlBase}a/admin/history/by_tag/${tag}/${num}`,
+                headers: {
+                    'x-access-token': _token
+                },
+            }
+            return $http(req);
+        }
+    }
+
+    //Get recent transaction based on input number
+    obj.getRecent = (num) => {
+        if (num >= 1) {
+            var req = {
+                method: 'GET',
+                url: `${_urlBase}a/admin/history/recent/${num}`,
+                headers: {
+                    'x-access-token': _token
+                },
+            }
+            return $http(req);
+        }
+        else {
+            num = 0;
+            var req = {
+                method: 'GET',
+                url: `${_urlBase}a/admin/history/recent/${num}`,
+                headers: {
+                    'x-access-token': _token
+                },
+            }
+            return $http(req);
+        }
+    }
+
+    //Get range of transactions based on start and end date
+    obj.getDateHistory = (start, end) => {
+        var req = {
+            method: 'GET',
+            url: `${_urlBase}a/admin/history/by_range/${start}/${end}`,
+            headers: {
+                'x-access-token': _token
+            },
+        }
+        return $http(req);
+    }
+
+    //Checkout
+    obj.checkout = (id, person, qty) => {
+        var req = {
+            method: 'POST',
+            url: `${_urlBase}a/checkout/${id}/${person}/${qty}`,
+            headers: {
+                'x-access-token': _token
+            },
+        }
+
+        var deferred = $q.defer();
+        var promise = $http(req);
+        promise.success(function () {
+            deferred.resolve({
+                success: true,
+                item_id: id,
+                name: person,
+                quantity: qty
+            });
+        });
+        promise.error(function (err, stat) {
+            deferred.resolve({
+                success: false,
+                item_id: id,
+                name: person,
+                quantity: qty,
+                error: err,
+                status: stat
+            });
+        });
+        return deferred.promise;
     }//end checkout
 
-    //checkin
-    obj.checkin = (id, person, qty)=>{
-      var req = {
-        method: 'POST',
-        url: `${_urlBase}a/admin/checkin/${id}/${person}/${qty}`,
-        headers: {
-          'x-access-token': _token
+    //Checkin
+    obj.checkin = (id, person, qty) => {
+        var req = {
+            method: 'POST',
+            url: `${_urlBase}a/admin/checkin/${id}/${person}/${qty}`,
+            headers: {
+                'x-access-token': _token
+            }
         }
-      }
-      //return $http(req);
 
-      var deferred = $q.defer();
-      var promise = $http(req);
-      promise.success(function(){
-        deferred.resolve({
-          success: true,
-          item_id: id,
-          name: person,
-          quantity: qty
+        var deferred = $q.defer();
+        var promise = $http(req);
+        promise.success(function () {
+            deferred.resolve({
+                success: true,
+                item_id: id,
+                name: person,
+                quantity: qty
+            });
         });
-      });
-      promise.error(function(err, stat){
-        deferred.resolve({
-          success: false,
-          item_id: id,
-          name: person,
-          quantity: qty,
-          error: err,
-          status: stat
+        promise.error(function (err, stat) {
+            deferred.resolve({
+                success: false,
+                item_id: id,
+                name: person,
+                quantity: qty,
+                error: err,
+                status: stat
+            });
         });
-      });
-      return deferred.promise;
+        return deferred.promise;
     }
 
-    //log out
-    obj.logOut = ()=>{
-      _name = 'Guest';
-      _admin = false;
-      _token = null;
+    //Request new item
+    obj.request = (qData) => {
+        return $http.post(_urlBase + 'a/request', qData);
+    }
+
+    //Log out
+    obj.logOut = () => {
+        _name = 'Guest';
+        _admin = false;
+        _token = null;
     };
 
-  return obj;//return the object
+    return obj; //Return the object
 }]);

@@ -1,0 +1,72 @@
+﻿<html lang="en">
+<head>
+
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Navigation Bar-->
+        <bootstrap-navbar></bootstrap-navbar>
+
+
+        <div class="page-wrapper">
+            <div class="page-inner">
+                <div class="row" style="margin-left: 15px;">
+                    <div class="col-md-12">
+                        <h2>Statistics</h2>
+                        <h5>View each item statistics below</h5>
+
+                    </div>
+                </div>
+                <hr>
+                <!--Statistics Table -->
+                <div class="container" id="statisticContainer" ng-app="catthings_app" ng-controller="StatisticController">
+                    <div ng-switch on="showGraph">
+                        <div ng-switch-when="false">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Inventory Tables</div>
+                                <div class="panel-body">
+
+                                    <table datatable="ng" id="statisticTable" class="table table-bordered">
+                                        <thead class="thead-inverse">
+                                            <tr>
+                                                <th><b>Name</b></th>
+                                                <th><b>Check Outs Per Day</b></th>
+                                                <th><b>Average Amount consumed by week</b></th>
+                                                <th><b>View Graph</b></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="item in inventory">
+                                                <td>{{ item.name }}</td>
+                                                <td>0</td>
+                                                <td>0</td>
+                                                <td>
+                                                    <a style="color:green; cursor:pointer;"><i class="fa fa-line-chart" ng-click="getStatistic(item.name)"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-switch-when="true">
+                            <row>
+
+                                    <button style="float:left; position:relative; margin-left:10px;"type="submit" class="btn btn-primary" ng-click="goBack()"><i class="fa fa-angle-left"> Back</i></button>
+                                    <center><h1>{{itemName}}</h1></center>
+                            </row>
+                            <div class="container" style="margin-top: 50px; margin-bottom: 100px;">
+                                <canvas id="bar" class="chart chart-bar" chart-data="graphData" chart-labels="labels"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
+
