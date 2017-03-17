@@ -17,22 +17,22 @@ module.exports = (req, res) => {
         if(err) {
             return console.error('error fetching client from pool', err);
         }
- 
-         
-    client.query('SELECT item_id, item_name, quantity, threshold, price FROM all_items order by item_id', [], function(err, resultItems) {
+
+
+    client.query('SELECT item_id, item_name, quantity, threshold, price, description FROM all_items order by item_id', [], function(err, resultItems) {
         //call `done()` to release the client back to the pool
         //done();
-            
+
         if(err) {
             console.log("Item was not received properly", err);
         }
 
-        else { //add tags 
+        else { //add tags
             i=0;
             client.query('SELECT item_id, tag_name FROM tags order by item_id' , [], function(err, resultTags) {
             //call `done()` to release the client back to the pool
             done();
-                      
+
                 if(err) {
                     console.log("Tag name was not received properly", err);
                 }
@@ -46,15 +46,16 @@ module.exports = (req, res) => {
                         for (; j < resultTags.rowCount && resultItems.rows[i].item_id == resultTags.rows[j].item_id ; j++){
                             itemTags.push(resultTags.rows[j].tag_name);
                         }
-                                    
+
                         items.push({item_id: resultItems.rows[i].item_id,
-                                    item_name: resultItems.rows[i].item_name,
+                                    name: resultItems.rows[i].item_name,
+                                    description: resultItems.rows[i].description,
                                     quantity: resultItems.rows[i].quantity,
                                     threshold: resultItems.rows[i].threshold,
                                     price: resultItems.rows[i].price,
                                     tags: itemTags});
                         }
-                    }      
+                    }
 
                     res.app.locals.helpers.errResultHandler(err, items, res);
                 }); /* end of Client query for getting tags*/
@@ -62,4 +63,3 @@ module.exports = (req, res) => {
         }); //End of SELECT first query
     }); //end of pools.connect
 }//end of module
-
