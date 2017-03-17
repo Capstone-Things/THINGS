@@ -23,6 +23,7 @@ var certFile=  fs.readFileSync('./conf/ssl/server.crt'); //ssl cert(self signed)
 //setup command line args
 const optionDefinitions = [
   { name: 'noAuth', type: Boolean },
+
 ];
 const options = argv(optionDefinitions);
 

@@ -93,5 +93,6 @@ app.run(function ($httpBackend) {
     $httpBackend.whenGET(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
     $httpBackend.whenPOST(/https:\/\/things\.cs\.pdx\.edu:3000\/*/).passThrough();
     $httpBackend.whenPOST(/https:\/\/localhost:3000\/*/).passThrough();
+    $httpBackend.whenGET(/https:\/\/localhost:3000\/*/).passThrough();
 
 });

@@ -9,14 +9,15 @@ var app = angular.module("catthings_app");
 app.controller('NewItemController', ['$scope', '$http', '$location', 'thingsAPI', NewItemController]);
 function NewItemController($scope, $http, $location, thingsAPI){
   $scope.addNewItem = function() {
-    thingsAPI.add($scope.itemName, $scope.description, $scope.price, $scope.threshold)
+    //add = (name, qty, desc, price, thresh, tags)
+    thingsAPI.add($scope.itemName, $scope.qty, $scope.description, $scope.price, $scope.threshold, $scope.tags)
     .then(function(response){
       console.log(response);
       console.log(response.status);
       console.log(response.data);
       if(response.status === 200){
-            $location.path("home");
-        }
-      });
-    }
+        $location.path("home");
+      }
+    });
   }
+}
