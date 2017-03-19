@@ -129,8 +129,13 @@ module.exports= {
         client.query('SELECT * FROM transactions AS t LEFT JOIN items AS i ON t.item_id = i.item_id WHERE cast(timestamp as date) <= $2 AND cast(timestamp as date) >= $1',
           [start_date, end_date], function(err, result) {
             done();
-
-            res.app.locals.helpers.errResultHandler(err, result.rows, res);
+            if(err){
+              console.error("Database error on History by timespan", err);
+              res.sendStatus(500);
+            }
+            else{
+              res.app.locals.helpers.errResultHandler(err, result.rows, res);
+            }
         });
     });
   }
