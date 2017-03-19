@@ -119,7 +119,11 @@ module.exports = {
       console.error('Threshold and quantity were not received properly', err);
     }
     else {
-      if((result.rows[0].quantity - qty) <= result.rows[0].threshold) { //send email to administrator
+
+      if(result.rows[0].quantity - qty <0){
+        console.error("Checkout aborted cannot checkout more than available");
+      }
+      else((result.rows[0].quantity - qty) <= result.rows[0].threshold) { //send email to administrator
         console.log("Sending email to administrator: ");
 
         res.app.locals.mailOptions.subject = 'CATTHINGS Notice: Item Below Threshold'; // Subject line
@@ -137,12 +141,12 @@ module.exports = {
 
         res.app.locals.smtpTransport.sendMail(res.app.locals.mailOptions, function(error, response){
         if(error){
-          console.log(error);
-          res.end("error");
+          console.error(error);
+          //res.end("error");
         }
         else{
           console.log("Message sent: " + response.message);
-          res.end("sent");
+          //res.end("sent");
         }
       });
      }
