@@ -14,7 +14,8 @@ module.exports = (req,res) => {
 
       res.app.locals.pool.connect(function(err, client, done) {
         if(err) {
-            return console.error('error fetching client from pool', err);
+            console.error('error fetching client from pool', err);
+            res.sendStatus(500);
         }
         client.query('INSERT INTO tags VALUES ($1, $2)',
                     [req.params.tag, req.params.id], function(err, result) {

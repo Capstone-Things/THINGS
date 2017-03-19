@@ -4,7 +4,15 @@ var app = angular.module("catthings_app");
 //Request Controller
 app.controller('RequestController', ['$scope', '$http', '$location', '$window', 'thingsAPI', RequestController]);
 function RequestController($scope, $http, $location, $window, thingsAPI){
-  $scope.question = {};
+  $scope.question = {
+    itemName: undefined,
+    quantityNeeded: undefined,
+    personName: undefined,
+    email: undefined,
+    date: undefined,
+    description: undefined,
+    message: undefined    
+  };
 
   //sendRequest
   $scope.sendRequest = function() {

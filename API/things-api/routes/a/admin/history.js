@@ -15,7 +15,8 @@ module.exports= {
   recent: (req,res)=>{
     res.app.locals.pool.connect(function(err, client, done) {
         if(err) {
-            return console.error('Error fetching client from pool', err);
+            console.error('Error fetching client from pool', err);
+            res.sendStatus(500);
         }
         var entries = 15
         if(req.params.entries) {
@@ -44,7 +45,8 @@ module.exports= {
   item: (req,res)=>{
     res.app.locals.pool.connect(function(err, client, done) {
         if(err) {
-            return console.error('Error fetching client from pool', err);
+            console.error('Error fetching client from pool', err);
+            res.sendStatus(500);
         }
         var entries = 15
         if(req.params.entries) {
@@ -82,7 +84,8 @@ module.exports= {
   tag: (req,res)=>{
     res.app.locals.pool.connect(function(err, client, done) {
         if(err) {
-            return console.error('Error fetching client from pool', err);
+            console.error('Error fetching client from pool', err);
+            res.sendStatus(500);
         }
         var entries = 15
         if(req.params.entries) {
@@ -115,17 +118,24 @@ module.exports= {
   timespan: (req,res)=>{
     res.app.locals.pool.connect(function(err, client, done) {
         if(err) {
-            return console.error('Error fetching client from pool', err);
+            console.error('Error fetching client from pool', err);
+            res.sendStatus(500);
         }
         //Date validation is a tricky problem I am
         //pretending does not exist for now
         var start_date = req.params.start_date
         var end_date = req.params.end_date
 
-        client.query('SELECT * FROM transactions AS t LEFT JOIN items AS i ON t.item_id = i.item_id WHERE cast(timestamp as date) <= $2 AND cast(timestamp as date) >= $1', [start_date, end_date], function(err, result) {
+        client.query('SELECT * FROM transactions AS t LEFT JOIN items AS i ON t.item_id = i.item_id WHERE cast(timestamp as date) <= $2 AND cast(timestamp as date) >= $1',
+          [start_date, end_date], function(err, result) {
             done();
-
-            res.app.locals.helpers.errResultHandler(err, result.rows, res);
+            if(err){
+              console.error("Database error on History by timespan", err);
+              res.sendStatus(500);
+            }
+            else{
+              res.app.locals.helpers.errResultHandler(err, result.rows, res);
+            }
         });
     });
   }

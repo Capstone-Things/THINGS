@@ -242,7 +242,15 @@ app.factory('thingsAPI', ['$http', '$q', function ($http, $q) {
 
     //Request new item
     obj.request = (qData) => {
-        return $http.post(_urlBase + 'a/request', qData);
+      var req = {
+        method: 'POST',
+        url: `${_urlBase}a/request`,
+        headers: {
+          'x-access-token': _token,
+        },
+        data: qData
+      }
+        return $http(req);
     }
 
     //Log out
