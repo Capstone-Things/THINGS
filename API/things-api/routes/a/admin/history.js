@@ -122,7 +122,7 @@ module.exports= {
         var start_date = req.params.start_date
         var end_date = req.params.end_date
 
-        client.query('SELECT * FROM transactions AS t LEFT JOIN items AS i ON t.item_id = i.item_id WHERE cast(timestamp as date) <= $2 AND cast(timestamp as date) >= $1', [start_date, end_date], function(err, result) {
+        client.query('SELECT * FROM transactions AS t LEFT JOIN items AS i ON t.item_id = i.item_id WHERE date(timestamp) <= $2 AND date(timestamp) >= $1', [start_date, end_date], function(err, result) {
             done();
 
             res.app.locals.helpers.errResultHandler(err, result.rows, res);

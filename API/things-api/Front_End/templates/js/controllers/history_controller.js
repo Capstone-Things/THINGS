@@ -78,7 +78,17 @@ function HistoryController($scope, $http,  $location, thingsAPI) {
 
   //gets a range of transactions between a start and end date
   $scope.getDateHistory = function(){
-      thingsAPI.getDateHistory($scope.startDate, $scope.endDate).then(function(response){
+      //convert dates to strings useable with database times
+      var startD = new Date($scope.startDate);
+      var start = startD.toISOString();
+      start = start.slice(0, 10);
+      var endD = new Date($scope.endDate);
+      var end = endD.toISOString();
+      end = end.slice(0,10);
+
+      console.log(start);
+      console.log(end);
+      thingsAPI.getDateHistory(start, end).then(function(response){
         console.log(response.status);
         console.log(response.data);
         if(response.status === 200){
