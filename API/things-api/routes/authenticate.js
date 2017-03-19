@@ -18,7 +18,8 @@ module.exports = (req, res) => {
   //Look up user in Database
   req.app.locals.pool.connect(function(err, client, done) {
       if(err) {
-          return console.error('error fetching client from pool', err);
+          console.error('error fetching client from pool', err);
+          res.sendStatus(500);
       }
 
        client.query("SELECT * FROM users WHERE username=$1", [username], function(err, result) {
@@ -34,8 +35,9 @@ module.exports = (req, res) => {
           } else {
               var data = result.rows[0];
               if(!data){
+                console.error('invalid username', username);
                 res.sendStatus(401);
-                return console.error('invalid username', username);
+
               }
               //if our user exsits, lets check their password.
               //bcyrpt compare
@@ -46,7 +48,7 @@ module.exports = (req, res) => {
                 }
                 if(!result){
                   //if we are here, the password did not match.
-                  return console.error('invalid password');
+                  console.error('invalid password');
                   res.sendStatus(401);//invalid password
                 }
                 else{

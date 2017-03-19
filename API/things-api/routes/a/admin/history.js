@@ -15,7 +15,8 @@ module.exports= {
   recent: (req,res)=>{
     res.app.locals.pool.connect(function(err, client, done) {
         if(err) {
-            return console.error('Error fetching client from pool', err);
+            console.error('Error fetching client from pool', err);
+            res.sendStatus(500);
         }
         var entries = 15
         if(req.params.entries) {
@@ -44,7 +45,8 @@ module.exports= {
   item: (req,res)=>{
     res.app.locals.pool.connect(function(err, client, done) {
         if(err) {
-            return console.error('Error fetching client from pool', err);
+            console.error('Error fetching client from pool', err);
+            res.sendStatus(500);
         }
         var entries = 15
         if(req.params.entries) {
@@ -82,7 +84,8 @@ module.exports= {
   tag: (req,res)=>{
     res.app.locals.pool.connect(function(err, client, done) {
         if(err) {
-            return console.error('Error fetching client from pool', err);
+            console.error('Error fetching client from pool', err);
+            res.sendStatus(500);
         }
         var entries = 15
         if(req.params.entries) {
@@ -115,7 +118,8 @@ module.exports= {
   timespan: (req,res)=>{
     res.app.locals.pool.connect(function(err, client, done) {
         if(err) {
-            return console.error('Error fetching client from pool', err);
+            console.error('Error fetching client from pool', err);
+            res.sendStatus(500);
         }
         //Date validation is a tricky problem I am
         //pretending does not exist for now

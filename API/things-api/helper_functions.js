@@ -22,7 +22,7 @@ module.exports = {
 
       if (err) {
 
-        res.status(500); 
+        res.status(500);
         res.jsonp('Database Error');
 
 
@@ -42,13 +42,13 @@ module.exports = {
 
         res.status(statusInt);
         res.jsonp(errString);
-        
+
 
       } else {
 
         res.status(200);
         res.jsonp(result);
-        
+
       }
   },
 
@@ -59,13 +59,14 @@ module.exports = {
   * /func name  transaction
   * /brief      Helper function for checkin route
   *
-  * /author     Luke 
+  * /author     Luke
   ****************************************************/
   transaction: function(id, person, qty, retFunc, res) {
 
       res.app.locals.pool.connect(function(err, client, done) {
           if(err) {
-              return console.error('error fetching client from pool', err);
+              console.error('error fetching client from pool', err);
+              res.sendStatus(500);
           }
            client.query('INSERT INTO transactions(item_id, person, qty_changed) VALUES ($1, $2, $3)', [id, person, qty], function(err, result) {
               //call `done()` to release the client back to the pool
@@ -78,17 +79,17 @@ module.exports = {
                   res.status(409);
                   res.jsonp("ERROR: Transaction not completed because it would result in an item with a negative quantity.");
                 } else {
-        
+
                   retFunc(err, null, res);
-                  
+
                 }
               } else {
                   retFunc(null, 'transaction: Transaction Completed Successfully', res);
-                
+
               }
           });
       });
-  
+
 
 },
 
@@ -109,7 +110,8 @@ module.exports = {
 
     res.app.locals.pool.connect(function(err, client, done) {
     if(err) {
-      return console.error('error fetching client from pool', err);
+      console.error('error fetching client from pool', err);
+      res.sendStatus(500);
     }
     client.query('SELECT threshold, quantity, item_name, item_id from items where item_id = $1', [id], function(err, result) {
     done();
@@ -123,14 +125,14 @@ module.exports = {
         res.app.locals.mailOptions.subject = 'CATTHINGS Notice: Item Below Threshold'; // Subject line
         res.app.locals.mailOptions.text = "";
 
-        res.app.locals.mailOptions.html =  res.app.locals.mailOptions.html 
+        res.app.locals.mailOptions.html =  res.app.locals.mailOptions.html
         + "This is to inform you that the following item is at or below its threshold level in the THINGS inventory. "
-        + "The details of the item are: " + "<br>" + "<br>" 
+        + "The details of the item are: " + "<br>" + "<br>"
         + "Item ID: " + result.rows[0].item_id + "<br>"
         + "Item Name: " + result.rows[0].item_name + "<br>"
         + "Item Threshold: " + result.rows[0].threshold + "<br>"
         + "Quantity Remaining: " + (result.rows[0].quantity - qty) + "<br>" + "<br>" + "<br>"
-        + "Thank you, " + "<br>" + "<br>" + "<br>" 
+        + "Thank you, " + "<br>" + "<br>" + "<br>"
         + "    CATTHINGS";
 
         res.app.locals.smtpTransport.sendMail(res.app.locals.mailOptions, function(error, response){

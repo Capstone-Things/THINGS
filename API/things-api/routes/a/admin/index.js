@@ -22,7 +22,7 @@ routes.use(function(req, res, next){
       next();
     }else {
       //this is not an admin account, sorry!
-      return res.status(403).send({
+      res.status(403).send({
           success: false,
           message: 'You do not have the proper credentials to access this page.'
       });

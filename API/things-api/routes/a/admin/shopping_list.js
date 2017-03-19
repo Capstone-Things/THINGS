@@ -11,7 +11,8 @@ module.exports=(req,res) => {
 
       res.app.locals.pool.connect(function(err, client, done) {
         if(err) {
-            return console.error('error fetching client from pool', err);
+            console.error('error fetching client from pool', err);
+            res.sendStatus(500);
         }
         client.query('SELECT item_name AS name, description, price, quantity FROM items WHERE quantity < threshold', [], function(err, result) {
             //call `done()` to release the client back to the pool

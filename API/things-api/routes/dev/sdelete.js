@@ -13,12 +13,14 @@
 module.exports = (req,res)=>{
   res.app.locals.pool.connect(function(err, client, done) {
       if(err) {
-          return console.error('Error fetching client from pool', err);
+          console.error('Error fetching client from pool', err);
+          res.sendStatus(500);
       }
       var id = parseInt(req.params.id)
       if(id != req.params.id) {
           done();
-          return console.error('Invalid item ID', err);
+          console.error('Invalid item ID', err);
+          res.sendStatus(400);
       }
       client.query('DELETE FROM $2 WHERE item_id = $1', [id, req.params.table], function(err, result) {
           done();
