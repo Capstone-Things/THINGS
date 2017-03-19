@@ -46,7 +46,7 @@ module.exports = (req, res) => {
                 }
                 if(!result){
                   //if we are here, the password did not match.
-                  return console.error('invalid password');
+                  console.error('invalid password');
                   res.sendStatus(401);//invalid password
                 }
                 else{
