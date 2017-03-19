@@ -123,7 +123,7 @@ module.exports = {
       if(result.rows[0].quantity - qty <0){
         console.error("Checkout aborted cannot checkout more than available");
       }
-      else((result.rows[0].quantity - qty) <= result.rows[0].threshold) { //send email to administrator
+      else if((result.rows[0].quantity - qty) <= result.rows[0].threshold){ //send email to administrator
         console.log("Sending email to administrator: ");
 
         res.app.locals.mailOptions.subject = 'CATTHINGS Notice: Item Below Threshold'; // Subject line
