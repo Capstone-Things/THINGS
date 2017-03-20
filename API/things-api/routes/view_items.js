@@ -1,3 +1,9 @@
+/*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+
+See LICENSE.txt for full information.
+*/
 module.exports = (req, res) => {
 
     var items = [];
@@ -7,8 +13,6 @@ module.exports = (req, res) => {
   * /path     /view
   * /params   null
   * /brief    Display all entries in the items table
-  *
-  * /author   <insert name>
   ****************************************************/
     //first query the database
     //then return the results to the user

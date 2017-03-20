@@ -1,3 +1,9 @@
+/*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+
+See LICENSE.txt for full information.
+*/
 /****************************************************
 * /route    /secretdelete/:table/:id
 * /params   :table - Table to delete from
@@ -6,9 +12,6 @@
 * /brief    Secret delete function for use during dev
 *           Either never document, or remove prior to
 *           delivery
-*
-* /author     Andrew McCann
-* /date       2/10/2017
 ****************************************************/
 module.exports = (req,res)=>{
   res.app.locals.pool.connect(function(err, client, done) {
