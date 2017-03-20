@@ -24,6 +24,7 @@ app.controller('LoginCheckController', ['$scope', '$location', 'thingsAPI',
                 }
             },
            function (err, response) {
+
                $scope.errorMessage = "Login failed: " + err.data;
                console.log(`AUTHENTICATE ERROR: ${err}, RESPONSE: ${response}`)
            }

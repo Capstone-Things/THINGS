@@ -61,7 +61,7 @@ function HistoryController($scope, $http,  $location, thingsAPI) {
 
   //gets the last 15 transactions to display for a specific item by tag if no number is specified, otherwise get that number of transactions
   $scope.getTagHistory = function(){
-      if($scope.number >= 1){
+      if ($scope.number >= 1) {
         thingsAPI.getTagHistory($scope.number, $scope.tag).then(function(response){
           console.log(response.status);
           console.log(response.data);
@@ -90,4 +90,22 @@ function HistoryController($scope, $http,  $location, thingsAPI) {
         }
       });
   }
+
+
+
+    
+      //make tab a property of TabCtrl & set an initial value
+      //hint: comparable to ng-init
+  $scope.tab = 1;
+
+      //create a function expression, creating the assignment logic
+  $scope.selectTab = function (setTab) {
+          //make tab equal to setTab 
+      $scope.tab = setTab;
+      };
+
+      //create a function for our comparison
+  $scope.isTab = function (checkTab) {
+      return $scope.tab === checkTab;
+      }; 
 }

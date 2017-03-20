@@ -7,29 +7,7 @@ function CheckInController($scope, $http, $location, $rootScope, inventoryList, 
   $scope.searchQuery = '';
   $scope.emptyNameError = true;
   $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('sDom', 'rtip');
-  var dti;
-  var dtInstanceCallback = dtInstanceCallback;
 
-  $scope.dtColumns = [
-    DTColumnDefBuilder.newColumnDef(0).withOption('searchable', false),
-    DTColumnDefBuilder.newColumnDef(1),
-    DTColumnDefBuilder.newColumnDef(2).withOption('searchable', false),
-    DTColumnDefBuilder.newColumnDef(3).withOption('searchable', false)
-  ]
-
-  $scope.dtInstanceCallback = function(dtInstance){
-    dti = dtInstance;
-  };
-
-  $scope.searchTable = function(){
-    if($scope.searchQuery == null){
-      dti.DataTable.search("").draw();
-    }
-    else{
-      dti.DataTable.search($scope.searchQuery);
-      dti.DataTable.search($scope.searchQuery).draw();
-    }
-  };
 
   //Get latest inventory data from database
   thingsAPI.getView().then(function (response) {

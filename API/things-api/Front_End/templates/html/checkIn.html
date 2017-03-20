@@ -1,91 +1,113 @@
 ﻿<html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <title>CAT THINGS</title>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="templates/css/checkIn.css" />
-  </head>
+</head>
 
-  <body>
+<body>
+    <div class="wrapper">
         <!-- Navigation Bar-->
-    <bootstrap-navbar></bootstrap-navbar>
+        <bootstrap-navbar></bootstrap-navbar>
 
-    <!-- Check-In Form-->
-    <div ng-app "catthings_app" ng-controller="CheckInController">
-      <div class="container">
-        <form role="form" class="request-form">
-          <div class="form-group required">
-            <label class="control-label">Name:</label>
-            <input type="text" ng-model="person.name" ng-change="checkPerson()" placeholder="Enter Name" class="form-control" required>
-          </div>
-          <div class="emptyName" ng-show="emptyNameError">
-            <b>Name is required!</b>
-          </div>
-          <label for="itemName">Search:</label>
-          <input type="text" ng-model="searchQuery" ng-change="searchTable()" placeholder="Search Inventory" class="form-control">
-          <table datatable="ng" dt-options="dtOptions" dt-columns="dtColumns" dt-instance="dtInstanceCallback" class="table table-bordered">
-            <thead class="thead-inverse">
-              <tr>
-                <th><b>Check In</b></th>
-                <th><b>Name</b></th>
-                <th><b>Description</b></th>
-                <th><b>Quantity</b></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="item in stuff | orderBy:'name'">
-                <td><input type="checkbox" ng-model="item.checkin" ng-change="addToCheckin(item)"/></td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.description }}</td>
-                <td>{{ item.quantity }}</td>
-              </tr>
-            </tbody>
-            </table>
-          </form>
-        </div>
+        <div class="page-wrapper">
+            <div class="page-inner">
+                <div class="row" style="margin-left: 15px;">
+                    <div class="col-md-12">
+                        <h2>Check-In An Existing Item</h2>
+                        <h5>Check-In an existing items into inventory</h5>
 
-        <br>
-        <br>
-        <br>
-
-        <div class="container">
-          <div class="notEmpty" ng-show="checkinNotEmpty">
-            <table datatable="ng" class="table table-bordered" id="checkinTable">
-              <thead class="thead-inverse">
-                <tr>
-                  <th><b>Remove<b></th>
-                    <th><b>Name</b></th>
-                    <th><b>Description</b></th>
-                    <th><b>Available</b></th>
-                    <th><b>Checkin</b></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr ng-repeat="selected in checkin | orderBy:'name'">
-                    <td><input type="checkbox" ng-model="selected.uncheckin"/></td>
-                  <td>{{ selected.name }}</td>
-                  <td>{{ selected.description }}</td>
-                  <td>{{ selected.quantity }}</td>
-                  <td><input type="number" ng-model="selected.selectedQuantity" required/>
-                    <div class="negativeQuantity" ng-show="selected.negativeQuantity">
-                      <b>Quantity cannot be negative!</b>
                     </div>
-                    <div class="zeroQuantity" ng-show="selected.zeroQuantity">
-                      <b>Quantity cannot be 0!</b>
+                </div>
+                <hr>
+
+
+                <!-- Check-In Form-->
+                <div class="container" ng-app="catthings_app" ng-controller="CheckInController">
+                    <form class="form-inline" style="margin-bottom: 25px; text-align:center;">
+                        <div class="form-group required">
+                            <label class="control-label">Name:</label>
+                            <input type="text" size=80 ng-model="person.name" ng-change="checkPerson()" placeholder="Enter Name" class="form-control" required>
+                        </div>
+                        <div class="emptyName" style="margin-bottom: 10px;">
+                            <div ng-show="emptyNameError">
+                                <b>Name is required!</b>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Check-In</div>
+                        <table datatable="ng" class="table table-bordered">
+                            <thead class="thead-inverse">
+                                <tr>
+                                    <th><b>Check In</b></th>
+                                    <th><b>Name</b></th>
+                                    <th><b>Description</b></th>
+                                    <th><b>Quantity</b></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in stuff | orderBy:'name'">
+                                    <td><input type="checkbox" ng-model="item.checkin" ng-change="addToCheckin(item)" /></td>
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.description }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="btn-group">
-              <button type="button" class="btn btn-danger" ng-click=removeSelected()>Remove</button>
-              <button type="submit" class="btn btn-success" ng-disabled="checkCheckin()" ng-click=confirm()>Checkin</button>
+                </div>
+
+                <div class="container" style="margin-top:100px;" ng-app="catthings_app" ng-controller="CheckInController">
+                    <div class="notEmpty" ng-show="checkinNotEmpty">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Cart</div>
+
+                            <table datatable="ng" class="table table-bordered" id="checkinTable">
+                                <thead class="thead-inverse">
+                                    <tr>
+                                        <th><b>Remove<b></th>
+                                        <th><b>Name</b></th>
+                                        <th><b>Description</b></th>
+                                        <th><b>Available</b></th>
+                                        <th><b>Checkin</b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="selected in checkin | orderBy:'name'">
+                                        <td><input type="checkbox" ng-model="selected.uncheckin" /></td>
+                                        <td>{{ selected.name }}</td>
+                                        <td>{{ selected.description }}</td>
+                                        <td>{{ selected.quantity }}</td>
+                                        <td>
+                                            <input type="number" ng-model="selected.selectedQuantity" required />
+                                            <div class="negativeQuantity" ng-show="selected.negativeQuantity">
+                                                <b>Quantity cannot be negative!</b>
+                                            </div>
+                                            <div class="zeroQuantity" ng-show="selected.zeroQuantity">
+                                                <b>Quantity cannot be 0!</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                                <div class="center-block text-center" style="margin-bottom:15px;">
+                                    <button type="button" class="btn btn-danger" ng-click=removeSelected()>
+                                        <i class="fa fa fa-trash"> Remove</i>
+                                    </button>
+
+                                    <button type="submit" class="btn btn-success" ng-disabled="checkCheckin()" ng-click=checkOut()>
+                                        <i class="fa fa-shopping-cart"> Checkin</i>
+                                    </button>
+                                </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="empty" ng-show="checkinEmpty">
-            Nothing to be checked in!
-          </div>
         </div>
-      </div>
-  </body>
+    </div>
+
+</body>
 </html>

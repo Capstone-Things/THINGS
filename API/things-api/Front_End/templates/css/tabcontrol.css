@@ -1,0 +1,42 @@
+﻿#poc {
+  padding-top: 30px;
+
+}
+.tabs {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  list-style-type: none;
+  margin:0px;
+  padding: 0px;
+}
+.tab {
+  width: 24.7%;
+  height: 40px;
+  color: #FFF;
+  line-height: 20px;
+  margin-right: 1px;
+  border-radius: 3px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  background: #25609b;
+  float: left;
+}
+.tab:last-child {
+  border: 0px;
+}
+.tab > a {
+  line-height: 40px;
+  color: #FFF;
+  text-decoration: none;
+  display: block;
+}
+.panel {
+  width: 100%;
+  clear: both;
+  margin: 50px auto;
+}
+.active {
+  background: #5893ce;
+  transition: background 300ms linear;
+}

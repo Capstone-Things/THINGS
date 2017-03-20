@@ -16,6 +16,8 @@
 
         <li ng-class="{ active: isActive('/shoppinglist')}" ng-show="credential.isAdmin"><a href="#shoppinglist">Shopping List</a></li>
         <li ng-class="{ active: isActive('/checkin')}" ng-show="credential.isAdmin"><a href="#checkin">Check In</a></li>
+        <li ng-class="{ active: isActive('/additem')}" ng-show="credential.isAdmin"><a href="#additem">Add New Item</a></li>
+
         <li ng-class="{ active: isActive('/statistic')}" ng-show="credential.isAdmin"><a href="#statistic">Statistics</a></li>
         <li ng-class="{ active: isActive('/viewhistory')}" ng-show="credential.isAdmin"><a href="#viewhistory">View History</a></li>
       </ul>
