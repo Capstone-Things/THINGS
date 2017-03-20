@@ -117,7 +117,7 @@ module.exports = {
 
         // OLD QUERY: SELECT i.item_name, i.item_id, ABS(SUM(t.qty_changed)) AS checkout_per_day, to_char(timestamp, 'day') AS dow FROM transactions AS t, items AS i WHERE t.item_id = $1 AND t.item_id = i.item_id AND t.qty_changed < 0 AND t.timestamp > (current_timestamp - INTERVAL '3 months') GROUP BY i.item_id, i.item_name, dow
 
-        client.query("SELECT item_name, item_id, ROUND(AVG(checkout_per_day),2) FROM checkout_per_day GROUP BY item_id", function(err, result) {
+        client.query("SELECT item_id, item_name, ROUND(AVG(checkout_per_day),2) FROM checkout_per_day GROUP BY item_id", function(err, result) {
             done();
             res.app.locals.helpers.errResultHandler(err, result.rows, res);
         });
