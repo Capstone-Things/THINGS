@@ -57,8 +57,8 @@
 
 	```javascript
 	exports.mail = {  
-	from: '"CAT-Things-User" <catthingsuser@yahoo.com>', // sender address
-	to: 'catthingsuser@yahoo.com' // list of receivers
+	from: '"name" <email-address>', // sender address
+	to: 'destination' // list of receivers
 	};  
 	```
    Where name is the name of the sender, email-address is their e-mail, and destination
