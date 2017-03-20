@@ -114,14 +114,6 @@ module.exports = {
            console.error('Error fetching client from pool', err);
            res.sendStatus(500);
         }
-        // Quickly validate if id is an int
-        var id = parseInt(req.params.item_id);
-
-        if(req.params.item_id != id) {
-            done();
-            console.error('Invalid ID number', err);
-            res.sendStatus(400);
-        }
 
         // OLD QUERY: SELECT i.item_name, i.item_id, ABS(SUM(t.qty_changed)) AS checkout_per_day, to_char(timestamp, 'day') AS dow FROM transactions AS t, items AS i WHERE t.item_id = $1 AND t.item_id = i.item_id AND t.qty_changed < 0 AND t.timestamp > (current_timestamp - INTERVAL '3 months') GROUP BY i.item_id, i.item_name, dow
 
