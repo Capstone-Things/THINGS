@@ -1,6 +1,9 @@
 #!/bin/bash
-#2/10/17
-#Nick McHale
+
+#Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+#Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+#See LICENSE.txt for full information.
+
 #PSU Capstone
 #	The purpouse of this script is to aid in the first time setup of the THINGS API
 #	The user will be prompted to enter database information
@@ -8,7 +11,7 @@
 
 
 
-#TODO implement this:
+#implement this:
 
 #first lets create the configuration directory structure
 mkdir -p ./conf/db
