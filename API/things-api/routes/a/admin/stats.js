@@ -1,4 +1,9 @@
+/*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
 
+See LICENSE.txt for full information.
+*/
 module.exports = {
 
   /****************************************************
@@ -7,10 +12,6 @@ module.exports = {
   *
   *
   * /brief    Returns average weekly consumption of item
-  *
-  *
-  * /author   Andrew McCann
-  * /date     2/26/2017
   ****************************************************/
   weeklyavg: (req, res) => {
     res.app.locals.pool.connect(function(err, client, done) {

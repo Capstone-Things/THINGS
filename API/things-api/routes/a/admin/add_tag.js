@@ -1,12 +1,15 @@
+/*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+
+See LICENSE.txt for full information.
+*/
 /****************************************************
 * /path     a/admin/tagitem/:id/:tag
 * /params   :id - The id of the item to tag
 *           :tag - the name of the tag to give the item
 *
 * /brief    Add a tag to an item given its id
-*
-* /author   Luke
-* /date     2/7/2017
 ****************************************************/
 module.exports = (req,res) => {
   //first query the database

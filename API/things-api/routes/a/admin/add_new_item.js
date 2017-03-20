@@ -1,3 +1,9 @@
+/*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+
+See LICENSE.txt for full information.
+*/
 /****************************************************
 * /path     api/a/admin/add/:name/:qty/:desc/:price/:thresh/:user/:tags
 * /params   name - the name of the item
@@ -6,9 +12,6 @@
 *           thresh - the threshold to notify the admin if the quantity drops below
 *
 * /brief    Add new item api route, used to insert rows into
-*
-* /author   Austen & Luke
-* /date     2/7/2017
 ****************************************************/
 module.exports = (req, res) => {
   //first query the database
