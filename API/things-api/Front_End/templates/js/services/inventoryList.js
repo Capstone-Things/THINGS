@@ -1,3 +1,16 @@
+/*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+
+See LICENSE.txt for full information.
+*/
+
+/*
+This file contains the AngularJS code maintaining the inventory factory.
+Factories allow the inventory table data to be shared between multiple
+controllers in a neat fashion.
+*/
+
 var app = angular.module("catthings_app");
 
 app.factory('inventoryList', [inventoryList]);
