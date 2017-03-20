@@ -52,19 +52,17 @@
 
                 <!--Cart Table -->
                 <div class="container" style="margin-top:100px;" ng-app="catthings_app" ng-controller="CartController">
-
                     <div class="empty" ng-show="cartNotEmpty">
+
+                        <form class="form-inline" style="margin-bottom: 25px; text-align:center;" >
+                            <label for="rg-from">Name: </label>
+                            <div class="form-group">
+                                <input type="text" style="width: 400px;" class="form-control" ng-model="userName" ng-required="true" placeholder="Default User">
+                            </div>
+                        </form>
+
                         <div class="panel panel-default">
                             <div class="panel-heading">Cart</div>
-
-                            <form role="form" class="form-horizontal form-groups-bordered">
-                                <div class="form-group">
-                                    <div align="center">
-                                        <label for="field-1" class="control-label">Name </label>
-                                        <input type="text" size="55" ng-model="userName" ng-required="true" placeholder="Default User"  />
-                                    </div>
-                                </div>
-                            </form>
                             <table datatable="ng" dt-options="dtOptions" class="table table-bordered" id="cartTable">
                                     <thead class="thead-inverse">
                                         <tr>
