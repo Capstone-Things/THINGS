@@ -1,117 +1,122 @@
-﻿<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>CAT THINGS</title>
-</head>
+<!--
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+See LICENSE.txt for full information.
 
-<body>
-    <div class="wrapper">
-        <!-- Navigation Bar-->
-        <bootstrap-navbar></bootstrap-navbar>
+This file contains the HTML for checking out items.
+-->
+<html lang="en">
+  <head>
+  </head>
 
-        <div class="page-wrapper">
-            <div class="page-inner">
-                <div class="row" style="margin-left: 15px;">
-                    <div class="col-md-12">
-                        <h2>Checkout Page</h2>
-                        <h5>Add the items to your cart and checkout</h5>
+  <body>
+      <div class="wrapper">
+          <!-- Navigation Bar-->
+          <bootstrap-navbar></bootstrap-navbar>
 
-                    </div>
-                </div>
-                <hr>
+          <div class="page-wrapper">
+              <div class="page-inner">
+                  <div class="row" style="margin-left: 15px;">
+                      <div class="col-md-12">
+                          <h2>Checkout Page</h2>
+                          <h5>Add the items to your cart and checkout</h5>
 
-                <!--Inventory Table -->
-                <div class="container" ng-app="catthings_app" ng-controller="InventoryController">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Inventory Tables</div>
-                        <div class="panel-body">
-                            <div class="table-responsive">
-                                <table datatable="ng" class="table table-bordered" id="inventoryTable">
-                                    <thead class="thead-inverse">
-                                        <tr>
-                                            <th><b>Add to Cart</b></th>
-                                            <th><b>Name</b></th>
-                                            <th><b>Description</b></th>
-                                            <th><b>Quantity</b></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="item in inventory | orderBy: 'name'">
-                                            <td><button type="button" class="btn btn-outline-primary" ng-click="addToCart(item)" data-ng-disabled="item.quantity < 1">Add</button></td>
-                                            <td>{{ item.name }}</td>
-                                            <td>{{ item.description }}</td>
-                                            <td>{{ item.quantity }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                      </div>
+                  </div>
+                  <hr>
+
+                  <!--Inventory Table -->
+                  <div class="container" ng-app="catthings_app" ng-controller="InventoryController">
+                      <div class="panel panel-default">
+                          <div class="panel-heading">Inventory Tables</div>
+                          <div class="panel-body">
+                              <div class="table-responsive">
+                                  <table datatable="ng" class="table table-bordered" id="inventoryTable">
+                                      <thead class="thead-inverse">
+                                          <tr>
+                                              <th><b>Add to Cart</b></th>
+                                              <th><b>Name</b></th>
+                                              <th><b>Description</b></th>
+                                              <th><b>Quantity</b></th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr ng-repeat="item in inventory | orderBy: 'name'">
+                                              <td><button type="button" class="btn btn-outline-primary" ng-click="addToCart(item)" data-ng-disabled="item.quantity < 1">Add</button></td>
+                                              <td>{{ item.name }}</td>
+                                              <td>{{ item.description }}</td>
+                                              <td>{{ item.quantity }}</td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
 
 
-                <!--Cart Table -->
-                <div class="container" style="margin-top:100px;" ng-app="catthings_app" ng-controller="CartController">
-                    <div class="empty" ng-show="cartNotEmpty">
+                  <!--Cart Table -->
+                  <div class="container" style="margin-top:100px;" ng-app="catthings_app" ng-controller="CartController">
+                      <div class="empty" ng-show="cartNotEmpty">
 
-                        <form class="form-inline" style="margin-bottom: 25px; text-align:center;" >
-                            <label for="rg-from">Name: </label>
-                            <div class="form-group">
-                                <input type="text" style="width: 400px;" class="form-control" ng-model="userName" ng-required="true" placeholder="Default User">
-                            </div>
-                        </form>
+                          <form class="form-inline" style="margin-bottom: 25px; text-align:center;" >
+                              <label for="rg-from">Name: </label>
+                              <div class="form-group">
+                                  <input type="text" style="width: 400px;" class="form-control" ng-model="userName" ng-required="true" placeholder="Default User">
+                              </div>
+                          </form>
 
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Cart</div>
-                            <table datatable="ng" dt-options="dtOptions" class="table table-bordered" id="cartTable">
-                                    <thead class="thead-inverse">
-                                        <tr>
-                                            <th><b>Remove<b></th>
-                                            <th><b>Name</b></th>
-                                            <th><b>Description</b></th>
-                                            <th><b>Available</b></th>
-                                            <th><b>Checkout</b></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="selected in cart | orderBy:'name'">
-                                            <td><input type="checkbox" ng-model="selected.checked" /></td>
-                                            <td>{{ selected.name }}</td>
-                                            <td>{{ selected.description }}</td>
-                                            <td>{{ selected.quantity }}</td>
-                                            <td>
-                                                <input type="number" ng-model="selected.selectedQuantity" required />
-                                                <div class="invalidQuantity" ng-show="selected.errorQuantity">
-                                                    <b>Quantity entered is greater than what is available</b>
-                                                </div>
-                                                <div class="negativeQuantity" ng-show="selected.negativeQuantity">
-                                                    <b>Quantity cannot be negative!</b>
-                                                </div>
-                                                <div class="zeroQuantity" ng-show="selected.zeroQuantity">
-                                                    <b>Quantity cannot be 0!</b>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                               </table>
+                          <div class="panel panel-default">
+                              <div class="panel-heading">Cart</div>
+                              <table datatable="ng" dt-options="dtOptions" class="table table-bordered" id="cartTable">
+                                      <thead class="thead-inverse">
+                                          <tr>
+                                              <th><b>Remove<b></th>
+                                              <th><b>Name</b></th>
+                                              <th><b>Description</b></th>
+                                              <th><b>Available</b></th>
+                                              <th><b>Checkout</b></th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr ng-repeat="selected in cart | orderBy:'name'">
+                                              <td><input type="checkbox" ng-model="selected.checked" /></td>
+                                              <td>{{ selected.name }}</td>
+                                              <td>{{ selected.description }}</td>
+                                              <td>{{ selected.quantity }}</td>
+                                              <td>
+                                                  <input type="number" ng-model="selected.selectedQuantity" required />
+                                                  <div class="invalidQuantity" ng-show="selected.errorQuantity">
+                                                      <b>Quantity entered is greater than what is available</b>
+                                                  </div>
+                                                  <div class="negativeQuantity" ng-show="selected.negativeQuantity">
+                                                      <b>Quantity cannot be negative!</b>
+                                                  </div>
+                                                  <div class="zeroQuantity" ng-show="selected.zeroQuantity">
+                                                      <b>Quantity cannot be 0!</b>
+                                                  </div>
+                                              </td>
+                                          </tr>
+                                      </tbody>
+                                 </table>
 
-                            <div class="center-block text-center" style="margin-bottom:15px;">
-                                <button type="button" class="btn btn-danger" ng-click=removeSelected()>
-                                    <i class="fa fa fa-trash"> Remove</i>
-                                </button>
+                              <div class="center-block text-center" style="margin-bottom:15px;">
+                                  <button type="button" class="btn btn-danger" ng-click=removeSelected()>
+                                      <i class="fa fa fa-trash"> Remove</i>
+                                  </button>
 
-                                <button type="submit" class="btn btn-success" ng-disabled="checkQuantity()" ng-click=checkOut()>
-                                    <i class="fa fa-shopping-cart"> Checkout</i>
-                                </button>
-                            </div>
-                        </div>
+                                  <button type="submit" class="btn btn-success" ng-disabled="checkQuantity()" ng-click=checkOut()>
+                                      <i class="fa fa-shopping-cart"> Checkout</i>
+                                  </button>
+                              </div>
+                          </div>
 
-                      
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-</body>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+  </body>
 </html>
