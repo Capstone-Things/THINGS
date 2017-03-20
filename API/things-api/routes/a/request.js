@@ -24,12 +24,20 @@ module.exports = (req, res) => {
   var datetime = time.create();
   var timereq = datetime.format('m/d/Y H:M:S');
 
+  //console.log(req);//DEV LOG
+  //console.log(req.body);//DEV LOG
+
 
 // setup email data with unicode symbols
 res.app.locals.mailOptions.subject = 'New Inventory Request from a User'; // Subject line
 
-
-res.app.locals.mailOptions.html =  res.app.locals.mailOptions.html + 'A user named ' + person + ' has requested ' + num + ' ' + name + ' which is needed by ' + date + '. This request was sent on ' + timereq + '\n' + 'With the following description: ' + desc + '\n' + 'Additional Information from user: ' + msg + '\n' + 'To contact ' + person + ' send an email to ' + addr + '\n';
+res.app.locals.mailOptions.html =  res.app.locals.mailOptions.html
+  + 'A user named ' + person + ' has requested '
+  + num + ' ' + name + ' <br>which is needed by ' + date
+  + '. <br>This request was sent on ' + timereq + '<br>'
+  + 'With the following description: ' + desc + '<br>'
+  + 'Additional Information from user: ' + msg + '<br>' + 'To contact '
+  + person + ' send an email to ' + addr + '<br>';
 
 
 res.app.locals.smtpTransport.sendMail(res.app.locals.mailOptions, function(error, response){

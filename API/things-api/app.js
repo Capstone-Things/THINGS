@@ -44,7 +44,7 @@ let mailOptions = {
   subject: '',
   text: '',
   html: ''
-  
+
 };
 
 
@@ -64,6 +64,8 @@ app.locals.smtpTransport = smtpTransport;
 // We need to be able to access the pool from our templates,
 // store the pool in app.locals
 app.locals.pool = pool;
+
+//Attatch Routes
 app.use('/', express.static('Front_End'))
 app.use('/api', routes);//import our routs this will import the routes
 

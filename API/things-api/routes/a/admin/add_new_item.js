@@ -41,7 +41,8 @@ module.exports = (req, res) => {
       //checkout a client from the pool
       res.app.locals.pool.connect(function(err, client, done) {
         if(err) {
-            return console.error('error fetching client from pool', err);
+            console.error('error fetching client from pool', err);
+            res.sendStatus(500);
         }
         //submit the query to the Database
         client.query(query, function(err, result) {

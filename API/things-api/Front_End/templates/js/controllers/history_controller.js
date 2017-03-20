@@ -13,6 +13,10 @@ function HistoryController($scope, $http,  $location, thingsAPI) {
   $scope.tagHistory = [];
   $scope.dateHistory = [];
 
+  //date objects
+  $scope.startDate = new Date();
+  $scope.endDate = new Date();
+
   //gets the last 15 transactions to display if no number is specified, otherwise get that number of transactions
   $scope.getRecentHistory = function(){
       if($scope.numRecent >= 1){
@@ -78,7 +82,7 @@ function HistoryController($scope, $http,  $location, thingsAPI) {
 
   //gets a range of transactions between a start and end date
   $scope.getDateHistory = function(){
-      thingsAPI.getDateHistory($scope.startDate, $scope.endDate).then(function(response){
+      thingsAPI.getDateHistory($scope.startDate.toUTCString(), $scope.endDate.toUTCString()).then(function(response){
         console.log(response.status);
         console.log(response.data);
         if(response.status === 200){
