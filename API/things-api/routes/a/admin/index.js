@@ -50,8 +50,8 @@ routes.get('/shopping_list', shoppingList);
 routes.get('/stats/netperday/:item_id', stats.item_id);
 routes.get('/stats/weeklyavg/:item_id', stats.weeklyavg);
 routes.get('/stats/threshold/:item_id', stats.threshold);
-routes.get('/stats/avgperday/:item_id', stats.avg)
-routes.get('/stats/avgperday', stats.avg_All);
+routes.get('/stats/avgperday/:item_id', stats.avg);
+routes.get('/stats/allavgperday', stats.avg_All);
 
 //History
 routes.get('/history/recent/:entries?', history.recent);

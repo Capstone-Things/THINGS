@@ -83,7 +83,7 @@ module.exports = {
            res.sendStatus(500);
         }
         // Quickly validate if id is an int
-        var id = parseInt(req.params.item_id)
+        var id = parseInt(req.params.item_id);
 
         if(req.params.item_id != id) {
             done();
@@ -115,7 +115,7 @@ module.exports = {
            res.sendStatus(500);
         }
         // Quickly validate if id is an int
-        var id = parseInt(req.params.item_id)
+        var id = parseInt(req.params.item_id);
 
         if(req.params.item_id != id) {
             done();
@@ -147,7 +147,7 @@ module.exports = {
             res.sendStatus(500);
         }
         // Quickly validate if id is an int
-        var id = parseInt(req.params.item_id)
+        var id = parseInt(req.params.item_id);
         if(req.params.item_id != id) {
             done();
             console.error('Invalid ID number', err);
