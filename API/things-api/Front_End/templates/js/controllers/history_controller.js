@@ -1,23 +1,33 @@
-//the view history controller. This controller acts as a middleman between the view history html page and the API
-//this controller packages up data for the view history page to use to display its entries
-//written by Austen Ruzicka
+/*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
 
+See LICENSE.txt for full information.
+*/
+
+/*
+This file contains the AngularJS code for viewing transaction history by taking
+user input and making an API call to get the data and display it.
+*/
 var app = angular.module('catthings_app');
 
 //Inventory Controller
 app.controller('HistoryController', ['$scope', '$http',  '$location', 'thingsAPI', HistoryController]);
 function HistoryController($scope, $http,  $location, thingsAPI) {
-  //empty history lists
+  //Empty history lists
   $scope.recentHistory = [];
   $scope.itemHistory = [];
   $scope.tagHistory = [];
   $scope.dateHistory = [];
 
-  //date objects
+  //Date objects
   $scope.startDate = new Date();
   $scope.endDate = new Date();
 
-  //gets the last 15 transactions to display if no number is specified, otherwise get that number of transactions
+  /*
+  Gets the last 15 transactions to display if no number is specified.
+  Otherwise, get that number of transactions
+  */
   $scope.getRecentHistory = function(){
       if($scope.numRecent >= 1){
         thingsAPI.getRecent($scope.numRecent).then(function(response){
@@ -38,7 +48,10 @@ function HistoryController($scope, $http,  $location, thingsAPI) {
       }
   }
 
-  //gets the last 15 transactions to display for a specific item if no number is specified, otherwise get that number of transactions
+  /*
+  Gets the last 15 transactions to display for a specific item if no number is
+  specified. Otherwise, get that number of transactions
+  */
   $scope.getItemHistory = function(){
       if($scope.num >= 1){
         thingsAPI.getItemHistory($scope.num, $scope.item).then(function(response){
@@ -59,7 +72,10 @@ function HistoryController($scope, $http,  $location, thingsAPI) {
       }
   }
 
-  //gets the last 15 transactions to display for a specific item by tag if no number is specified, otherwise get that number of transactions
+  /*
+  Gets the last 15 transactions to display for a specific item by tag if no
+  number is specified. Otherwise, get that number of transactions.
+  */
   $scope.getTagHistory = function(){
       if ($scope.number >= 1) {
         thingsAPI.getTagHistory($scope.number, $scope.tag).then(function(response){
@@ -80,7 +96,7 @@ function HistoryController($scope, $http,  $location, thingsAPI) {
       }
   }
 
-  //gets a range of transactions between a start and end date
+  //Gets a range of transactions between a start and end date.
   $scope.getDateHistory = function(){
       thingsAPI.getDateHistory($scope.startDate.toUTCString(), $scope.endDate.toUTCString()).then(function(response){
         console.log(response.status);
@@ -93,19 +109,19 @@ function HistoryController($scope, $http,  $location, thingsAPI) {
 
 
 
-    
+
       //make tab a property of TabCtrl & set an initial value
       //hint: comparable to ng-init
   $scope.tab = 1;
 
       //create a function expression, creating the assignment logic
   $scope.selectTab = function (setTab) {
-          //make tab equal to setTab 
+          //make tab equal to setTab
       $scope.tab = setTab;
       };
 
       //create a function for our comparison
   $scope.isTab = function (checkTab) {
       return $scope.tab === checkTab;
-      }; 
+      };
 }
