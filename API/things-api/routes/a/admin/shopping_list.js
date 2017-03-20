@@ -1,9 +1,13 @@
+/*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+
+See LICENSE.txt for full information.
+*/
 /****************************************************
 * /path     /shoppinglist
 * /params   null
 * /brief    Returns all items with quantity less than threshold
-*
-* /author   Luke
 ****************************************************/
 module.exports=(req,res) => {
   //first query the database

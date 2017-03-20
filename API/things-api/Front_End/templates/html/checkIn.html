@@ -1,9 +1,14 @@
-﻿<html lang="en">
+<!--
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+See LICENSE.txt for full information.
+
+This file contains the HTML for checking in items.
+-->
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <title>CAT THINGS</title>
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="templates/css/checkIn.css" />
 </head>
 
 <body>
@@ -12,7 +17,7 @@
         <bootstrap-navbar></bootstrap-navbar>
 
         <div class="page-wrapper">
-            <div class="page-inner">
+            <div class="page-inner" ng-app="catthings_app" ng-controller="CheckInController">
                 <div class="row" style="margin-left: 15px;">
                     <div class="col-md-12">
                         <h2>Check-In An Existing Item</h2>
@@ -22,9 +27,7 @@
                 </div>
                 <hr>
 
-
-                <!-- Check-In Form-->
-                <div class="container" ng-app="catthings_app" ng-controller="CheckInController">
+                <div class="container">
                     <form class="form-inline" style="margin-bottom: 25px; text-align:center;">
                         <div class="form-group required">
                             <label class="control-label">Name:</label>
@@ -59,7 +62,7 @@
                     </div>
                 </div>
 
-                <div class="container" style="margin-top:100px;" ng-app="catthings_app" ng-controller="CheckInController">
+                <div class="container" style="margin-top:100px;">
                     <div class="notEmpty" ng-show="checkinNotEmpty">
 
                         <div class="panel panel-default">
@@ -98,7 +101,7 @@
                                         <i class="fa fa fa-trash"> Remove</i>
                                     </button>
 
-                                    <button type="submit" class="btn btn-success" ng-disabled="checkCheckin()" ng-click=checkOut()>
+                                    <button type="submit" class="btn btn-success" ng-disabled="checkCheckin()" ng-click=confirm()>
                                         <i class="fa fa-shopping-cart"> Checkin</i>
                                     </button>
                                 </div>

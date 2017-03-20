@@ -1,3 +1,13 @@
+/*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+
+See LICENSE.txt for full information.
+*/
+
+/*
+This file contains CSS for the checkout page.
+*/
 .navbar-default {
   background-color: #303641;
   border: 0px solid black;
@@ -8,7 +18,7 @@
 }
 
 
-.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active >   
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active >
  a:hover, .navbar-default .navbar-nav > .active > a:focus {
   color: #fff; /*BACKGROUND color for active*/
   background-color: #2b303a;

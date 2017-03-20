@@ -1,3 +1,14 @@
+/*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+
+See LICENSE.txt for full information.
+*/
+
+/*
+This file contains global AngularJS code.
+*/
+
 /*global angular*/
 //var app = angular.module("catthings_app");
 var app = angular.module("catthings_app",
@@ -7,7 +18,7 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
 
     // For any unmatched url, send to /index
     $urlRouterProvider.otherwise("/");
-
+    //List the pages to open when given a state
     $stateProvider
         .state('login', {
           url: "/",

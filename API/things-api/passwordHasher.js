@@ -1,3 +1,10 @@
+/*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+
+See LICENSE.txt for full information.
+*/
+
 //this  is a temporary script not intended for distribution in the final product.
 //this is a workaround untill a create user module can be created.
 //It can be called with node passwordHasher.js <passwordToHash>

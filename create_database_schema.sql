@@ -1,8 +1,10 @@
 /*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+See LICENSE.txt for full information.
+*/
+/*
 *   SQL Commands to Create Database Schema
-*   Luke Kazmierowicz
-*   3/1/17
-*
 *   README
 *     To rebuild the THINGS data base from scratch completely destroying the existing
 *     one, execute this SQL file.
@@ -112,7 +114,7 @@
         SELECT a.item_name, a.item_id,
             CASE WHEN b.checkout_per_day is NULL THEN 0 ELSE ABS(b.checkout_per_day) END AS checkout_per_day , a.day_of_week
         FROM
-            (       
+            (
                 SELECT *
                 FROM
                 (
@@ -136,4 +138,3 @@
             WHERE qty_changed < 0 AND timestamp > (current_timestamp - INTERVAL '3 months')
             GROUP BY item_id, item_name, weekdaynum) AS b
         ON a.item_id = b.item_id AND a.weekdaynum = b.weekdaynum;
-

@@ -1,11 +1,15 @@
+/*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+
+See LICENSE.txt for full information.
+*/
 /****************************************************
 * /path     a/admin/checkin/:id/:person/:qty
 * /params   id
 *           person
 *           qty
 * /brief    Route to add quantity to an existing item in the inventory
-*
-* /author   Luke
 ****************************************************/
 module.exports = (req, res) =>{
 

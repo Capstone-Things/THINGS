@@ -1,5 +1,11 @@
-//This module will export the various /history routes
+/*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
 
+See LICENSE.txt for full information.
+*/
+
+//This module will export the various /history routes
 module.exports= {
 
   /****************************************************
@@ -8,9 +14,6 @@ module.exports= {
   *           specify number of recents
   *
   * /brief    Route to get last 15 transactions
-  *
-  * /author   Andrew McCann
-  * /date     2/10/2017
   ****************************************************/
   recent: (req,res)=>{
     res.app.locals.pool.connect(function(err, client, done) {

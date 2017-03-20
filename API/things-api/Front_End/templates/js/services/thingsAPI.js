@@ -1,3 +1,16 @@
+/*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+
+See LICENSE.txt for full information.
+*/
+
+/*
+This file contains the AngularJS code maintaining the thingsAPI factory.
+The thingsAPI allows the frontend to make API calls in an easy to understand
+way.
+*/
+
 //This File will hold a factory that Will handle all of our
 var app = angular.module('catthings_app');
 
@@ -12,7 +25,6 @@ app.factory('thingsAPI', ['$http', '$q', function ($http, $q) {
     //For local dev mode comment out the first line and uncomment the second...
     var _urlBase = 'https://things.cs.pdx.edu:3000/api/';
     //var _urlBase = 'https://localhost:3000/api/';
-
 
     var obj = {}; //this is the object that will be handed to our controller.
     //Methods
@@ -61,19 +73,18 @@ app.factory('thingsAPI', ['$http', '$q', function ($http, $q) {
         return $http(req);
     }
 
-
     //Add new item
-  //api/a/admin/add/:name/:qty/:desc/:price/:thresh/:user/:tag
-  obj.add = (name, qty, desc, price, thresh, tags)=>{
-        var req = {
-            method: 'POST',
-      url: `${_urlBase}a/admin/add/${name}/${qty}/${desc}/${price}/${thresh}/${_user}/${tags}`,
-            headers: {
-                'x-access-token': _token
-            }
-        }
-        return $http(req);
-    }
+    //api/a/admin/add/:name/:qty/:desc/:price/:thresh/:user/:tag
+    obj.add = (name, qty, desc, price, thresh, tags)=>{
+          var req = {
+              method: 'POST',
+        url: `${_urlBase}a/admin/add/${name}/${qty}/${desc}/${price}/${thresh}/${_user}/${tags}`,
+              headers: {
+                  'x-access-token': _token
+              }
+          }
+          return $http(req);
+      }
 
     //Get recent transaction based on input number
     obj.getItemHistory = (num, item) => {

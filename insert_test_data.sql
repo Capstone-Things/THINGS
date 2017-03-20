@@ -1,8 +1,11 @@
 /*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+See LICENSE.txt for full information.
+*/
+/*
 *
 *   SQL Commands to Insert Test Data into the Things Database
-*   Luke Kazmierowicz
-*   3/1/17
 *
 */
 
@@ -56,7 +59,7 @@
         ('Poop Tarts', 'A not-so tasty snack.', 0.0, 10, 5, true);
     INSERT INTO items (item_name, description, price, quantity, threshold, is_hidden) VALUES
         ('kechanical meyboard', 'typing', 19.00, 5, 2, true);
- 
+
 
 
     ----------------------------------------------------------------------------

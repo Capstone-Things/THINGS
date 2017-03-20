@@ -1,3 +1,9 @@
+/*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+
+See LICENSE.txt for full information.
+*/
 
 //note: nodemailer code comes from samples on https://nodemailer.com/about/
 
@@ -9,8 +15,6 @@ var time = require('node-datetime');
 * HTTP Method: POST
 * Params: itemName, quantityNeeded, personName, email, date, description, message
 * Brief: This route will package up info from a user and e-mail it to a CAT admin
-*
-* Author: Austen Ruzicka
 ****************************************************/
 module.exports = (req, res) => {
 

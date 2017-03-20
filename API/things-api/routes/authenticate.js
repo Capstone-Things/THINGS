@@ -1,3 +1,10 @@
+/*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+
+See LICENSE.txt for full information.
+*/
+
 var jwt = require('jsonwebtoken');//JWT library
 var fs = require('fs');
 var bcrypt = require('bcrypt-nodejs');
@@ -8,8 +15,6 @@ var bcrypt = require('bcrypt-nodejs');
 * Params: Username, Password
 * Brief: This route will Authenticate the user and return a JSON token
 *     that is valid for 1 week
-*
-* Author: Nick McHale
 ****************************************************/
 module.exports = (req, res) => {
   var username = req.body.username;

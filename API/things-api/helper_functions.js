@@ -1,3 +1,10 @@
+/*
+Copyright (c) 2016 CATTHINGS: Nicholas McHale, Andrew McCann, Susmita Awasthi,
+Manpreet Bahl, Austen Ruzicka, Luke Kazmierowicz, Hillman Chen
+
+See LICENSE.txt for full information.
+*/
+
 //helper_functions.js Exports a number of funtions that are used in various
 // templates.  by locating the functions here, functions from different
 // directories can gain access after we attatch this object to the app.locals variable
@@ -11,9 +18,6 @@ module.exports = {
                 :res - the function to handle the responding the result
   *
   * /brief      Responds with a meaningful status and returns the results
-  *
-  * /author     Luke
-  * /date       2/7/2017
   ****************************************************/
 
 
