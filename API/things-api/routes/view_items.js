@@ -24,7 +24,7 @@ module.exports = (req, res) => {
         }
 
 
-    client.query('SELECT item_id, item_name, quantity, threshold, price, description FROM all_items order by item_id', [], function(err, resultItems) {
+    client.query('SELECT item_id, item_name, quantity, threshold, price, description FROM all_items WHERE is_hidden = false ORDER by item_id', [], function(err, resultItems) {
         //call `done()` to release the client back to the pool
         //done();
 

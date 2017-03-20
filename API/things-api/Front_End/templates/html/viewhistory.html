@@ -45,7 +45,7 @@ This file contains the HTML for viewing transaction history by various filters.
                                         <a ng-click="selectTab(2)">History Table by Item Name</a>
                                     </li>
                                     <li class="tab text-center" ng-class="{'active': isTab(3)}">
-                                        <a ng-click="selectTab(3)">History Table by Item ID</a>
+                                        <a ng-click="selectTab(3)">History Table by Item Tag</a>
                                     </li>
                                     <li class="tab text-center" ng-class="{'active': isTab(4)}">
                                         <a ng-click="selectTab(4)">History Table by Dates</a>
@@ -85,7 +85,7 @@ This file contains the HTML for viewing transaction history by various filters.
                                                         <td>{{ item.person }}</td>
                                                         <td>{{ item.qty_changed }}</td>
                                                         <td>{{ item.qty_remaining }}</td>
-                                                        <td>{{ item.timestamp }}</td>
+                                                        <td>{{ item.timestamp | date: 'medium'}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -131,7 +131,7 @@ This file contains the HTML for viewing transaction history by various filters.
                                                         <td>{{ item.person }}</td>
                                                         <td>{{ item.qty_changed }}</td>
                                                         <td>{{ item.qty_remaining }}</td>
-                                                        <td>{{ item.timestamp }}</td>
+                                                        <td>{{ item.timestamp | date: 'medium'}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -177,7 +177,7 @@ This file contains the HTML for viewing transaction history by various filters.
                                                         <td>{{ item.person }}</td>
                                                         <td>{{ item.qty_changed }}</td>
                                                         <td>{{ item.qty_remaining }}</td>
-                                                        <td>{{ item.timestamp }}</td>
+                                                        <td>{{ item.timestamp | date: 'medium'}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -222,7 +222,7 @@ This file contains the HTML for viewing transaction history by various filters.
                                                         <td>{{ item.person }}</td>
                                                         <td>{{ item.qty_changed }}</td>
                                                         <td>{{ item.qty_remaining }}</td>
-                                                        <td>{{ item.timestamp }}</td>
+                                                        <td>{{ item.timestamp | date: 'medium'}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
