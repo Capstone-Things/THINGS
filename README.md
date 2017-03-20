@@ -55,22 +55,23 @@
 8. Create a new file in API/things-api/conf/mailopt.js.
 9. Add the following lines  
 
-       ```javascript
-       exports.mail = {  
-       	from: '"name" <email-address>', // sender address
-  	to: 'destination' // list of receivers
-       };  
-
+	```javascript
+	exports.mail = {  
+	from: '"CAT-Things-User" <catthingsuser@yahoo.com>', // sender address
+	to: 'catthingsuser@yahoo.com' // list of receivers
+	};  
+	```
    Where name is the name of the sender, email-address is their e-mail, and destination
    is the address to send the e-mail to.
 10. Create another new file in API/things-api/conf/email_auth.js.
 11. Add the following lines  
 
-       ```javascript
-       exports.auth = {  
-       	user: "sender",
-  	pass: "pw"
-       };  
+	```javascript
+	exports.auth = {  
+	user: "sender",
+	pass: "pw"
+	};  
+	```
    Where sender is the e-mail address used to send e-mails about requests and
    inventory updates, and pw is the password to the account.
 12. Launch the server from the things-api directory with
