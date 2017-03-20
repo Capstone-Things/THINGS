@@ -75,9 +75,6 @@ module.exports = {
   *
   * /brief    Gets the average usage (aka checkout/day) by
   *           day of the week.
-  *
-  * /author   Andrew McCann
-  * /date     2/19/2017
   ****************************************************/
   avg: (req, res) => {
     res.app.locals.pool.connect(function(err, client, done) {
@@ -103,6 +100,38 @@ module.exports = {
     });
   },
   /****************************************************
+  * /path     a/admin/stats/avgperday/
+  * /params   None
+  *
+  *
+  * /brief    Route to pull satistics for all items
+  *           Returns the net change in qty/day for
+  *           the past week
+  ****************************************************/
+  avg_All: (req, res) => {
+    res.app.locals.pool.connect(function(err, client, done) {
+        if(err) {
+           console.error('Error fetching client from pool', err);
+           res.sendStatus(500);
+        }
+        // Quickly validate if id is an int
+        var id = parseInt(req.params.item_id)
+
+        if(req.params.item_id != id) {
+            done();
+            console.error('Invalid ID number', err);
+            res.sendStatus(400);
+        }
+
+        // OLD QUERY: SELECT i.item_name, i.item_id, ABS(SUM(t.qty_changed)) AS checkout_per_day, to_char(timestamp, 'day') AS dow FROM transactions AS t, items AS i WHERE t.item_id = $1 AND t.item_id = i.item_id AND t.qty_changed < 0 AND t.timestamp > (current_timestamp - INTERVAL '3 months') GROUP BY i.item_id, i.item_name, dow
+
+        client.query("SELECT * FROM checkout_per_day", function(err, result) {
+            done();
+            res.app.locals.helpers.errResultHandler(err, result.rows, res);
+        });
+    });
+  },
+  /****************************************************
   * /path     a/admin/stats/netperday/:item_id
   * /params   :item_id - item_id of what we are looking for
   *
@@ -110,9 +139,6 @@ module.exports = {
   * /brief    Route to pull satistics for an item
   *           Returns the net change in qty/day for
   *           the past week
-  *
-  * /author   Andrew McCann
-  * /date     2/19/2017
   ****************************************************/
   item_id: (req, res) => {
     res.app.locals.pool.connect(function(err, client, done) {
