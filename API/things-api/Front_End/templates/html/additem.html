@@ -2,42 +2,59 @@
 which are packaged and sent to the API which will insert the item into the database
 written by Austen Ruzicka-->
 <head>
-    <link rel="stylesheet" type="text/css" href="templates/css/form-elements.css" />
+
 </head>
 
 <body>
-  <!--Navigation Bar -->
-  <bootstrap-navbar></bootstrap-navbar>
+    <div class="wrapper">
+        <!--Navigation Bar -->
+        <bootstrap-navbar></bootstrap-navbar>
 
-  <div class="container">
-  <form role="form" class="add-form" ng-app "catthings_app" ng-controller="NewItemController">
-    <div class="form-group">
-      <label for="itemName">Name:</label>
-      <input type="text" ng-model="itemName" name = "itemName" placeholder="Name of item" class="form-control" required>
+        <div class="page-wrapper">
+            <div class="page-inner">
+                <div class="row" style="margin-left: 15px;">
+                    <div class="col-md-12">
+                        <h2>Check-In A New Item</h2>
+                        <h5>Check-In a new item into the inventory</h5>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="container">
+                    <form role="form" class="add-form" ng-app="catthings_app" ng-controller="NewItemController">
+                        <div class="form-group">
+                            <label for="itemName">Name:</label>
+                            <input type="text" ng-model="itemName" name="itemName" placeholder="Name of item" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Quantity">Initial quantity:</label>
+                            <input type="number" ng-model="qty" name="qty" class="form-control" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Price:</label>
+                            <input type="number" ng-model="price" name="price" class="form-control" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="threshold">Threshold:</label>
+                            <input type="number" ng-model="threshold" name="threshold" placeholder="When the number in the database falls below threshold, admin is notified" class="form-control" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description:</label>
+                            <textarea cols="50" rows="4" ng-model="description" name="description" placeholder="Describe the item" class="form-control" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="Tags">Tags:</label>
+                            <input type="text" ng-model="tags" name="tags" placeholder="insert tags seperated by commas" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success" ng-click=addNewItem() value="Submit">
+                                <i class="fa fa-send"> Submit</i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-      <label for="Quantity">Initial quantity:</label>
-      <input type="number" ng-model="qty" name = "qty" class="form-control" min="0" required>
-    </div>
-    <div class="form-group">
-      <label for="price">Price:</label>
-      <input type="number" ng-model="price" name = "price" class="form-control" min="0" required>
-    </div>
-    <div class="form-group">
-      <label for="threshold">Threshold:</label>
-      <input type="number" ng-model="threshold" name = "threshold" placeholder="When the number in the database falls below threshold, admin is notified" class="form-control" min="0" required>
-    </div>
-    <div class="form-group">
-      <label for="description">Description:</label>
-      <textarea cols="50" rows="4" ng-model="description" name="description" placeholder="Describe the item" class = "form-control" required></textarea>
-    </div>
-    <div class="form-group">
-      <label for="Tags">Tags:</label>
-      <input type="text" ng-model="tags" name = "tags" placeholder="insert tags seperated by commas" class="form-control" required>
-    </div>
-    <div class="form-group">
-      <input type="submit" ng-click=addNewItem() value="Submit">
-    </div>
-  </form>
-  </div>
+
 </body>
