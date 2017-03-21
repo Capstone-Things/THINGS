@@ -135,6 +135,6 @@ See LICENSE.txt for full information.
         LEFT JOIN
         (SELECT item_id, item_name, SUM(qty_changed) AS checkout_per_day, to_char(timestamp, 'D') AS weekdaynum
             FROM (items NATURAL JOIN transactions)
-            WHERE qty_changed < 0 AND timestamp > (current_timestamp - INTERVAL '1 week')
+            WHERE qty_changed < 0 AND timestamp > (current_timestamp - INTERVAL 1 WEEK)
             GROUP BY item_id, item_name, weekdaynum) AS b
         ON a.item_id = b.item_id AND a.weekdaynum = b.weekdaynum;
