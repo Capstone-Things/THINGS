@@ -40,7 +40,7 @@ function StatisticController($scope, $http, $location, cartList, thingsAPI, inve
   });
 
   //Get average consumption from past week
-  thingsAPI.getAverageWeekly().then(function (response)){
+  thingsAPI.getAverageWeekly().then(function (response){
     for (var i = 0; i < response.data.length; i++){
       for (var j = 0; j < $scope.inventory.length; j++){
         if(response.data[i].item_id == $scope.inventory[j].item_id){
@@ -48,7 +48,7 @@ function StatisticController($scope, $http, $location, cartList, thingsAPI, inve
         }
       }
     }
-  }
+  )};
 
   //Closes the graph
   $scope.goBack = function () {
