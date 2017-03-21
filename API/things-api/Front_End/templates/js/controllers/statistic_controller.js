@@ -25,6 +25,19 @@ function StatisticController($scope, $http, $location, cartList, thingsAPI, inve
       for (var i = 0; i < response.data.length; ++i) {
           $scope.inventory[i] = { name: response.data[i].name, item_id: response.data[i].item_id };
       }
+      console.log($scope.inventory);
+  });
+
+  thingsAPI.getAverage().then(function (response){
+    console.log(response);
+    for (var i = 0; i < response.data.length; i++){
+      for (var j = 0; j < $scope.inventory.length; j++){
+        if(response.data[i].item_id == $scope.inventory[j].item_id){
+          $scope.inventory[j].round = response.data[i].round;
+        }
+      }
+    }
+    console.log($scope.inventory);
   });
 
   //Closes the graph

@@ -47,7 +47,7 @@ This file contains the HTML viewing statistics about items.
                                         <tbody>
                                             <tr ng-repeat="item in inventory">
                                                 <td>{{ item.name }}</td>
-                                                <td>0</td>
+                                                <td>{{ item.round }}</td>
                                                 <td>0</td>
                                                 <td>
                                                     <a style="color:green; cursor:pointer;"><i class="fa fa-line-chart" ng-click="getStatistic(item.name)"></i></a>
