@@ -85,8 +85,20 @@ app.factory('thingsAPI', ['$http', '$q', function ($http, $q) {
       return $http(req);
     }
 
+    //Get Average amoutn consumed by week
+    //Get Average Checkout per Day
+    obj.getAverageWeekly = () => {
+      var req = {
+        method: 'GET',
+        url: `${_urlBase}a/admin/stats/allweeklyavg`,
+        headers:{
+          'x-access-token': _token
+        }
+      }
+      return $http(req);
+    }
+
     //Add new item
-    //api/a/admin/add/:name/:qty/:desc/:price/:thresh/:user/:tag
     obj.add = (name, qty, desc, price, thresh, tags)=>{
           var req = {
               method: 'POST',
