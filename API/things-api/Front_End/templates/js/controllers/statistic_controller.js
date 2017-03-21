@@ -25,7 +25,6 @@ function StatisticController($scope, $http, $location, cartList, thingsAPI, inve
       for (var i = 0; i < response.data.length; ++i) {
           $scope.inventory[i] = { name: response.data[i].name, item_id: response.data[i].item_id };
       }
-      console.log($scope.inventory);
   });
 
   //Get latest average checkout per day from past week
