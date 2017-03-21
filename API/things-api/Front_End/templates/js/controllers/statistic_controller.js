@@ -48,7 +48,7 @@ function StatisticController($scope, $http, $location, cartList, thingsAPI, inve
         }
       }
     }
-  )};
+  });
 
   //Closes the graph
   $scope.goBack = function () {
