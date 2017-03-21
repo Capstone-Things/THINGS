@@ -30,7 +30,27 @@ module.exports = {
 
         // If you want to change this rolling window that is used to calculate the average,
         // just alter the INTERVAL amount per SQL guidelines.
-        client.query("SELECT weekly.item_name, weekly.item_id, AVG(sum) AS weekly_avg FROM (SELECT i.item_name, i.item_id, SUM(ABS(t.qty_changed)) FROM transactions AS t, items AS i WHERE t.item_id = $1 AND t.item_id = i.item_id AND t.qty_changed < 0 AND t.timestamp > (current_timestamp - INTERVAL '3 months') GROUP BY i.item_name, i.item_id, date_trunc('week', timestamp)) AS weekly GROUP BY 1,2", [id], function(err, result) {
+        client.query("SELECT weekly.item_name, weekly.item_id, AVG(sum) AS weekly_avg FROM (SELECT i.item_name, i.item_id, SUM(ABS(t.qty_changed)) FROM transactions AS t, items AS i WHERE t.item_id = $1 AND t.item_id = i.item_id AND t.qty_changed < 0 AND t.timestamp > (current_timestamp - INTERVAL 1 WEEK) GROUP BY i.item_name, i.item_id, date_trunc('week', timestamp)) AS weekly GROUP BY 1,2", [id], function(err, result) {
+            done();
+            res.app.locals.helpers.errResultHandler(err, result.rows, res);
+        });
+    });
+  },
+  /****************************************************
+  * /path     a/admin/stats/allweeklyavg/
+  * /params   None
+  * /brief    Returns average weekly consumption of all items
+  ****************************************************/
+  weeklyavg_All: (req, res) => {
+    res.app.locals.pool.connect(function(err, client, done) {
+        if(err) {
+            console.error('Error fetching client from pool', err);
+            res.sendStatus(500);
+        }
+
+        // If you want to change this rolling window that is used to calculate the average,
+        // just alter the INTERVAL amount per SQL guidelines.
+        client.query("SELECT weekly.item_name, weekly.item_id, AVG(sum) AS weekly_avg FROM (SELECT i.item_name, i.item_id, SUM(ABS(t.qty_changed)) FROM transactions AS t, items AS i WHERE t.item_id = i.item_id AND t.qty_changed < 0 AND t.timestamp > (current_timestamp - INTERVAL 1 WEEK) GROUP BY i.item_name, i.item_id, date_trunc('week', timestamp)) AS weekly GROUP BY 1,2", function(err, result) {
             done();
             res.app.locals.helpers.errResultHandler(err, result.rows, res);
         });
@@ -43,9 +63,6 @@ module.exports = {
   *
   * /brief    Returns the rough day count between most recent
   *           checkin, and threshold.
-  *
-  * /author   Andrew McCann
-  * /date     2/26/2017
   ****************************************************/
   threshold: (req, res) => {
     res.app.locals.pool.connect(function(err, client, done) {
@@ -100,7 +117,7 @@ module.exports = {
     });
   },
   /****************************************************
-  * /path     a/admin/stats/avgperday/
+  * /path     a/admin/stats/allavgperday/
   * /params   None
   *
   *
