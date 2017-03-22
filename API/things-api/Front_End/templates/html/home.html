@@ -15,7 +15,7 @@ This file contains the HTML for checking out items.
           <bootstrap-navbar></bootstrap-navbar>
 
           <div class="page-wrapper">
-              <div class="page-inner">
+              <div class="page-inner" ng-controller="CartController">
                   <div class="row" style="margin-left: 15px;">
                       <div class="col-md-12">
                           <h2>Checkout Page</h2>
@@ -26,9 +26,9 @@ This file contains the HTML for checking out items.
                   <hr>
 
                   <!--Inventory Table -->
-                  <div class="container" ng-app="catthings_app" ng-controller="InventoryController">
+                  <div class="container" ng-app="catthings_app" >
                       <div class="panel panel-default">
-                          <div class="panel-heading">Inventory</div>
+                          <div class="panel-heading">Inventory <div class="pull-right">Cart Count: {{cart.length}}</div></div>
                           <div class="panel-body">
                               <div class="table-responsive">
                                   <table datatable="ng" class="table table-bordered" id="inventoryTable">
@@ -56,9 +56,8 @@ This file contains the HTML for checking out items.
 
 
                   <!--Cart Table -->
-                  <div class="container" style="margin-top:100px;" ng-app="catthings_app" ng-controller="CartController">
+                  <div class="container" style="margin-top:100px;" ng-app="catthings_app">
                       <div class="empty" ng-show="cartNotEmpty">
-
                           <form class="form-inline" style="margin-bottom: 25px; text-align:center;" >
                               <label for="rg-from">Name: </label>
                               <div class="form-group">

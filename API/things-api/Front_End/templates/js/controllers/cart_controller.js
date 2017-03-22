@@ -27,6 +27,20 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
   //Display the empty name error since no name has been entered.
   $scope.emptyNameError = true;
 
+  //Get latest inventory data from database
+  thingsAPI.getView().then(function (response) {
+      inventoryList.setInventory(response.data);
+      $scope.inventory=inventoryList.getInventory();
+  });
+
+
+  $scope.addToCart = function(item){
+    var cartItem = angular.copy(item);
+    cartItem.check = false;
+    cartItem.selectedQuantity = 1;
+    cartList.addToCart(cartItem);
+  }
+
   /*
   Check whether there are items in the cart and then display either the cart
   datatable or the message saying that the cart is empty.
@@ -175,6 +189,7 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
       //Update inventory with new quantities
       thingsAPI.getView().then(function(response) {
         inventoryList.setInventory(response.data);
+        $scope.inventory=inventoryList.getInventory();
         $scope.cart.length = 0;
         $scope.cartEmpty = true;
         $scope.cartNotEmpty = false;
