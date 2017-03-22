@@ -33,7 +33,7 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
       $scope.inventory=inventoryList.getInventory();
   });
 
-
+  //Add to cart
   $scope.addToCart = function(item){
     var cartItem = angular.copy(item);
     cartItem.check = false;
