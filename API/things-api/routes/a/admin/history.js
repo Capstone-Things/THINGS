@@ -27,7 +27,7 @@ module.exports= {
         }
         // TODO:> Define what attributes we actually want to display.
         // would be cool if we had a VERBose flag.
-        client.query('SELECT * FROM transactions ORDER BY timestamp DESC LIMIT $1', [entries], function(err, result) {
+        client.query('SELECT * FROM transactions as t LEFT JOIN items AS i ON t.item_id = i.item_id ORDER BY timestamp DESC LIMIT $1', [entries], function(err, result) {
             done();
            res.app.locals.helpers.errResultHandler(err, result.rows, res);
         });
@@ -94,7 +94,7 @@ module.exports= {
         }
         name = tag.toLowerCase()
         //TODO:> Results, and console log above, route name is sloppy. Differentiate without collision?
-        client.query('SELECT * FROM transactions AS t, tags WHERE LOWER(tags.tag_name) = $2 AND t.item_id = tags.item_id ORDER BY timestamp DESC LIMIT $1', [entries, name], function(err, result) {
+        client.query('SELECT * FROM transactions AS t, tags WHERE LOWER(tags.tag_name) = $2 AND t.item_id = tags.item_id LEFT JOIN items AS i ON t.item_id = i.item_id ORDER BY timestamp DESC LIMIT $1', [entries, name], function(err, result) {
             done();
            res.app.locals.helpers.errResultHandler(err, result.rows, res);
         });
