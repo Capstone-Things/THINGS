@@ -28,7 +28,7 @@ This file contains the HTML for checking out items.
                   <!--Inventory Table -->
                   <div class="container" ng-app="catthings_app" ng-controller="InventoryController">
                       <div class="panel panel-default">
-                          <div class="panel-heading">Inventory Tables</div>
+                          <div class="panel-heading">Inventory</div>
                           <div class="panel-body">
                               <div class="table-responsive">
                                   <table datatable="ng" class="table table-bordered" id="inventoryTable">
@@ -62,7 +62,7 @@ This file contains the HTML for checking out items.
                           <form class="form-inline" style="margin-bottom: 25px; text-align:center;" >
                               <label for="rg-from">Name: </label>
                               <div class="form-group">
-                                  <input type="text" style="width: 400px;" class="form-control" ng-model="userName" ng-required="true" placeholder="Default User">
+                                  <input type="text" size=80 ng-model="userName" placeholder="Enter Name" class="form-control">
                               </div>
                           </form>
 

@@ -28,17 +28,6 @@ This file contains the HTML for checking in items.
                 <hr>
 
                 <div class="container">
-                    <form class="form-inline" style="margin-bottom: 25px; text-align:center;">
-                        <div class="form-group required">
-                            <label class="control-label">Name:</label>
-                            <input type="text" size=80 ng-model="person.name" ng-change="checkPerson()" placeholder="Enter Name" class="form-control" required>
-                        </div>
-                        <div class="emptyName" style="margin-bottom: 10px;">
-                            <div ng-show="emptyNameError">
-                                <b>Name is required!</b>
-                            </div>
-                        </div>
-                    </form>
                     <div class="panel panel-default">
                         <div class="panel-heading">Check-In</div>
                         <table datatable="ng" class="table table-bordered">
@@ -64,7 +53,17 @@ This file contains the HTML for checking in items.
 
                 <div class="container" style="margin-top:100px;">
                     <div class="notEmpty" ng-show="checkinNotEmpty">
-
+                      <form class="form-inline" style="margin-bottom: 25px; text-align:center;">
+                          <div class="form-group required">
+                              <label class="control-label">Name:</label>
+                              <input type="text" size=80 ng-model="person" placeholder="Enter Name" class="form-control">
+                          </div>
+                          <div class="emptyName" style="margin-bottom: 10px;">
+                              <div ng-show="emptyNameError">
+                                  <b>Name is required!</b>
+                              </div>
+                          </div>
+                      </form>
                         <div class="panel panel-default">
                             <div class="panel-heading">Cart</div>
 

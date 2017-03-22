@@ -17,9 +17,10 @@ app.controller('CartController', ['$scope', '$http',  '$location', '$rootScope',
 function CartController($scope, $http,  $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, inventoryList, $q, $window){
   //Initialization
   $scope.cart = []; //Cart array which contains list of items that user wants to check out.
+  $scope.userName = 'Anonymous'; //Set default user name
   $scope.dtOptions = { //Datatables Initialization
-     paging: false,
-     searching: false,
+     paging: true,
+     searching: true,
      info: false
   };
 
@@ -145,6 +146,12 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
   */
   $scope.checkOut = function() {
     var promises = [];
+
+    //Name is undefined so set to default name
+    if(angular.isUndefined($scope.userName) || $scope.userName.length == 0){
+      $scope.userName = 'Anonymous';
+    }
+
     for(var i = 0; i < $scope.cart.length; i++){
       promises.push(thingsAPI.checkout($scope.cart[i].item_id, $scope.userName, $scope.cart[i].selectedQuantity));
     }
