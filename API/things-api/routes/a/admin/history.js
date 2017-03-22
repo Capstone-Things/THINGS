@@ -41,9 +41,6 @@ module.exports= {
   *
   * /brief    Route to get last 15 transactions of a
   *           specific item
-  *
-  * /author   Andrew McCann
-  * /date     2/10/2017
   ****************************************************/
   item: (req,res)=>{
     res.app.locals.pool.connect(function(err, client, done) {
@@ -80,9 +77,6 @@ module.exports= {
   *
   * /brief    Route to get last 15 transactions of a
   *           specific item
-  *
-  * /author   Andrew McCann
-  * /date     2/10/2017
   ****************************************************/
   tag: (req,res)=>{
     res.app.locals.pool.connect(function(err, client, done) {
@@ -114,9 +108,6 @@ module.exports= {
   *
   * /brief    Route to get a window of transactions and
   *           some related information
-  *
-  * /author   Andrew McCann
-  * /date     2/10/2017
   ****************************************************/
   timespan: (req,res)=>{
     res.app.locals.pool.connect(function(err, client, done) {

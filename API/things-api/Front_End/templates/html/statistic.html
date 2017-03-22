@@ -40,15 +40,15 @@ This file contains the HTML viewing statistics about items.
                                             <tr>
                                                 <th><b>Name</b></th>
                                                 <th><b>Check Outs Per Day</b></th>
-                                                <th><b>Average Amount consumed by week</b></th>
+                                                <th><b>Average Amount Consumed By Week</b></th>
                                                 <th><b>View Graph</b></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="item in inventory">
                                                 <td>{{ item.name }}</td>
-                                                <td>0</td>
-                                                <td>0</td>
+                                                <td>{{ item.round }}</td>
+                                                <td>{{ item.weekly }}</td>
                                                 <td>
                                                     <a style="color:green; cursor:pointer;"><i class="fa fa-line-chart" ng-click="getStatistic(item.name)"></i></a>
                                                 </td>
