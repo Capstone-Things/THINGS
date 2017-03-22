@@ -122,7 +122,7 @@ module.exports= {
         var end_date = req.params.end_date
 
         //SELECT * FROM transactions AS t LEFT JOIN items AS i ON t.item_id = i.item_id WHERE cast(timestamp as date) <= $2 AND cast(timestamp as date) >= $1'
-        client.query('SELECT * FROM transactions AS t LEFT JOIN items AS i ON t.item_id = i.item_id WHERE cast(timestamp AT TIMEZONE PST) <= $2 AND cast(timestamp AT TIMEZONE PST) >= $1',
+        client.query('SELECT * FROM transactions AS t LEFT JOIN items AS i ON t.item_id = i.item_id WHERE cast(timestamp AT TIMEZONE "PST") <= $2 AND cast(timestamp AT TIMEZONE "PST") >= $1',
           [start_date, end_date], function(err, result) {
             done();
             if(err){
