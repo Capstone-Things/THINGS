@@ -1,0 +1,1779 @@
+{
+	"variables": [],
+	"info": {
+		"name": "THINGS-API",
+		"_postman_id": "70b0d904-74e7-fada-3e61-eb13aa1e06c1",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Connect to API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Connected to API\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://things.cs.pdx.edu:3000/api/",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Admin login using correct credentials",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"postman.setEnvironmentVariable(\"adminToken\", responseHeaders.token);",
+							"tests[\"Admin login using correct credentials\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://things.cs.pdx.edu:3000/api/authenticate",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "YOUR_USERNAME",
+							"type": "text",
+							"enabled": true
+						},
+						{
+							"key": "password",
+							"value": "YOUR_PASSWORD",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": "Admin login using correct credentials"
+			},
+			"response": []
+		},
+		{
+			"name": "Admin login using bad username",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Admin login using bad username\"] = responseCode.code === 401;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://things.cs.pdx.edu:3000/api/authenticate",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "badUsername1",
+							"type": "text",
+							"enabled": true
+						},
+						{
+							"key": "password",
+							"value": "YOUR_PASSWORD",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": "Admin login using bad username"
+			},
+			"response": []
+		},
+		{
+			"name": "Admin login using bad password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Admin login using bad password\"] = responseCode.code === 401;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://things.cs.pdx.edu:3000/api/authenticate",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "YOUR_USERNAME",
+							"type": "text",
+							"enabled": true
+						},
+						{
+							"key": "password",
+							"value": "badPassword@",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Login with bad username and password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Login using bad username and password\"] = responseCode.code === 401;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://things.cs.pdx.edu:3000/api/authenticate",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "badUsername1",
+							"type": "text",
+							"enabled": true
+						},
+						{
+							"key": "password",
+							"value": "badPassword$",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "User login with correct credentials",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"postman.setEnvironmentVariable(\"userToken\", responseHeaders.token);",
+							"tests[\"User login using correct credentials\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://things.cs.pdx.edu:3000/api/authenticate",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "YOUR_USERNAME",
+							"type": "text",
+							"enabled": true
+						},
+						{
+							"key": "password",
+							"value": "YOUR_PASSWORD",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "User login with bad username",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"User login using bad username\"] = responseCode.code === 401;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://things.cs.pdx.edu:3000/api/authenticate",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "badUsername1",
+							"type": "text",
+							"enabled": true
+						},
+						{
+							"key": "password",
+							"value": "YOUR_PASSWORD",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "User login with bad password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"User login using bad password\"] = responseCode.code === 401;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://things.cs.pdx.edu:3000/api/authenticate",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "YOUR_USERNAME",
+							"type": "text",
+							"enabled": true
+						},
+						{
+							"key": "password",
+							"value": "badPassword12^",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add new item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Add new item\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/admin/add/:name/:qty/:desc/:price/:thresh/:_user/:tags",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"admin",
+						"add",
+						":name",
+						":qty",
+						":desc",
+						":price",
+						":thresh",
+						":_user",
+						":tags"
+					],
+					"variable": [
+						{
+							"value": "API Testing Item",
+							"id": "name"
+						},
+						{
+							"value": "10",
+							"id": "qty"
+						},
+						{
+							"value": "This is a testing item",
+							"id": "desc"
+						},
+						{
+							"value": "7.99",
+							"id": "price"
+						},
+						{
+							"value": "5",
+							"id": "thresh"
+						},
+						{
+							"value": "admin",
+							"id": "_user"
+						},
+						{
+							"value": "testing, more testing",
+							"id": "tags"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW4iOnRydWUsImlhdCI6MTQ4OTg5NzkwMCwiZXhwIjoxNDkwNTAyNzAwfQ.uDkWcXcL18OAVfsr8m5v4ddpy2PSM503VBEoeK00HoU",
+							"type": "text",
+							"enabled": false
+						},
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "View Items Route",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var inventory = JSON.parse(responseBody);",
+							"for(var i = 0; i < inventory.length; i++)",
+							"{",
+							"    if(inventory[i].name === \"API Testing Item\")",
+							"    {",
+							"        postman.setEnvironmentVariable(\"item_id\", inventory[i].item_id);",
+							"        postman.setEnvironmentVariable(\"itemName\", inventory[i].name)",
+							"        break;",
+							"    }",
+							"}",
+							"tests[\"View Items Route\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://things.cs.pdx.edu:3000/api/view",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Shopping List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Shopping List\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://things.cs.pdx.edu:3000/api/a/admin/shopping_list",
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{token}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Checkin Item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Checkin item\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/admin/checkin/:id/:person/:qty",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"admin",
+						"checkin",
+						":id",
+						":person",
+						":qty"
+					],
+					"variable": [
+						{
+							"value": "{{item_id}}",
+							"id": "id"
+						},
+						{
+							"value": "API Tester",
+							"id": "person"
+						},
+						{
+							"value": "10",
+							"id": "qty"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Checkin Negative Quantity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Checkin Negative Quantity\"] = responseCode.code === 403;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/admin/checkin/:id/:person/:qty",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"admin",
+						"checkin",
+						":id",
+						":person",
+						":qty"
+					],
+					"variable": [
+						{
+							"value": "{{item_id}}",
+							"id": "id"
+						},
+						{
+							"value": "admin",
+							"id": "person"
+						},
+						{
+							"value": "-10",
+							"id": "qty"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Checkin Non-Integer Quantity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Checkin Non-Integer Quantity\"] = responseCode.code === 500;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/admin/checkin/:id/:person/:qty",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"admin",
+						"checkin",
+						":id",
+						":person",
+						":qty"
+					],
+					"variable": [
+						{
+							"value": "{{item_id}}",
+							"id": "id"
+						},
+						{
+							"value": "API Tester",
+							"id": "person"
+						},
+						{
+							"value": "words@5",
+							"id": "qty"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Checkout Item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Admin Checkout Item\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/checkout/:id/:person/:qty",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"checkout",
+						":id",
+						":person",
+						":qty"
+					],
+					"variable": [
+						{
+							"value": "{{item_id}}",
+							"id": "id"
+						},
+						{
+							"value": "admin",
+							"id": "person"
+						},
+						{
+							"value": "5",
+							"id": "qty"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": "This checks out the test item using the admin session token"
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Checkout more than available",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Admin Checkout more than available\"] = responseCode.code === 409;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/checkout/:id/:person/:qty",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"checkout",
+						":id",
+						":person",
+						":qty"
+					],
+					"variable": [
+						{
+							"value": "{{item_id}}",
+							"id": "id"
+						},
+						{
+							"value": "API Tester",
+							"id": "person"
+						},
+						{
+							"value": "9999",
+							"id": "qty"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Checkout Negative Quantity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Admin Checkout Negative Quantity\"] = responseCode.code === 403;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/checkout/:id/:person/:qty",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"checkout",
+						":id",
+						":person",
+						":qty"
+					],
+					"variable": [
+						{
+							"value": "{{item_id}}",
+							"id": "id"
+						},
+						{
+							"value": "API Tester",
+							"id": "person"
+						},
+						{
+							"value": "-10",
+							"id": "qty"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Checkout Non-Integer Quantity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Admin Checkout Non-Integer Quantity\"] = responseCode.code === 500;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/checkout/:id/:person/:qty",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"checkout",
+						":id",
+						":person",
+						":qty"
+					],
+					"variable": [
+						{
+							"value": "{{item_id}}",
+							"id": "id"
+						},
+						{
+							"value": "API Tester",
+							"id": "person"
+						},
+						{
+							"value": "a",
+							"id": "qty"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "User Checkout Item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"User Checkout Item\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/checkout/:id/:person/:qty",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"checkout",
+						":id",
+						":person",
+						":qty"
+					],
+					"variable": [
+						{
+							"value": "{{item_id}}",
+							"id": "id"
+						},
+						{
+							"value": "API Tester",
+							"id": "person"
+						},
+						{
+							"value": "5",
+							"id": "qty"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "{{userToken}}",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": "This performs a checkout using the user session token."
+			},
+			"response": []
+		},
+		{
+			"name": "User Checkout more than available",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"User Checkout more than available\"] = responseCode.code === 409;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/checkout/:id/:person/:qty",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"checkout",
+						":id",
+						":person",
+						":qty"
+					],
+					"variable": [
+						{
+							"value": "{{item_id}}",
+							"id": "id"
+						},
+						{
+							"value": "API Tester",
+							"id": "person"
+						},
+						{
+							"value": "9999",
+							"id": "qty"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "{{userToken}}",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "User Checkout Negative Quantity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"User Checkout Negative Quantity\"] = responseCode.code === 403;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/checkout/:id/:person/:qty",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"checkout",
+						":id",
+						":person",
+						":qty"
+					],
+					"variable": [
+						{
+							"value": "{{item_id}}",
+							"id": "id"
+						},
+						{
+							"value": "API Tester",
+							"id": "person"
+						},
+						{
+							"value": "-10",
+							"id": "qty"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "{{userToken}}",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "User Checkout Non-Integer Quantity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"User Checkout Non-Integer Quantity\"] = responseCode.code === 500;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/checkout/:id/:person/:qty",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"checkout",
+						":id",
+						":person",
+						":qty"
+					],
+					"variable": [
+						{
+							"value": "{{item_id}}",
+							"id": "id"
+						},
+						{
+							"value": "API Tester",
+							"id": "person"
+						},
+						{
+							"value": "words@3",
+							"id": "qty"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "{{userToken}}",
+							"type": "text",
+							"enabled": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Stats Average Checkout per Day for 1 Item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Stats Average per Day\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/admin/stats/avgperday/:name",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"admin",
+						"stats",
+						"avgperday",
+						":name"
+					],
+					"variable": [
+						{
+							"value": "{{item_id}}",
+							"id": "name"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{adminToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Stats Average per Week for 1 Item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Stats Average per Week\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/admin/stats/weeklyavg/:item_id",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"admin",
+						"stats",
+						"weeklyavg",
+						":item_id"
+					],
+					"variable": [
+						{
+							"value": "{{item_id}}",
+							"id": "item_id"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{adminToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Stats Average per Weeek for all Items",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Stats Average per Week for All Items\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://things.cs.pdx.edu:3000/api/a/admin/stats/allweeklyavg/",
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{adminToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Stats Threshold between more recent Checkin and Threshold",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Stats Threshold between more recent Checkin and Threshold\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/admin/stats/threshold/:item_id",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"admin",
+						"stats",
+						"threshold",
+						":item_id"
+					],
+					"variable": [
+						{
+							"value": "{{item_id}}",
+							"id": "item_id"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{adminToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Stats Average per Day for All Items",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Stats Average per Day for All Items\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://things.cs.pdx.edu:3000/api/a/admin/stats/allavgperday/",
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{adminToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Stats Net Change Past Week",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Stats Net Change Past Week\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/admin/stats/netperday/:item_id",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"admin",
+						"stats",
+						"netperday",
+						":item_id"
+					],
+					"variable": [
+						{
+							"value": "{{item_id}}",
+							"id": "item_id"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{adminToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "History Last 5 Transactions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"History Last 5 Transactions\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/admin/history/recent/:entries",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"admin",
+						"history",
+						"recent",
+						":entries"
+					],
+					"variable": [
+						{
+							"value": "5",
+							"id": "entries"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{adminToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "History Last 5 Transactions of Specific Item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"History Last 5 Transactions of Specific Item\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/admin/history/by_item/:name/:entries",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"admin",
+						"history",
+						"by_item",
+						":name",
+						":entries"
+					],
+					"variable": [
+						{
+							"value": "{{itemName}}",
+							"id": "name"
+						},
+						{
+							"value": "5",
+							"id": "entries"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{adminToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "History Last 5 Transactions of Specific Tag",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"History Last 5 Transactions of Specific Tag\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/admin/history/by_tag/:tag/:entries",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"admin",
+						"history",
+						"by_tag",
+						":tag",
+						":entries"
+					],
+					"variable": [
+						{
+							"value": "testing",
+							"id": "tag"
+						},
+						{
+							"value": "5",
+							"id": "entries"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{adminToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "History Date Range",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"History Date Range\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://things.cs.pdx.edu:3000/api/a/admin/history/by_range/:start_date/:end_date",
+					"protocol": "https",
+					"auth": {},
+					"host": [
+						"things",
+						"cs",
+						"pdx",
+						"edu"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"a",
+						"admin",
+						"history",
+						"by_range",
+						":start_date",
+						":end_date"
+					],
+					"variable": [
+						{
+							"value": "2017-03-18T18:07:07-07:00",
+							"id": "start_date"
+						},
+						{
+							"value": "2017-03-20T18:07:07-07:00",
+							"id": "end_date"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{adminToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
