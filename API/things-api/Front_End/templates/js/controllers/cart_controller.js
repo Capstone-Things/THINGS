@@ -17,14 +17,29 @@ app.controller('CartController', ['$scope', '$http',  '$location', '$rootScope',
 function CartController($scope, $http,  $location, $rootScope, cartList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, inventoryList, $q, $window){
   //Initialization
   $scope.cart = []; //Cart array which contains list of items that user wants to check out.
+  $scope.userName = 'Anonymous'; //Set default user name
   $scope.dtOptions = { //Datatables Initialization
-     paging: false,
-     searching: false,
+     paging: true,
+     searching: true,
      info: false
   };
 
   //Display the empty name error since no name has been entered.
   $scope.emptyNameError = true;
+
+  //Get latest inventory data from database
+  thingsAPI.getView().then(function (response) {
+      inventoryList.setInventory(response.data);
+      $scope.inventory=inventoryList.getInventory();
+  });
+
+  //Add to cart
+  $scope.addToCart = function(item){
+    var cartItem = angular.copy(item);
+    cartItem.check = false;
+    cartItem.selectedQuantity = 1;
+    cartList.addToCart(cartItem);
+  }
 
   /*
   Check whether there are items in the cart and then display either the cart
@@ -145,6 +160,12 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
   */
   $scope.checkOut = function() {
     var promises = [];
+
+    //Name is undefined so set to default name
+    if(angular.isUndefined($scope.userName) || $scope.userName.length == 0){
+      $scope.userName = 'Anonymous';
+    }
+
     for(var i = 0; i < $scope.cart.length; i++){
       promises.push(thingsAPI.checkout($scope.cart[i].item_id, $scope.userName, $scope.cart[i].selectedQuantity));
     }
@@ -168,6 +189,7 @@ function CartController($scope, $http,  $location, $rootScope, cartList, DTOptio
       //Update inventory with new quantities
       thingsAPI.getView().then(function(response) {
         inventoryList.setInventory(response.data);
+        $scope.inventory=inventoryList.getInventory();
         $scope.cart.length = 0;
         $scope.cartEmpty = true;
         $scope.cartNotEmpty = false;
