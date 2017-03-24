@@ -37,6 +37,7 @@ This file contains the HTML for checking in items.
                                     <th><b>Name</b></th>
                                     <th><b>Description</b></th>
                                     <th><b>Quantity</b></th>
+                                    <th><b>Tags</b></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -45,6 +46,7 @@ This file contains the HTML for checking in items.
                                     <td>{{ item.name }}</td>
                                     <td>{{ item.description }}</td>
                                     <td>{{ item.quantity }}</td>
+                                    <td><div ng-repeat="tag in item.tags">{{tag}}, </div></td>
                                 </tr>
                             </tbody>
                         </table>
