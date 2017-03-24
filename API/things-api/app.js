@@ -17,23 +17,21 @@ var morgan = require('morgan');//for logging requests
 var cors = require('cors');//package to handle Cross Origin Resource Sharing
 var routes = require('./routes');
 var helpers = require('./helper_functions')
-var tokenSecret = fs.readFileSync('./conf/jwtSecret.key', 'utf-8').replace(/\s/g, '');
-const nodemailer = require('nodemailer');
-const email_auth = require('./conf/email_auth');
-const mailopt = require('./conf/mailopt');
+var nodemailer = require('nodemailer');
 
 //Import Config files
 var db_info = require('./conf/db/db_info'); //This file contains all of the configuration info needed to connect to the database.
 var keyFile =  fs.readFileSync('./conf/ssl/server.key'); //the key for SSL
 var certFile=  fs.readFileSync('./conf/ssl/server.crt'); //ssl cert(self signed)
+var email_auth = require('./conf/email_auth');
+var mailopt = require('./conf/mailopt');
+var tokenSecret = fs.readFileSync('./conf/jwtSecret.key', 'utf-8').replace(/\s/g, '');
 
 //setup command line args
 const optionDefinitions = [
-  { name: 'noAuth', type: Boolean },
-
+  { name: 'port', type: Number , defaultValue: 3000},
 ];
 const options = argv(optionDefinitions);
-
 
 //Instanciate global variables.
 var app = express(); // This is our Express Application.
@@ -44,6 +42,8 @@ app.use(morgan('dev')); // enables console output for dev purpouses on requests
 app.use(cors()); // allow cross origin resource sharing
 var pool = new pg.Pool(db_info.config); //This is the pool that DB client connections live in.
 
+
+//this sets the basis for email options
 let mailOptions = {
 
   from: mailopt.mail.from,
@@ -80,8 +80,8 @@ app.use('/api', routes);//import our routs this will import the routes
 https.createServer({
 	key: keyFile,
 	cert: certFile
-}, app).listen(3000, function() {
-	console.log('Listening on port 3000');
+}, app).listen(options.port, function() {
+	console.log(`Listening on port ${options.port}`);
 });
 
 //The following is depreciated as we are launching with a HTTPS server

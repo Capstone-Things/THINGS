@@ -60,7 +60,6 @@ app.config(function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
    ]);
 });
 
-
 app.run(function ($httpBackend) {
     var inventory = [{name: 'Pop Tarts', description: 'Yummy', quantity: '5'}, {name: 'Kool-Aid', description: 'Oh Yeah', quantity: '10'}, {name: 'Printer Ink', description: 'Ink for printer', quantity: '30'}];
 

@@ -60,7 +60,7 @@ routes.get('/history/by_item/:name/:entries?', history.item);
 routes.get('/history/by_tag/:tag/:entries?', history.tag);
 routes.get('/history/by_range/:start_date/:end_date', history.timespan);
 //this is an inline route handler...
-//this is where you land if you goto GET https://localhost:3000/a/admin/
+//this is where you land if you goto GET https://localhost:3000/api/a/admin/
 routes.get('/', (req, res) => {
   res.status(200).json({ message: 'You have connected to SECURE ADMIN CATTHINGS API!' });
 });

@@ -19,15 +19,15 @@ mkdir -p ./conf/ssl
 
 #prompt the user for the database information.
 echo "Please enter your database information"
-echo "username: \c"
+echo "username: "
 read pguser
-echo "database: \c"
+echo "database: "
 read pgdatabase
-echo "password: \c"
+echo "password: "
 read pgpassword
-echo "hostname: \c"
+echo "hostname: "
 read pghost
-echo "port: \c"
+echo "port: "
 read pgport
 
 #write the dbinfo.js file

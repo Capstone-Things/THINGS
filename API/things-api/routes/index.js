@@ -10,14 +10,16 @@ See LICENSE.txt for full information.
 // https://scotch.io/tutorials/keeping-api-routing-clean-using-express-routers
 const routes = require('express').Router();
 const secure_routes = require('./a/');
-const dev = require('./dev/');
+//const dev = require('./dev/');
 const test = require('./test');
 const auth = require('./authenticate');
 const view = require('./view_items');
 
 //add route handelers for subfolders here:
 routes.use('/a', secure_routes);
-routes.use('/dev', dev);
+
+//these dev routes are pulled for production and could probably be deleted.
+//routes.use('/dev', dev);
 
 //any route specific middleware should be added here:
 
@@ -27,7 +29,7 @@ routes.get('/view', view);
 routes.post('/authenticate', auth);
 
 //this is an inline route handler...
-//this is where you land if you goto GET https://localhost:3000/
+//this is where you land if you goto GET https://localhost:3000/api
 routes.get('/', (req, res) => {
   res.status(200).json({ message: 'You have connected to CATTHINGS API!' });
 });

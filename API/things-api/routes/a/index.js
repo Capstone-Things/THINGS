@@ -59,7 +59,7 @@ routes.post('/checkout/:id/:person/:qty', checkout);
 routes.post('/request', request)
 
 //this is an inline route handler...
-//this is where you land if you goto GET https://localhost:3000/a/
+//this is where you land if you goto GET https://localhost:3000/api/a/
 routes.get('/', (req, res) => {
   res.status(200).json({ message: 'You have connected to SECURE USER AUTHORIZED CATTHINGS API!' });
 });
