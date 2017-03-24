@@ -18,7 +18,6 @@ function InventoryController($scope, $http,  $location, cartList, thingsAPI, inv
   thingsAPI.getView().then(function (response) {
       inventoryList.setInventory(response.data);
       $scope.inventory=inventoryList.getInventory();
-      console.log($scope.inventory);
   });
 
   /*

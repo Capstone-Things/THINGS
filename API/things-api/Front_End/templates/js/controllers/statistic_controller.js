@@ -27,6 +27,28 @@ function StatisticController($scope, $http, $location, cartList, thingsAPI, inve
       }
   });
 
+  //Get latest average checkout per day from past week
+  thingsAPI.getAverage().then(function (response){
+    for (var i = 0; i < response.data.length; i++){
+      for (var j = 0; j < $scope.inventory.length; j++){
+        if(response.data[i].item_id == $scope.inventory[j].item_id){
+          $scope.inventory[j].round = response.data[i].round;
+        }
+      }
+    }
+  });
+
+  //Get average consumption from past week
+  thingsAPI.getAverageWeekly().then(function (response){
+    for (var i = 0; i < response.data.length; i++){
+      for (var j = 0; j < $scope.inventory.length; j++){
+        if(response.data[i].item_id == $scope.inventory[j].item_id){
+          $scope.inventory[j].weekly = response.data[i].weekly_avg;
+        }
+      }
+    }
+  });
+
   //Closes the graph
   $scope.goBack = function () {
       $scope.showGraph = false;

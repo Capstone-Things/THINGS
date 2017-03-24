@@ -16,12 +16,10 @@ app.controller('CheckInController', ['$scope', '$http', '$location', '$rootScope
 function CheckInController($scope, $http, $location, $rootScope, inventoryList, DTOptionsBuilder, DTColumnDefBuilder, thingsAPI, checkinList, $q, $window){
   //Initialization Variables
   $scope.checkin=[]; //Check in
-  $scope.person={}; //Name of person
+  $scope.person='Anonymous'; //Name of person
+  //$scope.person.name = 'Anonymous';
   //Datatable Initialization
-  $scope.searchQuery = '';
-  $scope.emptyNameError = true;
   $scope.dtOptions = DTOptionsBuilder.newOptions().withOption('sDom', 'rtip');
-
 
   //Get latest inventory data from database
   thingsAPI.getView().then(function (response) {
@@ -71,35 +69,11 @@ function CheckInController($scope, $http, $location, $rootScope, inventoryList, 
   }
 
   /*
-  This function checks whether a name has been entered in the name input field
-  and display the error message if it has not been.
-  */
-  $scope.checkPerson = function(){
-    //Name is undefined
-    if(angular.isUndefined($scope.person.name)){
-      $scope.emptyNameError = true;
-    }
-    else{ //No name has been entered
-      if($scope.person.name.length == 0){
-        $scope.emptyNameError = true;
-      }
-      else{ //Name has been entered
-        $scope.emptyNameError = false;
-      }
-    }
-  }
-
-  /*
   This function checks if all information entered and selected are valid. If
   there are errors, it will return true which disables the checkin button.
   Otherwise, it will enable the checkin button.
   */
   $scope.checkCheckin = function(){
-    if($scope.emptyNameError == true){
-      if(angular.isUndefined($scope.person.name)){
-        return true;
-      }
-    }
     for(var i = 0; i < $scope.checkin.length; i++){
       //Not all items have selected quantities
       if($scope.checkin[i].selectedQuantity == null){
@@ -134,6 +108,11 @@ function CheckInController($scope, $http, $location, $rootScope, inventoryList, 
   */
   $scope.confirm = function(){
     var promises = [];
+    //No name is specified
+    if(angular.isUndefined($scope.person) || $scope.person.length == 0){
+      $scope.person = 'Anonymous';
+    }
+
     for(var i = 0; i < $scope.checkin.length; i++){
       promises.push(thingsAPI.checkin($scope.checkin[i].item_id, $scope.person, $scope.checkin[i].selectedQuantity));
     }

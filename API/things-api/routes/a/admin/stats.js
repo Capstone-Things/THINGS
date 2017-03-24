@@ -30,7 +30,27 @@ module.exports = {
 
         // If you want to change this rolling window that is used to calculate the average,
         // just alter the INTERVAL amount per SQL guidelines.
-        client.query("SELECT weekly.item_name, weekly.item_id, AVG(sum) AS weekly_avg FROM (SELECT i.item_name, i.item_id, SUM(ABS(t.qty_changed)) FROM transactions AS t, items AS i WHERE t.item_id = $1 AND t.item_id = i.item_id AND t.qty_changed < 0 AND t.timestamp > (current_timestamp - INTERVAL '3 months') GROUP BY i.item_name, i.item_id, date_trunc('week', timestamp)) AS weekly GROUP BY 1,2", [id], function(err, result) {
+        client.query("SELECT weekly.item_name, weekly.item_id, AVG(sum) AS weekly_avg FROM (SELECT i.item_name, i.item_id, SUM(ABS(t.qty_changed)) FROM transactions AS t, items AS i WHERE t.item_id = $1 AND t.item_id = i.item_id AND t.qty_changed < 0 AND t.timestamp > (current_timestamp - INTERVAL '1 WEEK') GROUP BY i.item_name, i.item_id, date_trunc('week', timestamp)) AS weekly GROUP BY 1,2", [id], function(err, result) {
+            done();
+            res.app.locals.helpers.errResultHandler(err, result.rows, res);
+        });
+    });
+  },
+  /****************************************************
+  * /path     a/admin/stats/allweeklyavg/
+  * /params   None
+  * /brief    Returns average weekly consumption of all items
+  ****************************************************/
+  weeklyavg_All: (req, res) => {
+    res.app.locals.pool.connect(function(err, client, done) {
+        if(err) {
+            console.error('Error fetching client from pool', err);
+            res.sendStatus(500);
+        }
+
+        // If you want to change this rolling window that is used to calculate the average,
+        // just alter the INTERVAL amount per SQL guidelines.
+        client.query("SELECT weekly.item_name, weekly.item_id, ROUND(AVG(sum),2) AS weekly_avg FROM (SELECT i.item_name, i.item_id, SUM(ABS(t.qty_changed)) FROM transactions AS t, items AS i WHERE t.item_id = i.item_id AND t.qty_changed < 0 AND t.timestamp > (current_timestamp - INTERVAL '1 WEEK') GROUP BY i.item_name, i.item_id, date_trunc('week', timestamp)) AS weekly GROUP BY 1,2", function(err, result) {
             done();
             res.app.locals.helpers.errResultHandler(err, result.rows, res);
         });
@@ -43,9 +63,6 @@ module.exports = {
   *
   * /brief    Returns the rough day count between most recent
   *           checkin, and threshold.
-  *
-  * /author   Andrew McCann
-  * /date     2/26/2017
   ****************************************************/
   threshold: (req, res) => {
     res.app.locals.pool.connect(function(err, client, done) {
@@ -75,9 +92,6 @@ module.exports = {
   *
   * /brief    Gets the average usage (aka checkout/day) by
   *           day of the week.
-  *
-  * /author   Andrew McCann
-  * /date     2/19/2017
   ****************************************************/
   avg: (req, res) => {
     res.app.locals.pool.connect(function(err, client, done) {
@@ -86,7 +100,7 @@ module.exports = {
            res.sendStatus(500);
         }
         // Quickly validate if id is an int
-        var id = parseInt(req.params.item_id)
+        var id = parseInt(req.params.item_id);
 
         if(req.params.item_id != id) {
             done();
@@ -103,6 +117,30 @@ module.exports = {
     });
   },
   /****************************************************
+  * /path     a/admin/stats/allavgperday/
+  * /params   None
+  *
+  *
+  * /brief    Route to pull satistics for all items
+  *           Returns the net change in qty/day for
+  *           the past week
+  ****************************************************/
+  avg_All: (req, res) => {
+    res.app.locals.pool.connect(function(err, client, done) {
+        if(err) {
+           console.error('Error fetching client from pool', err);
+           res.sendStatus(500);
+        }
+
+        // OLD QUERY: SELECT i.item_name, i.item_id, ABS(SUM(t.qty_changed)) AS checkout_per_day, to_char(timestamp, 'day') AS dow FROM transactions AS t, items AS i WHERE t.item_id = $1 AND t.item_id = i.item_id AND t.qty_changed < 0 AND t.timestamp > (current_timestamp - INTERVAL '3 months') GROUP BY i.item_id, i.item_name, dow
+
+        client.query("SELECT item_id, item_name, ROUND(AVG(checkout_per_day),2) FROM checkout_per_day GROUP BY item_id, item_name", function(err, result) {
+            done();
+            res.app.locals.helpers.errResultHandler(err, result.rows, res);
+        });
+    });
+  },
+  /****************************************************
   * /path     a/admin/stats/netperday/:item_id
   * /params   :item_id - item_id of what we are looking for
   *
@@ -110,9 +148,6 @@ module.exports = {
   * /brief    Route to pull satistics for an item
   *           Returns the net change in qty/day for
   *           the past week
-  *
-  * /author   Andrew McCann
-  * /date     2/19/2017
   ****************************************************/
   item_id: (req, res) => {
     res.app.locals.pool.connect(function(err, client, done) {
@@ -121,7 +156,7 @@ module.exports = {
             res.sendStatus(500);
         }
         // Quickly validate if id is an int
-        var id = parseInt(req.params.item_id)
+        var id = parseInt(req.params.item_id);
         if(req.params.item_id != id) {
             done();
             console.error('Invalid ID number', err);

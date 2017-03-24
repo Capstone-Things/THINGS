@@ -27,7 +27,7 @@ module.exports= {
         }
         // TODO:> Define what attributes we actually want to display.
         // would be cool if we had a VERBose flag.
-        client.query('SELECT * FROM transactions ORDER BY timestamp DESC LIMIT $1', [entries], function(err, result) {
+        client.query('SELECT * FROM transactions as t LEFT JOIN items AS i ON t.item_id = i.item_id ORDER BY timestamp DESC LIMIT $1', [entries], function(err, result) {
             done();
            res.app.locals.helpers.errResultHandler(err, result.rows, res);
         });
@@ -40,10 +40,7 @@ module.exports= {
   *           specify number of recents
   *
   * /brief    Route to get last 15 transactions of a
-  *           specific item
-  *
-  * /author   Andrew McCann
-  * /date     2/10/2017
+  *           specific item by name
   ****************************************************/
   item: (req,res)=>{
     res.app.locals.pool.connect(function(err, client, done) {
@@ -79,10 +76,7 @@ module.exports= {
   *           specify number of recents
   *
   * /brief    Route to get last 15 transactions of a
-  *           specific item
-  *
-  * /author   Andrew McCann
-  * /date     2/10/2017
+  *           specific item by tag
   ****************************************************/
   tag: (req,res)=>{
     res.app.locals.pool.connect(function(err, client, done) {
@@ -100,7 +94,8 @@ module.exports= {
         }
         name = tag.toLowerCase()
         //TODO:> Results, and console log above, route name is sloppy. Differentiate without collision?
-        client.query('SELECT * FROM transactions AS t, tags WHERE LOWER(tags.tag_name) = $2 AND t.item_id = tags.item_id ORDER BY timestamp DESC LIMIT $1', [entries, name], function(err, result) {
+        //SELECT * FROM transactions AS t, tags WHERE LOWER(tags.tag_name) = $2 AND t.item_id = tags.item_id LEFT JOIN items AS i ON t.item_id = i.item_id ORDER BY timestamp DESC LIMIT $1
+        client.query('SELECT * FROM (SELECT * FROM transactions AS t NATURAL JOIN tags WHERE LOWER(tags.tag_name) = $2 ORDER BY timestamp DESC LIMIT $1) as foo LEFT JOIN items AS i ON foo.item_id = i.item_id;', [entries, name], function(err, result) {
             done();
            res.app.locals.helpers.errResultHandler(err, result.rows, res);
         });
@@ -114,9 +109,6 @@ module.exports= {
   *
   * /brief    Route to get a window of transactions and
   *           some related information
-  *
-  * /author   Andrew McCann
-  * /date     2/10/2017
   ****************************************************/
   timespan: (req,res)=>{
     res.app.locals.pool.connect(function(err, client, done) {
@@ -129,7 +121,8 @@ module.exports= {
         var start_date = req.params.start_date
         var end_date = req.params.end_date
 
-        client.query('SELECT * FROM transactions AS t LEFT JOIN items AS i ON t.item_id = i.item_id WHERE cast(timestamp as date) <= $2 AND cast(timestamp as date) >= $1',
+        //SELECT * FROM transactions AS t LEFT JOIN items AS i ON t.item_id = i.item_id WHERE cast(timestamp as date) <= $2 AND cast(timestamp as date) >= $1'
+        client.query('SELECT * FROM transactions AS t LEFT JOIN items AS i ON t.item_id = i.item_id WHERE cast(timestamp as timestamp) <= $2 AND cast(timestamp as timestamp) >= $1',
           [start_date, end_date], function(err, result) {
             done();
             if(err){
