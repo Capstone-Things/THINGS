@@ -29,7 +29,7 @@ var tokenSecret = fs.readFileSync('./conf/jwtSecret.key', 'utf-8').replace(/\s/g
 
 //setup command line args
 const optionDefinitions = [
-  { name: 'port', type: Number },
+  { name: 'port', type: Number , defaultValue: 3000},
 ];
 const options = argv(optionDefinitions);
 
